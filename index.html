@@ -4,10 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#eeeae2" />
-    <meta name="description" content="An architecture and interior design studio portfolio. Explore architectural perspectives, interior spaces and physical model studies." />
+    <meta
+      name="description"
+      content="An architecture and interior design studio portfolio. Explore architectural perspectives, interior spaces and physical model studies."
+    />
     <meta name="robots" content="noindex,nofollow" />
     <title>STUDIO NAME — Architecture & Interiors</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      if (location.pathname === "/") {
+        const hero = document.createElement("link");
+        hero.rel = "preload";
+        hero.as = "image";
+        hero.href = "/media/exterior-driveway-golden-hour.webp";
+        hero.fetchPriority = "high";
+        document.head.appendChild(hero);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

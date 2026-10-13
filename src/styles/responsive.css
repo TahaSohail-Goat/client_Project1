@@ -1,0 +1,40 @@
+/* Short/landscape screens need normal-flow chapters to keep all content reachable. */
+@media (max-height: 650px) {
+  .facade-scene {
+    height: auto;
+    min-height: 0;
+  }
+  .facade-establish {
+    position: relative;
+    height: 55svh;
+    min-height: 300px;
+  }
+  .ivory-panel {
+    position: relative;
+    padding-top: 60px;
+  }
+  .interior-sequence {
+    height: auto;
+    min-height: 0;
+    padding-top: 60px;
+  }
+  .interior-stage {
+    height: auto;
+    display: grid;
+    gap: 40px;
+  }
+  .interior-slide {
+    position: relative;
+  }
+  .interior-photo {
+    height: auto;
+  }
+  .interior-caption {
+    position: relative;
+    background: none;
+    padding: 20px 0;
+  }
+  .interior-indicators {
+    display: none;
+  }
+}

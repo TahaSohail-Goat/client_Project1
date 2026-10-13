@@ -1,4 +1,69 @@
-:root{--ivory:#eeeae2;--paper:#f6f3ed;--ink:#252b23;--muted:#686c60;--line:#cbc9bd;--olive:#414936;--stone:#b7a58d;--gutter:clamp(22px,4.4vw,88px);--header-height:82px;--sans:Arial,Helvetica,sans-serif;--serif:Georgia,'Times New Roman',serif;color-scheme:light;font-synthesis:none}
-img{height:auto}
-.model-depth-stage{position:relative;height:380px;margin-bottom:45px;overflow:hidden}.model-depth-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:35px;perspective:1000px;transition:opacity .3s}.model-depth-fallback img{width:29%;height:auto;max-height:310px;object-fit:contain}.model-depth-fallback img:first-child{transform:rotateY(-3deg) rotate(-1.5deg)}.model-depth-fallback img:last-child{transform:rotateY(3deg) rotate(1.5deg)}.model-canvas{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s}.canvas-ready .model-canvas{opacity:1}.canvas-ready .model-depth-fallback{opacity:0}
-@media(max-width:1023px),(prefers-reduced-motion:reduce){.model-depth-stage{display:none}}
+:root {
+  --ivory: #eeeae2;
+  --paper: #f6f3ed;
+  --ink: #252b23;
+  --muted: #686c60;
+  --line: #cbc9bd;
+  --olive: #414936;
+  --stone: #b7a58d;
+  --gutter: clamp(22px, 4.4vw, 88px);
+  --header-height: 82px;
+  --sans: Arial, Helvetica, sans-serif;
+  --serif: Georgia, "Times New Roman", serif;
+  color-scheme: light;
+  font-synthesis: none;
+}
+:root {
+  --muted: #606457;
+}
+img {
+  height: auto;
+}
+.model-depth-stage {
+  position: relative;
+  height: 380px;
+  margin-bottom: 45px;
+  overflow: hidden;
+}
+.model-depth-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  perspective: 1000px;
+  transition: opacity 0.3s;
+}
+.model-depth-fallback img {
+  width: 29%;
+  height: auto;
+  max-height: 310px;
+  object-fit: contain;
+}
+.model-depth-fallback img:first-child {
+  transform: rotateY(-3deg) rotate(-1.5deg);
+}
+.model-depth-fallback img:last-child {
+  transform: rotateY(3deg) rotate(1.5deg);
+}
+.model-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.canvas-ready .model-canvas {
+  opacity: 1;
+}
+.canvas-ready .model-depth-fallback {
+  opacity: 0;
+}
+@media (max-width: 1023px),
+  (prefers-reduced-motion: reduce),
+  (max-height: 650px) {
+  .model-depth-stage {
+    display: none;
+  }
+}
