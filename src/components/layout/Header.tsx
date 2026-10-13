@@ -16,6 +16,8 @@ export function Header() {
     if (!open) return;
     const prior = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const backgrounds = document.querySelectorAll<HTMLElement>('main, footer');
+    backgrounds.forEach(element => { element.inert = true; });
     panel.current?.querySelector<HTMLElement>('a')?.focus();
     const keyboard = (event: KeyboardEvent) => {
       if (event.key === 'Escape') { setOpen(false); toggle.current?.focus(); }
@@ -27,7 +29,7 @@ export function Header() {
       }
     };
     document.addEventListener('keydown', keyboard);
-    return () => { document.body.style.overflow = prior; document.removeEventListener('keydown', keyboard); };
+    return () => { document.body.style.overflow = prior; backgrounds.forEach(element => { element.inert = false; }); document.removeEventListener('keydown', keyboard); };
   }, [open]);
   return <>
     <a className="skip-link" href="#main">Skip to content</a>

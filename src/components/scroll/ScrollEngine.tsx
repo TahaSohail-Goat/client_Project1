@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -8,6 +8,7 @@ import 'lenis/dist/lenis.css';
 gsap.registerPlugin(ScrollTrigger);
 export function ScrollEngine() {
   const { pathname, hash } = useLocation();
+  const engine = useRef<Lenis | null>(null);
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const desktop = window.matchMedia('(min-width: 1024px) and (pointer: fine)');
@@ -17,8 +18,10 @@ export function ScrollEngine() {
       gsap.ticker.remove(tick);
       lenis?.destroy();
       lenis = undefined;
+      engine.current = null;
       if (desktop.matches && !preference.matches) {
         lenis = new Lenis({ autoRaf: false, duration: 0.9, smoothWheel: true, anchors: true });
+        engine.current = lenis;
         lenis.on('scroll', ScrollTrigger.update);
         gsap.ticker.add(tick);
       }
@@ -29,12 +32,30 @@ export function ScrollEngine() {
     return () => { gsap.ticker.remove(tick); lenis?.destroy(); preference.removeEventListener('change', configure); desktop.removeEventListener('change', configure); };
   }, []);
   useEffect(() => {
+    engine.current?.scrollTo(0, { immediate: true, force: true });
     window.scrollTo({ top: 0, behavior: 'instant' });
-    const timer = window.setTimeout(() => {
-      ScrollTrigger.refresh();
-      if (hash) document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
-    }, 80);
-    return () => window.clearTimeout(timer);
+    let frame = 0;
+    let timeout = 0;
+    let finished = false;
+    const observer = new MutationObserver(() => locate());
+    const locate = () => {
+      if (finished) return;
+      const element = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : document.querySelector('main > :not(.route-loading)');
+      if (!element) return;
+      finished = true;
+      observer.disconnect();
+      frame = requestAnimationFrame(() => { frame = requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        if (hash) {
+          if (engine.current) engine.current.scrollTo(element as HTMLElement, { offset: -100, immediate: true, force: true });
+          else window.scrollTo({ top: element.getBoundingClientRect().top + scrollY - 100, behavior: 'instant' });
+        }
+      }); });
+    };
+    observer.observe(document.getElementById('main')!, { childList: true, subtree: true });
+    locate();
+    timeout = window.setTimeout(() => observer.disconnect(), 5000);
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); window.clearTimeout(timeout); };
   }, [pathname, hash]);
   return null;
 }
