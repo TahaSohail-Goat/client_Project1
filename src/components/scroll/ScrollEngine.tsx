@@ -20,7 +20,7 @@ export function ScrollEngine() {
       lenis = undefined;
       engine.current = null;
       if (desktop.matches && !preference.matches) {
-        lenis = new Lenis({ autoRaf: false, duration: 0.9, smoothWheel: true, anchors: true });
+        lenis = new Lenis({ autoRaf: false, duration: 0.9, smoothWheel: true, anchors: false, stopInertiaOnNavigate: true });
         engine.current = lenis;
         lenis.on('scroll', ScrollTrigger.update);
         gsap.ticker.add(tick);
@@ -46,8 +46,9 @@ export function ScrollEngine() {
       observer.disconnect();
       frame = requestAnimationFrame(() => { frame = requestAnimationFrame(() => {
         ScrollTrigger.refresh();
+        engine.current?.resize();
         if (hash) {
-          if (engine.current) engine.current.scrollTo(element as HTMLElement, { offset: -100, immediate: true, force: true });
+          if (engine.current) engine.current.scrollTo(element as HTMLElement, { immediate: true, force: true });
           else window.scrollTo({ top: element.getBoundingClientRect().top + scrollY - 100, behavior: 'instant' });
         }
       }); });

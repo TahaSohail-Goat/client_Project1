@@ -1,5 +1,5 @@
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ScrollEngine } from './components/scroll/ScrollEngine';
@@ -20,6 +20,8 @@ function Home() { return <><HeroScene /><FacadePanelReveal /><ExteriorWorks /><I
 function Placeholder({ title }: { title: string }) { return <section className="page-heading section-pad"><p className="eyebrow">Studio preview</p><h1>{title}</h1><p>This chapter is being prepared.</p><Link to="/">Return home</Link></section>; }
 export default function App() {
   const { pathname } = useLocation();
+  const previousPath = useRef(pathname);
   useEffect(() => { document.title = `${pathname === '/' ? 'Architecture & Interiors' : pathname.slice(1).replace(/^./, c => c.toUpperCase())} — STUDIO NAME`; }, [pathname]);
+  useEffect(() => { if (previousPath.current !== pathname) document.getElementById('main')?.focus({ preventScroll: true }); previousPath.current = pathname; }, [pathname]);
   return <><ScrollEngine /><Header /><main id="main" tabIndex={-1}><Suspense fallback={<div className="route-loading" role="status">Opening chapter…</div>}><Routes><Route path="/" element={<Home />} /><Route path="/work" element={<WorkPage />} /><Route path="/studio" element={<StudioPage />} /><Route path="/contact" element={<ContactPage />} /><Route path="*" element={<Placeholder title="Page not found" />} /></Routes></Suspense></main><Footer /></>;
 }

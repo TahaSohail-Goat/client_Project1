@@ -13,6 +13,8 @@ export function FacadePanelReveal() {
     mm.add({ desktop: '(min-width: 768px)', mobile: '(max-width: 767px)', reduced: '(prefers-reduced-motion: reduce)' }, context => {
       if (context.conditions?.reduced) return;
       const desktop = context.conditions?.desktop;
+      const panel = ref.current!.querySelector<HTMLElement>('.ivory-panel')!;
+      panel.inert = true;
       const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { id: 'facade', trigger: ref.current, start: 'top top', end: () => `+=${window.innerHeight * (desktop ? 1.3 : 1.05)}`, pin: true, scrub: 0.45, invalidateOnRefresh: true, anticipatePin: 1 } });
       tl.to('.facade-photo', { scale: 1.08, yPercent: -2, duration: 0.5 }, 0)
         .fromTo('.ivory-panel', { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.42 }, 0.24)
@@ -21,6 +23,8 @@ export function FacadePanelReveal() {
         .fromTo('.vision-composition', { clipPath: 'inset(100% 0% 0% 0%)', y: 28 }, { clipPath: 'inset(0% 0% 0% 0%)', y: 0, duration: 0.25 }, 0.65)
         .fromTo('.vision-copy', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.2 }, 0.72)
         .to({}, { duration: 0.1 }, 0.92);
+      tl.eventCallback('onUpdate', () => { panel.inert = tl.progress() < 0.72; });
+      return () => { panel.inert = false; };
     }, ref);
     return () => mm.revert();
   }, []);

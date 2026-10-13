@@ -19,6 +19,9 @@ export function HeroScene() {
       tl.to('.hero-photo', { scale: desktop ? 1.075 : 1.035, yPercent: -1.5, duration: 1 }, 0)
         .to('.hero-copy', { y: -36, opacity: 0, duration: 0.5 }, 0.35)
         .to('.hero-bottom', { opacity: 0, duration: 0.3 }, 0.6);
+      const interactive = ref.current!.querySelectorAll<HTMLElement>('.hero-copy, .hero-bottom');
+      tl.eventCallback('onUpdate', () => interactive.forEach(element => { element.inert = tl.progress() > 0.9; }));
+      return () => interactive.forEach(element => { element.inert = false; });
     }, ref);
     return () => mm.revert();
   }, []);

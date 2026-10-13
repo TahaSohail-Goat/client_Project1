@@ -6,7 +6,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: { manualChunks: (id) => {
-        if (/node_modules\/(three|@react-three|three-stdlib)/.test(id.replaceAll('\\', '/'))) return 'model-experience';
+        const path = id.replaceAll('\\', '/');
+        if (/node_modules\/(three|@react-three|three-stdlib)/.test(path)) return 'model-experience';
+        if (/node_modules\/(react|react-dom|scheduler)\//.test(path)) return 'react-vendor';
+        if (/node_modules\/(motion|framer-motion|motion-dom|motion-utils)\//.test(path)) return 'motion';
+        if (/node_modules\/(gsap|lenis)\//.test(path)) return 'scroll';
       } }
     }
   }
