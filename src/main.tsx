@@ -18,6 +18,7 @@ import "./styles/housing-study.css";
 import "./styles/video-hero.css";
 import "./styles/cinematic.css";
 import "./styles/vision-depth.css";
+import "./styles/materials-depth.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

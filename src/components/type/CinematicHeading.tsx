@@ -11,14 +11,17 @@ export function CinematicHeading({
   id,
   className = "",
   as: Tag = "h2",
+  animate = true,
 }: {
   lines: Line[];
   id?: string;
   className?: string;
   as?: "h2" | "h3";
+  animate?: boolean;
 }) {
   const ref = useRef<HTMLHeadingElement>(null);
   useLayoutEffect(() => {
+    if (!animate) return;
     const mm = gsap.matchMedia();
     mm.add(
       "(prefers-reduced-motion: no-preference)",
@@ -54,7 +57,7 @@ export function CinematicHeading({
       ref,
     );
     return () => mm.revert();
-  }, []);
+  }, [animate]);
   const words = (text: string) =>
     text.split(" ").map((word, i) => (
       <span className="cinematic-word-mask" key={`${word}-${i}`}>

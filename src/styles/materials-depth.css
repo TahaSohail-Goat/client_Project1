@@ -1,0 +1,144 @@
+.material-stage {
+  position: relative;
+  perspective: 1600px;
+}
+.material-image {
+  position: relative;
+  aspect-ratio: 1.35;
+}
+.material-small .material-image {
+  aspect-ratio: 0.72;
+}
+.materials .material-image > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+.material-static-caption {
+  display: flex;
+  gap: 18px;
+}
+.material-static-caption svg {
+  width: 14px;
+  height: 14px;
+}
+.materials-canvas,
+.material-controls {
+  display: none;
+}
+.materials[data-immersive="true"] {
+  height: 100svh;
+  min-height: 760px;
+  display: flex;
+  flex-direction: column;
+  padding-block: 112px 28px;
+}
+.materials[data-immersive="true"] .section-heading {
+  flex-shrink: 0;
+  margin-bottom: 12px;
+  align-items: center;
+}
+.materials[data-immersive="true"] .section-heading .eyebrow {
+  margin-bottom: 18px;
+}
+.materials[data-immersive="true"] .section-heading h2 {
+  font-size: clamp(60px, 6.4vw, 98px);
+}
+.materials[data-immersive="true"] .material-stage {
+  flex: 1;
+  min-height: 300px;
+  overflow: hidden;
+}
+.materials[data-immersive="true"] .materials-grid {
+  position: absolute;
+  inset: 20px 0;
+  height: calc(100% - 40px);
+  align-items: center;
+  transform-style: preserve-3d;
+}
+.materials[data-immersive="true"] .material-large {
+  margin-top: 0;
+  height: 86%;
+}
+.materials[data-immersive="true"] .material-small {
+  height: 100%;
+  aspect-ratio: 0.72;
+  justify-self: center;
+}
+.materials[data-immersive="true"] .material-photo,
+.materials[data-immersive="true"] .material-image {
+  height: 100%;
+  aspect-ratio: auto;
+  transform-style: preserve-3d;
+}
+.materials[data-immersive="true"] .material-static-caption,
+.materials[data-immersive="true"] .material-static-copy {
+  display: none;
+}
+.materials[data-immersive="true"] .materials-canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+.materials[data-renderer="webgl"] .materials-canvas {
+  pointer-events: auto;
+  visibility: visible;
+}
+.materials[data-renderer="webgl"] .material-photo {
+  visibility: hidden;
+}
+.materials-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.materials[data-immersive="true"] .material-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px 32px;
+  flex-shrink: 0;
+  padding-top: 12px;
+}
+.material-caption-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+}
+.material-caption-links a {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 12px;
+  transition: color 180ms;
+}
+.material-caption-links a:hover {
+  color: var(--bronze);
+}
+.material-caption-links .eyebrow {
+  font-size: 9px;
+  color: var(--bronze);
+}
+.material-caption-links svg {
+  width: 15px;
+  height: 15px;
+}
+.material-controls > .line-link {
+  font-size: 12px;
+}
+.material-progress {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: var(--line);
+}
+.material-progress span {
+  display: block;
+  height: 100%;
+  background: var(--bronze);
+  transform-origin: left center;
+}

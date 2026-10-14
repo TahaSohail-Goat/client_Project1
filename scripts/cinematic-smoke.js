@@ -75,7 +75,7 @@ async (page) => {
     .evaluate((e) => Number(getComputedStyle(e).opacity));
   if (reversed > 0.4) throw Error("Heading did not reverse");
   await scroll(".materials", 100);
-  await page.locator(".materials img").first().waitFor();
+  await page.locator('.materials[data-renderer="webgl"]').waitFor({ timeout: 20000 });
   await screenshot("materials");
   const interior = async (progress) => {
     await page.evaluate(p => {
