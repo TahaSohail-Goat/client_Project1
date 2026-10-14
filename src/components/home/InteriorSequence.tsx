@@ -119,7 +119,7 @@ export function InteriorSequence() {
           Life, on the <em>inside.</em>
         </h2>
         <Link to="/work?category=Interiors" className="line-link">
-          All 11 interiors <Arrow diagonal />
+          All 25 interiors <Arrow diagonal />
         </Link>
       </div>
       <div className="interior-stage">

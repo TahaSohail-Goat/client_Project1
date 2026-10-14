@@ -67,12 +67,12 @@ export function ExteriorWorks() {
       </Reveal>
       <div className="exterior-grid">
         <ExteriorCard
-          item={photo("exterior-front-twilight")}
+          item={photo("supplemental-04")}
           number="01"
           caption="Light & form"
         />
         <ExteriorCard
-          item={photo("exterior-side-landscape")}
+          item={photo("supplemental-03")}
           number="02"
           caption="An exterior study"
         />

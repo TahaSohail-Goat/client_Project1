@@ -1,6 +1,6 @@
 # Asset usage
 
-All 18 supplied originals are preserved. All have an accessible viewing path through `/work` and its full-frame keyboard lightbox. Photo-to-project associations are unconfirmed; categories are not commissions. Model images show a physical miniature, not a supplied 3D asset.
+All 18 handoff originals and the 25 JPEGs in `DesktopAssests` are preserved. All have an accessible viewing path through `/work` and its full-frame keyboard lightbox. Photo-to-project associations are unconfirmed; categories are not commissions. Model images show physical miniatures, not supplied 3D assets.
 
 | Filename                             | Category      | Dimensions  | Use beyond Work gallery/lightbox                                      |
 | ------------------------------------ | ------------- | ----------- | --------------------------------------------------------------------- |
@@ -28,6 +28,7 @@ All 18 supplied originals are preserved. All have an accessible viewing path thr
 - Original SHA-256 hashes: all 18 match the supplied manifest. All 36 original/WebP image dimensions match the manifest.
 - Original unchanged-size WebP total: 1,757,054 bytes (~1.68 MiB).
 - `public/media`: 18 supplied WebPs plus 480px and 768px derivatives for each (54 files). Pillow LANCZOS, quality 82, method 6; original aspect ratios retained, no upscaling.
+- `public/media/supplemental`: optimized WebPs plus 480px and 768px derivatives for the 25 additional client images. These are categorized as 7 architecture studies, 14 interior studies and 4 model studies.
 - Full hero/facade and lightbox use the original WebP sources. Gallery/editorial photography uses responsive srcset and sizes. Hero is eager/high priority; lower images are lazy with reserved dimensions.
 - Canvas uses only the three model WebPs as textures. A same-image DOM fallback and actual gallery links preserve accessibility.
 - Original JPEGs, client filename hashes and reference MP4 are not copied into `public`/`dist`. The manifest is imported as source metadata; upload filenames/hashes are not used as public project descriptions.

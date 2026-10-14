@@ -20,7 +20,7 @@ Development: `http://127.0.0.1:5173`. Production preview: `http://127.0.0.1:4173
 ## Pages and content
 
 - `/`: nine chapters, including the five-chapter pinned photographic opening (exterior approach, interior depth and ivory finish), chapter/skip controls and four-scene interior gallery.
-- `/work`: all 18 photos, true category filters, full-frame native dialog lightbox, keyboard controls.
+- `/work`: the original 18 photos plus the 25-image `DesktopAssests` client collection, true category filters, full-frame native dialog lightbox, keyboard controls.
 - `/studio`: editable introduction and the two confirmed disciplines.
 - `/contact`: validated inquiry preview until a real destination is configured.
 

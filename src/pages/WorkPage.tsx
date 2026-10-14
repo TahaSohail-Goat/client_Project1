@@ -51,7 +51,7 @@ export default function WorkPage() {
             perspectives on space, form and the detail in between.
           </p>
           <span>
-            18 photographs
+            {media.length} photographs
             <br />3 disciplines of exploration
           </span>
         </div>
@@ -73,8 +73,8 @@ export default function WorkPage() {
             >
               {value}
               <sup>
-                {value === "All"
-                  ? 18
+                  {value === "All"
+                  ? media.length
                   : media.filter((item) => item.category === value).length}
               </sup>
             </button>

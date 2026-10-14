@@ -29,13 +29,14 @@ export function PhotoImage({
         </span>
       </div>
     );
+  const responsive = item.src.replace(/\.webp$/, "");
   return (
     <img
       src={item.src}
       srcSet={
         full
           ? undefined
-          : `/media/${item.slug}-480.webp 480w, /media/${item.slug}-768.webp 768w, ${item.src} ${item.width}w`
+          : `${responsive}-480.webp 480w, ${responsive}-768.webp 768w, ${item.src} ${item.width}w`
       }
       sizes={sizes}
       alt={item.description}

@@ -30,7 +30,7 @@ async (page) => {
   await page.goto("http://127.0.0.1:4173/work?category=Interiors");
   await page.locator(".work-card").first().waitFor();
   const count = await page.locator(".work-card").count();
-  if (count !== 11) throw Error("Filter failed");
+  if (count !== 25) throw Error("Filter failed");
   await page.locator(".work-card").first().click();
   await page.getByRole("dialog").waitFor({ state: "visible" });
   await page.keyboard.press("ArrowRight");

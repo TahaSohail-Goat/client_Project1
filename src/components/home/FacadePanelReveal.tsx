@@ -93,7 +93,7 @@ export function FacadePanelReveal({
     >
       <div className="facade-establish">
         <PhotoImage
-          item={photo("exterior-rear-facade")}
+          item={photo("supplemental-06")}
           className="facade-photo"
           full
         />
@@ -124,7 +124,7 @@ export function FacadePanelReveal({
           </div>
           <figure className="vision-composition">
             <PhotoImage
-              item={photo("exterior-side-landscape")}
+              item={photo("supplemental-07")}
               sizes="(min-width: 768px) 52vw, 100vw"
             />
             <figcaption>
