@@ -4,7 +4,6 @@ import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { ScrollEngine } from "./components/scroll/ScrollEngine";
 import { HeroScene } from "./components/home/HeroScene";
-import { FacadePanelReveal } from "./components/home/FacadePanelReveal";
 import { ExteriorWorks } from "./components/home/ExteriorWorks";
 import { InteriorSequence } from "./components/home/InteriorSequence";
 import { MaterialsScene } from "./components/home/MaterialsScene";
@@ -21,7 +20,6 @@ function Home() {
   return (
     <>
       <HeroScene />
-      <FacadePanelReveal />
       <ExteriorWorks />
       <InteriorSequence />
       <MaterialsScene />

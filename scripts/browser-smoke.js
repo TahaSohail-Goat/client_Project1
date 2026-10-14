@@ -11,17 +11,14 @@ async (page) => {
   const zoom = await page
     .locator(".hero-photo")
     .evaluate((e) => new DOMMatrixReadOnly(getComputedStyle(e).transform).a);
-  if (zoom < 1.01 || zoom > 1.08)
+  if (zoom < 1.01 || zoom > 1.11)
     throw Error("Unexpected hero push-in: " + zoom);
-  const top = await page
-    .locator(".facade-scene")
-    .evaluate((e) => e.getBoundingClientRect().top + scrollY);
-  await page.evaluate((y) => scrollTo(0, y), top + 1050);
-  await page.waitForTimeout(800);
+  await page.getByRole('button', { name: 'Jump to Vision chapter' }).click();
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.ivory-panel')).clipPath === 'inset(0%)');
   const panel = await page
     .locator(".ivory-panel")
     .evaluate((e) => getComputedStyle(e).clipPath);
-  await page.evaluate(() => scrollTo(0, 0));
+  await page.getByRole("button", { name: "Jump to Arrival chapter" }).click();
   await page.waitForFunction(
     () =>
       Math.abs(

@@ -6,6 +6,7 @@ import App from "./App";
 import "./styles/tokens.css";
 import "./styles/site.css";
 import "./styles/responsive.css";
+import "./styles/hero-journey.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

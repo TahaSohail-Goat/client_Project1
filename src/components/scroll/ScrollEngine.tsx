@@ -35,9 +35,19 @@ export function ScrollEngine() {
       }
     };
     configure();
+    const navigateSequence = (event: Event) => {
+      const position = Number((event as CustomEvent<number>).detail);
+      if (!Number.isFinite(position)) return;
+      engine.current?.resize();
+      if (engine.current)
+        engine.current.scrollTo(position, { immediate: true, force: true });
+      else window.scrollTo({ top: position, behavior: "instant" });
+    };
+    window.addEventListener("studio:scroll-to", navigateSequence);
     preference.addEventListener("change", configure);
     desktop.addEventListener("change", configure);
     return () => {
+      window.removeEventListener("studio:scroll-to", navigateSequence);
       gsap.ticker.remove(tick);
       lenis?.destroy();
       preference.removeEventListener("change", configure);

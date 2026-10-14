@@ -19,12 +19,12 @@ Development: `http://127.0.0.1:5173`. Production preview: `http://127.0.0.1:4173
 
 ## Pages and content
 
-- `/`: nine chapters, including the reversible exterior hero, facade-to-ivory transition and four-scene interior gallery.
+- `/`: nine chapters, including the five-chapter pinned photographic opening (exterior approach, interior depth and ivory finish), chapter/skip controls and four-scene interior gallery.
 - `/work`: all 18 photos, true category filters, full-frame native dialog lightbox, keyboard controls.
 - `/studio`: editable introduction and the two confirmed disciplines.
 - `/contact`: validated inquiry preview until a real destination is configured.
 
-Edit studio identity and approved editorial copy in `src/content/site.ts`. Photo metadata comes from `docs/ASSET_MANIFEST.json` through `src/content/media.ts`. Photos are not assigned to projects. Detail pages, team biographies, locations, awards and unconfirmed services are intentionally deferred.
+Edit studio identity and approved editorial copy in `src/content/site.ts`; opening chapter labels/bookmarks are in `src/content/hero.ts`. Photo metadata comes from `docs/ASSET_MANIFEST.json` through `src/content/media.ts`. Photos are not assigned to projects. Detail pages, team biographies, locations, awards and unconfirmed services are intentionally deferred.
 
 ## Inquiry delivery
 

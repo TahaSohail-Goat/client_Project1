@@ -1,11 +1,6 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import {
-  m,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { m, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { photo, type Photo } from "../../content/media";
 import { Arrow } from "../Arrow";
 import { PhotoImage } from "../PhotoImage";
@@ -54,6 +49,7 @@ export function ExteriorWorks() {
   return (
     <section
       className="section-pad exterior-works"
+      id="selected-work"
       aria-labelledby="work-title"
     >
       <Reveal className="section-heading">

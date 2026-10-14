@@ -6,9 +6,14 @@ import { site } from "../../content/site";
 import { PhotoImage } from "../PhotoImage";
 import { Arrow } from "../Arrow";
 
-export function FacadePanelReveal() {
+export function FacadePanelReveal({
+  embedded = false,
+}: {
+  embedded?: boolean;
+}) {
   const ref = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
+    if (embedded) return;
     const mm = gsap.matchMedia();
     mm.add(
       {
@@ -77,11 +82,11 @@ export function FacadePanelReveal() {
       ref,
     );
     return () => mm.revert();
-  }, []);
+  }, [embedded]);
   return (
     <section
       id="vision"
-      className="facade-scene"
+      className={`facade-scene ${embedded ? "hero-finish" : ""}`}
       ref={ref}
       aria-labelledby="vision-title"
       data-scene="facade"

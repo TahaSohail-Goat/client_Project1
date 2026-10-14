@@ -5,12 +5,12 @@ All 18 supplied originals are preserved. All have an accessible viewing path thr
 | Filename                             | Category      | Dimensions  | Use beyond Work gallery/lightbox                                      |
 | ------------------------------------ | ------------- | ----------- | --------------------------------------------------------------------- |
 | `exterior-front-twilight.webp`       | Architecture  | 1080 ? 471  | Home selected architecture                                            |
-| `exterior-rear-facade.webp`          | Architecture  | 1080 ? 540  | Home facade reveal; Studio banner                                     |
+| `exterior-rear-facade.webp`          | Architecture  | 1080 ? 540  | Home opening Approach and facade finish; Studio banner                |
 | `exterior-side-landscape.webp`       | Architecture  | 1080 ? 475  | Home ivory split composition; selected architecture; Studio expertise |
 | `exterior-driveway-golden-hour.webp` | Architecture  | 1080 ? 607  | Home hero                                                             |
 | `interior-bedroom-classic.webp`      | Interiors     | 1169 ? 590  | Home interior scene 3                                                 |
 | `interior-bedroom-marble.webp`       | Interiors     | 904 ? 1280  | Work gallery / direct image link                                      |
-| `interior-lounge-bar.webp`           | Interiors     | 1280 ? 639  | Home interior scene 2                                                 |
+| `interior-lounge-bar.webp`           | Interiors     | 1280 ? 639  | Home opening Atmosphere chapter; interior scene 2                     |
 | `interior-display-wall.webp`         | Interiors     | 1280 ? 639  | Home materiality                                                      |
 | `interior-bedroom-minimal.webp`      | Interiors     | 904 ? 1280  | Work gallery / direct image link                                      |
 | `interior-bathroom-warmstone.webp`   | Interiors     | 904 ? 1280  | Home materiality                                                      |
@@ -18,7 +18,7 @@ All 18 supplied originals are preserved. All have an accessible viewing path thr
 | `interior-reading-nook.webp`         | Interiors     | 1280 ? 639  | Home studio introduction                                              |
 | `interior-study-shelf.webp`          | Interiors     | 1280 ? 639  | Work gallery / direct image link                                      |
 | `interior-compact-bedroom.webp`      | Interiors     | 904 ? 1280  | Work gallery / direct image link                                      |
-| `interior-dining-living.webp`        | Interiors     | 1280 ? 639  | Home interior scene 1; Studio expertise                               |
+| `interior-dining-living.webp`        | Interiors     | 1280 ? 639  | Home opening Within chapter; interior scene 1; Studio expertise       |
 | `model-front-facade.webp`            | Model Studies | 1363 ? 1136 | Home model grid and optional photo-plane canvas                       |
 | `model-top-perspective.webp`         | Model Studies | 1302 ? 1068 | Home model grid and optional photo-plane canvas                       |
 | `model-open-cross-section.webp`      | Model Studies | 1444 ? 1033 | Home model grid and optional photo-plane canvas                       |

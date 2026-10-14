@@ -2,6 +2,22 @@
 
 Date: 14 October 2026 (Asia/Karachi). Local implementation; no deployment or real inquiry destination configured.
 
+## Latest revision: extended photo-based opening
+
+The user requested a long pinned arrival/house-entry-style hero like the live reference and explicitly chose to use the supplied photographs. The opening now has **five cinematic chapters in one continuous pin** (580vh desktop / 440vh mobile), with photo-plane perspective, exterior approach, an expanding interior aperture, a second interior atmosphere and the ivory editorial finish. The former separate facade pin is embedded into this timeline. All existing portfolio/studio/contact/model functionality remains.
+
+The live reference was inspected successfully in Chromium during this revision: its canvas hero has 148 frames and an approximately 460vh section. Its source imagery/film/geometry was not reused. This revision is an honest photographic depth sequence, not a real building walkthrough or invented 3D model.
+
+Verified on the compiled revision: 360, 390, 428, 768, 1024, 1440 and 1920px widths; Within/Atmosphere/Vision/Arrival chapter seeks; pin top at 0; no horizontal overflow; final copy clear of controls; Skip sequence lands at ~100px; reverse returns scale 1 and interior opacity 0. Reduced-motion result: 0 pins, 0 hidden journey frames, all 4 opening photos. No page errors in the responsive run. Resize while pinned passed at 1440x900 -> 1024x768 -> 390x844; keyboard Enter selected Atmosphere. The editorial CTA opened the 4-photo Architecture filter; route departure removed all pins; returning home restored Arrival at scroll 0. Short-screen fallback had 0 pins/0 hidden frames. Firefox and WebKit passed the updated smoke test with hero scale ~1.04625 at 400px, settled ivory, 11 interior filter results, dialog focus restoration, ~100px anchor offset, no reduced-motion pins and no page errors.
+
+The final loading check confirmed one opening image before interaction and four after selecting Within, with the interior image decoded. All five mobile chapter buttons measure 44px high; final editorial copy ends at ~607px and controls start at ~721px in the 390x844 test. Later photos no longer mount on an idle timer.
+
+Milestone screenshots: `output/playwright/journey-arrival.png`, `journey-approach.png`, `journey-aperture.png`, `journey-within.png`, `journey-atmosphere.png`, `journey-ivory-wipe.png`, `journey-vision.png`, `journey-mobile-arrival.png`, `journey-mobile-within.png`, `journey-mobile-vision.png`.
+
+Latest long-hero Lighthouse run: performance 76, accessibility 100, best practices 100; LCP 3.3 s, CLS 0, TBT 560 ms. This run disabled full-page screenshot capture and audited performance/accessibility/best practices. Host benchmark indices varied from 1556.5 in the earlier release to 442 in one later run; the latest index is 719. Shared-host load substantially affects comparisons. An earlier long-hero run measured 86/100/100, LCP 3.0s, CLS 0, TBT 300ms; another resource-constrained run measured 61/100/100 and TBT 910ms. No consistent performance gain, sustained frame rate, field INP or LCP-target attainment is claimed. Reports: `lighthouse-long-journey.json`, `lighthouse-long-journey-optimized.json`, `lighthouse-long-journey-isolated.json` in `output/playwright/`.
+
+The phase-gate results and Lighthouse metrics below describe the initial release; hero timing/ownership is superseded by this revision. Updated choreography is in `ANIMATION_SPEC.md`. The repeatable browser smoke script now uses chapter controls to reach the editorial finish.
+
 ## Audit and safeguard
 
 - The opened workspace was the supplied handoff folder only. There was no `.git`, application source, `package.json`, existing routing, CSS system, build command, test suite, SEO implementation or deployment configuration. Therefore no preexisting application baseline build was possible.
