@@ -1,20 +1,25 @@
 :root {
-  --ivory: #eeeae2;
-  --paper: #f6f3ed;
-  --ink: #252b23;
-  --muted: #686c60;
-  --line: #cbc9bd;
-  --olive: #414936;
-  --stone: #b7a58d;
+  --charcoal: #171c1a;
+  --ivory: #f2ede5;
+  --bronze: #b99670;
+  --sage: #84917a;
+  --clay: #b66f56;
+  --paper: #fbf8f2;
+  --ink: var(--charcoal);
+  --muted: #626a61;
+  --line: #d2cec4;
+  --olive: var(--sage);
+  --stone: var(--bronze);
   --gutter: clamp(22px, 4.4vw, 88px);
   --header-height: 82px;
-  --sans: Arial, Helvetica, sans-serif;
-  --serif: Georgia, "Times New Roman", serif;
+  --display: "Space Grotesk", Arial, sans-serif;
+  --sans: "Manrope", Arial, sans-serif;
+  --serif: "Instrument Serif", Georgia, serif;
+  --type-display: clamp(3.25rem, 7.8vw, 9.4rem);
+  --type-section: clamp(2.75rem, 6vw, 6.25rem);
+  --type-copy: clamp(0.82rem, 0.2vw + 0.73rem, 0.96rem);
   color-scheme: light;
   font-synthesis: none;
-}
-:root {
-  --muted: #606457;
 }
 img {
   height: auto;

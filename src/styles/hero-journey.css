@@ -1,6 +1,20 @@
 .hero-journey {
-  background: #1b211b;
+  --chapter-accent: var(--bronze);
+  background: var(--charcoal);
   min-height: 0;
+  transition: color 0.5s ease, background-color 0.5s ease;
+}
+.hero-journey[data-chapter="approach"] {
+  --chapter-accent: var(--sage);
+}
+.hero-journey[data-chapter="within"] {
+  --chapter-accent: var(--clay);
+}
+.hero-journey[data-chapter="detail"] {
+  --chapter-accent: var(--bronze);
+}
+.hero-journey[data-chapter="vision"] {
+  --chapter-accent: var(--sage);
 }
 .hero-world {
   position: absolute;
@@ -13,7 +27,7 @@
   inset: 0;
   overflow: hidden;
   margin: 0;
-  background: #252b23;
+  background: var(--charcoal);
   perspective: 1200px;
 }
 .journey-camera {
@@ -54,7 +68,7 @@
   margin-bottom: 25px;
 }
 .journey-caption h2 {
-  font-size: clamp(70px, 7.4vw, 140px);
+  font-size: clamp(4.4rem, 7.4vw, 8.75rem);
   max-width: 1000px;
   line-height: 1.01;
 }
@@ -85,7 +99,7 @@
   height: 52%;
   left: 34%;
   top: 24%;
-  border: 1px solid #eeeae24f;
+  border: 1px solid color-mix(in srgb, var(--ivory) 30%, transparent);
   pointer-events: none;
   opacity: 0;
 }
@@ -93,7 +107,7 @@
   position: absolute;
   width: 28px;
   height: 28px;
-  border-color: #eeeae2b3;
+  border-color: color-mix(in srgb, var(--ivory) 70%, transparent);
   border-style: solid;
 }
 .journey-aperture i:nth-child(1) {
@@ -123,6 +137,7 @@
   bottom: 28px;
   color: var(--paper);
   z-index: 6;
+  transition: color 0.5s ease;
 }
 .journey-control-row {
   display: flex;
@@ -174,17 +189,18 @@
 }
 .journey-progress {
   height: 1px;
-  background: #eeeae24d;
+  background: color-mix(in srgb, var(--ivory) 28%, transparent);
   margin-top: 12px;
   overflow: hidden;
 }
 .journey-progress-fill {
   height: 100%;
   width: 100%;
-  background: currentColor;
+  background: var(--chapter-accent);
   display: block;
   transform: scaleX(0);
   transform-origin: left;
+  transition: background-color 0.5s ease;
 }
 .journey-static-caption {
   display: none;

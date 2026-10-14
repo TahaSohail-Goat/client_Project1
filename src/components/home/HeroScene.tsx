@@ -7,6 +7,7 @@ import { heroChapters, heroCopy } from "../../content/hero";
 import { site } from "../../content/site";
 import { PhotoImage } from "../PhotoImage";
 import { Arrow } from "../Arrow";
+import { EditorialHeading } from "../type/EditorialHeading";
 import { FacadePanelReveal } from "./FacadePanelReveal";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -78,6 +79,11 @@ export function HeroScene() {
           { opacity: 0 },
         );
         gsap.set(".journey-caption", { opacity: 0, y: 24 });
+        gsap.set(".journey-caption .editorial-heading__line > span", {
+          opacity: 0,
+          yPercent: 115,
+          rotation: -1.5,
+        });
         gsap.set(".journey-aperture", { opacity: 0, scale: 0.8 });
         gsap.set(".ivory-panel", { clipPath: "inset(100% 0% 0% 0%)" });
         gsap.set(".vision-line span", { yPercent: 112 });
@@ -124,6 +130,11 @@ export function HeroScene() {
             1.8,
           )
           .to(".caption-outside", { opacity: 1, y: 0, duration: 0.45 }, 2.45)
+          .to(
+            ".caption-outside .editorial-heading__line > span",
+            { opacity: 1, yPercent: 0, rotation: 0, stagger: 0.08, duration: 0.38 },
+            2.48,
+          )
           .to(".caption-outside", { opacity: 0, y: -18, duration: 0.4 }, 3.4)
           .to(
             ".journey-aperture",
@@ -168,6 +179,11 @@ export function HeroScene() {
             3.6,
           )
           .to(".caption-within", { opacity: 1, y: 0, duration: 0.5 }, 4.9)
+          .to(
+            ".caption-within .editorial-heading__line > span",
+            { opacity: 1, yPercent: 0, rotation: 0, stagger: 0.08, duration: 0.38 },
+            4.94,
+          )
           .to(".caption-within", { opacity: 0, y: -20, duration: 0.4 }, 6.25)
           .fromTo(
             ".journey-detail",
@@ -194,6 +210,11 @@ export function HeroScene() {
             6.3,
           )
           .to(".caption-detail", { opacity: 1, y: 0, duration: 0.45 }, 7.05)
+          .to(
+            ".caption-detail .editorial-heading__line > span",
+            { opacity: 1, yPercent: 0, rotation: 0, stagger: 0.08, duration: 0.38 },
+            7.08,
+          )
           .to(".caption-detail", { opacity: 0, y: -20, duration: 0.4 }, 8.25)
           .fromTo(
             ".hero-finish",
@@ -294,11 +315,7 @@ export function HeroScene() {
   ) => (
     <div className={`journey-caption ${className}`}>
       <p className="eyebrow">{chapter}</p>
-      <h2>
-        {lines[0]}
-        <br />
-        <em>{lines[1]}</em>
-      </h2>
+      <EditorialHeading lead={lines[0]} emphasis={lines[1]} />
     </div>
   );
   const image = (slug: string) => (
@@ -326,11 +343,12 @@ export function HeroScene() {
           <div className="journey-photo-shade" />
           <div className="hero-copy">
             <p className="eyebrow">01 / Form & feeling</p>
-            <h1 id="hero-title">
-              {site.hero[0]}
-              <br />
-              <em>{site.hero[1]}</em>
-            </h1>
+            <EditorialHeading
+              as="h1"
+              id="hero-title"
+              lead={site.hero[0]}
+              emphasis={site.hero[1]}
+            />
             <div className="hero-actions">
               <Link to="/work" className="line-link">
                 Explore the work <Arrow diagonal />
