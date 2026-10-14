@@ -10,10 +10,13 @@ import { Arrow } from "../Arrow";
 import { EditorialHeading } from "../type/EditorialHeading";
 import { FacadePanelReveal } from "./FacadePanelReveal";
 import { addVisionDepth } from "./visionDepth";
+import { canUseVisionThree } from "../three/visionCapabilities";
 
 gsap.registerPlugin(ScrollTrigger);
 export function PhotographicHero({ notice }: { notice?: string }) {
   const ref = useRef<HTMLElement>(null);
+  const visionProgress = useRef(0);
+  const visionRedraw = useRef<(() => void) | null>(null);
   const [loadStory, setLoadStory] = useState(false);
   const [staticStory, setStaticStory] = useState(false);
   const requested = useRef(false);
@@ -222,10 +225,11 @@ export function PhotographicHero({ notice }: { notice?: string }) {
             8.5,
           )
           .to(".hero-top", { opacity: 0, duration: 0.4 }, 8.65);
-        addVisionDepth(tl, root, { start: 9.15, duration: 5.75, immersive: !!context.conditions?.immersive });
+        addVisionDepth(tl, root, { start: 9.15, duration: 5.75, immersive: !!context.conditions?.immersive }, { progress: visionProgress, redraw: visionRedraw });
         tl.to({}, { duration: 1.1 }, 14.9);
         const update = () => {
           const time = tl.time();
+          visionRedraw.current?.();
           const index =
             time < 2.3
               ? 0
@@ -363,7 +367,7 @@ export function PhotographicHero({ notice }: { notice?: string }) {
         <span className="eyebrow">{heroCopy.collection}</span>
       </div>
       <div data-journey-frame className="journey-finish-frame">
-        <FacadePanelReveal embedded />
+        <FacadePanelReveal embedded threeDEnabled={loadStory && !staticStory && canUseVisionThree()} progress={visionProgress} redraw={visionRedraw} />
       </div>
     </section>
   );

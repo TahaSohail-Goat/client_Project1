@@ -78,6 +78,20 @@
   height: 100%;
   object-fit: cover;
   object-position: center 48%;
+  transition: opacity 220ms ease-out;
+}
+.vision-photo-camera[data-three-ready="true"] > img {
+  opacity: 0;
+}
+.vision-three-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.vision-three-layer canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .vision-photo-glare {
   position: absolute;

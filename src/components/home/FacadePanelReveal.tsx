@@ -10,8 +10,14 @@ import { addVisionDepth } from "./visionDepth";
 
 export function FacadePanelReveal({
   embedded = false,
+  threeDEnabled = false,
+  progress,
+  redraw,
 }: {
   embedded?: boolean;
+  threeDEnabled?: boolean;
+  progress: { current: number };
+  redraw: { current: (() => void) | null };
 }) {
   const ref = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
@@ -48,7 +54,7 @@ export function FacadePanelReveal({
           start: 0.24,
           duration: 0.76,
           immersive: !!context.conditions?.immersive,
-        });
+        }, { progress, redraw });
         tl.to({}, { duration: 0.12 }, 1);
         tl.eventCallback("onUpdate", () => {
           panel.inert = tl.progress() < 0.92;
@@ -60,7 +66,7 @@ export function FacadePanelReveal({
       ref,
     );
     return () => mm.revert();
-  }, [embedded]);
+  }, [embedded, progress, redraw]);
   return (
     <section
       id="vision"
@@ -133,7 +139,7 @@ export function FacadePanelReveal({
                 Architectural perspectives <Arrow diagonal />
               </Link>
             </div>
-            <VisionPhoto />
+            <VisionPhoto threeDEnabled={threeDEnabled} progress={progress} redraw={redraw} />
           </div>
         </div>
       </div>

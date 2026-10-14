@@ -9,6 +9,10 @@ export function addVisionDepth(
     duration,
     immersive,
   }: { start: number; duration: number; immersive: boolean },
+  three: {
+    progress: { current: number };
+    redraw: { current: (() => void) | null };
+  },
 ) {
   const panel = root.querySelector<HTMLElement>(".ivory-panel")!;
   const stage = panel.querySelector<HTMLElement>(".vision-depth-stage")!;
@@ -83,6 +87,7 @@ export function addVisionDepth(
     transformOrigin: "50% 50%",
   });
   gsap.set(paths, { strokeDashoffset: 1 });
+  gsap.set(three.progress, { current: 0 });
 
   timeline
     .to(panel, { clipPath: "inset(0% 0% 0% 0%)", duration: span(0.26) }, at(0))
@@ -192,6 +197,15 @@ export function addVisionDepth(
         ease: "none",
       },
       at(0.3),
+    )
+    .to(
+      three.progress,
+      {
+        current: 1,
+        duration: span(0.58),
+        onUpdate: () => three.redraw.current?.(),
+      },
+      at(0.22),
     )
     .to(
       copy,

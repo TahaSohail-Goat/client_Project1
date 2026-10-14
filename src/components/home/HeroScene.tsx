@@ -12,6 +12,7 @@ import { FacadePanelReveal } from "./FacadePanelReveal";
 import { PhotographicHero } from "./PhotographicHero";
 import { addVisionDepth } from "./visionDepth";
 import { addVideoStillJourney, VideoStillJourney } from "./VideoStillJourney";
+import { canUseVisionThree } from "../three/visionCapabilities";
 
 gsap.registerPlugin(ScrollTrigger);
 function canAnimate() {
@@ -22,8 +23,11 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const progress = useRef(0);
+  const visionProgress = useRef(0);
+  const visionRedraw = useRef<(() => void) | null>(null);
   const [enabled, setEnabled] = useState(canAnimate);
   const [loadStills, setLoadStills] = useState(false);
+  const [loadVision, setLoadVision] = useState(false);
   // Keep the loaded rendition through resizes to avoid decoder resets and re-downloads.
   const [small] = useState(() => matchMedia("(max-width: 767px)").matches);
   const source = enabled ? small ? videoHero.mobile : videoHero.desktop : null;
@@ -58,13 +62,14 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
         .to(interior, { opacity: 0, y: -20, duration: 0.07 }, 0.71)
         .to(".video-hero .hero-top", { opacity: 0, duration: 0.06 }, 0.77);
       addVideoStillJourney(tl, node, { start: 0.88 });
-      addVisionDepth(tl, node, { start: 1.48, duration: 0.46, immersive: !!context.conditions?.immersive });
+      addVisionDepth(tl, node, { start: 1.48, duration: 0.46, immersive: !!context.conditions?.immersive }, { progress: visionProgress, redraw: visionRedraw });
       tl.to({}, { duration: 0.06 }, 1.94);
       const update = () => {
         const p = playhead.p;
         const time = tl.time();
         progress.current = Math.min(1, p / videoHero.filmEnd);
         requestSeek();
+        visionRedraw.current?.();
         node.dataset.progress = p.toFixed(4);
         opening.inert = time > 0.3;
         opening.setAttribute("aria-hidden", String(time > 0.3));
@@ -72,6 +77,7 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
         editorial.inert = p < 0.92;
         editorial.setAttribute("aria-hidden", String(p < 0.92));
         if (p > 0.34) setLoadStills(true);
+        if (time > 1.3 && canUseVisionThree()) setLoadVision(true);
         const stillJourney = node.querySelector<HTMLElement>(".video-stills");
         const stillsActive = time >= 0.88 && time < 1.5;
         if (stillJourney) {
@@ -122,7 +128,7 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
     <p className="video-loading" role="status" aria-live="polite">
       {enabled && !ready ? "Preparing the film…" : buffering ? "Preparing this view…" : ""}
     </p>
-    <div className="video-editorial"><FacadePanelReveal embedded /></div>
+    <div className="video-editorial"><FacadePanelReveal embedded threeDEnabled={loadVision} progress={visionProgress} redraw={visionRedraw} /></div>
   </section>;
 }
 export function HeroScene() {
