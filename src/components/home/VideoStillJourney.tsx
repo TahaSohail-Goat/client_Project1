@@ -4,22 +4,22 @@ import { PhotoImage } from "../PhotoImage";
 
 const stills = [
   {
-    slug: "supplemental-04",
-    kind: "Exterior study",
-    title: "An arrival in evening light.",
-    detail: "A covered threshold, held between garden and home.",
+    slug: "supplemental-22",
+    kind: "Model study / Facade",
+    title: "Form, held in scale.",
+    detail: "A front-facing study of the model's exterior composition.",
   },
   {
-    slug: "supplemental-13",
-    kind: "Living study",
-    title: "A quieter way to gather.",
-    detail: "Material, daylight and a measured place to pause.",
+    slug: "supplemental-23",
+    kind: "Model study / Section",
+    title: "A view through the spaces.",
+    detail: "An open-section view of the model's interior volumes.",
   },
   {
-    slug: "supplemental-19",
-    kind: "Kitchen & dining study",
-    title: "Room for the everyday.",
-    detail: "An interior shaped around light and shared rituals.",
+    slug: "supplemental-24",
+    kind: "Model study / Upper view",
+    title: "The plan, seen in form.",
+    detail: "A raised perspective across the model's roof and rooms.",
   },
 ] as const;
 

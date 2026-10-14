@@ -21,7 +21,7 @@ async (page) => {
     await page.waitForTimeout(300);
   };
   const stills = [];
-  for (const [progress, expectedIndex] of [[.5, 0], [.6, 1], [.7, 2]]) {
+  for (const [progress, expectedIndex, expectedImage] of [[.5, 0, 'supplemental-22'], [.6, 1, 'supplemental-23'], [.7, 2, 'supplemental-24']]) {
     await go(progress);
     const scene = await page.locator('.video-stills').evaluate(e => ({
       hidden: e.getAttribute('aria-hidden') === 'true',
@@ -30,11 +30,12 @@ async (page) => {
         hidden: slide.getAttribute('aria-hidden') === 'true',
         transform: getComputedStyle(slide.querySelector('.video-still-plane')).transform,
         imageReady: !!slide.querySelector('img')?.naturalWidth,
+        image: slide.querySelector('img')?.getAttribute('src'),
       })).filter(slide => !slide.hidden),
     }));
-    if (scene.hidden || scene.active.length !== 1 || scene.active[0].index !== expectedIndex || !scene.active[0].imageReady || !scene.active[0].transform.startsWith('matrix3d')) throw Error('Photo chapter: '+JSON.stringify({progress,scene}));
+    if (scene.hidden || scene.active.length !== 1 || scene.active[0].index !== expectedIndex || !scene.active[0].imageReady || !scene.active[0].image.includes(expectedImage) || !scene.active[0].transform.startsWith('matrix3d')) throw Error('Photo chapter: '+JSON.stringify({progress,scene}));
     stills.push({progress,...scene});
-    if (progress === .6) await page.screenshot({ path: `output/playwright/hero-stills-${engine}-living.png` });
+    if (progress === .6) await page.screenshot({ path: `output/playwright/hero-stills-${engine}-model-section.png` });
   }
   await go(.4);
   if (!(await page.locator('.video-stills').evaluate(e => e.inert && e.getAttribute('aria-hidden') === 'true'))) throw Error('Photo journey did not reverse into the film');
@@ -79,7 +80,7 @@ async (page) => {
         return { captionTop: caption.top, captionRight: caption.right, captionBottom: caption.bottom, opacity: Number(getComputedStyle(e.querySelector('.video-still-caption')).opacity), overflow: document.documentElement.scrollWidth - innerWidth, imageReady: !!e.querySelector('img')?.naturalWidth };
       });
       if (stillLayout.captionTop < 70 || stillLayout.captionRight > width + 1 || stillLayout.captionBottom > height - 110 || stillLayout.opacity < .8 || stillLayout.overflow || !stillLayout.imageReady) throw Error('Mobile photo chapter: '+JSON.stringify(stillLayout));
-      await page.screenshot({ path: `output/playwright/hero-stills-${engine}-mobile.png` });
+      await page.screenshot({ path: `output/playwright/hero-stills-${engine}-model-mobile.png` });
     }
     await go(.98);
     const layout = await page.locator('.ivory-panel').evaluate(e => ({
