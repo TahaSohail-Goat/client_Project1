@@ -20,13 +20,13 @@ async (page) => {
     }, p);
     await page.waitForFunction(expectedProgress => {
       const v = document.querySelector('video');
-      const target = Math.min(1, expectedProgress / 0.6) * (v.duration - 1/24);
+      const target = Math.min(1, expectedProgress / 0.45) * (v.duration - 1/24);
       return !v.seeking && Math.abs(v.currentTime-target)<0.08;
     }, p);
     return {chapter:name,time:await page.locator('video').evaluate(v=>v.currentTime),settleMs:Math.round(Date.now()-start)};
   };
-  const approach = await seek('Approach',0.25 / 1.5);
-  const within = await seek('Within',0.65 / 1.5);
+  const approach = await seek('Approach',0.25 / 2);
+  const within = await seek('Within',0.65 / 2);
   const vision = await seek('Vision',0.98);
   await page.waitForFunction(() => getComputedStyle(document.querySelector('.video-editorial .ivory-panel')).clipPath === 'inset(0%)');
   const panel = await page.locator('.video-editorial .ivory-panel').evaluate(e => getComputedStyle(e).clipPath);

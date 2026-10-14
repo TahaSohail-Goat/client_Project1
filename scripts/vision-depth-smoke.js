@@ -20,16 +20,34 @@ async (page) => {
     await page.waitForFunction(p => Math.abs(Number(document.querySelector('.video-hero').dataset.progress) - p) < .003, progress);
     await page.waitForTimeout(300);
   };
+  const stills = [];
+  for (const [progress, expectedIndex] of [[.5, 0], [.6, 1], [.7, 2]]) {
+    await go(progress);
+    const scene = await page.locator('.video-stills').evaluate(e => ({
+      hidden: e.getAttribute('aria-hidden') === 'true',
+      active: Array.from(e.querySelectorAll('.video-still-slide')).map((slide, index) => ({
+        index,
+        hidden: slide.getAttribute('aria-hidden') === 'true',
+        transform: getComputedStyle(slide.querySelector('.video-still-plane')).transform,
+        imageReady: !!slide.querySelector('img')?.naturalWidth,
+      })).filter(slide => !slide.hidden),
+    }));
+    if (scene.hidden || scene.active.length !== 1 || scene.active[0].index !== expectedIndex || !scene.active[0].imageReady || !scene.active[0].transform.startsWith('matrix3d')) throw Error('Photo chapter: '+JSON.stringify({progress,scene}));
+    stills.push({progress,...scene});
+    if (progress === .6) await page.screenshot({ path: `output/playwright/hero-stills-${engine}-living.png` });
+  }
+  await go(.4);
+  if (!(await page.locator('.video-stills').evaluate(e => e.inert && e.getAttribute('aria-hidden') === 'true'))) throw Error('Photo journey did not reverse into the film');
   const pose = () => page.locator('.vision-composition').evaluate(e => ({
     transform: getComputedStyle(e).transform,
     opacity: Number(getComputedStyle(e).opacity),
     clip: getComputedStyle(e.querySelector('.vision-photo-mask')).clipPath,
     layers: e.querySelectorAll('.vision-photo-sheet').length,
   }));
-  await go(.68);
+  await go(.78);
   const entering = await pose();
   await page.screenshot({ path: `output/playwright/vision-${engine}-entering.png` });
-  await go(.76);
+  await go(.86);
   await page.screenshot({ path: `output/playwright/vision-${engine}-forward.png` });
   await go(.98);
   const settled = await pose();
@@ -43,7 +61,7 @@ async (page) => {
   await page.waitForTimeout(650);
   const hovered = await pointer.evaluate(e => getComputedStyle(e).transform);
   await page.mouse.move(10, 10);
-  await go(.58);
+  await go(.70);
   const reversed = await pose();
   if (reversed.opacity > .05) throw Error('Photo reveal did not reverse');
   await go(.98);
@@ -54,6 +72,15 @@ async (page) => {
     await page.setViewportSize({width, height});
     await visit();
     await page.locator('.video-hero[data-video-state="ready"]').waitFor();
+    if (width <= 767 && height > 700) {
+      await go(.6);
+      const stillLayout = await page.locator('.video-stills .video-still-slide:not([aria-hidden="true"])').evaluate(e => {
+        const caption = e.querySelector('.video-still-caption').getBoundingClientRect();
+        return { captionTop: caption.top, captionRight: caption.right, captionBottom: caption.bottom, opacity: Number(getComputedStyle(e.querySelector('.video-still-caption')).opacity), overflow: document.documentElement.scrollWidth - innerWidth, imageReady: !!e.querySelector('img')?.naturalWidth };
+      });
+      if (stillLayout.captionTop < 70 || stillLayout.captionRight > width + 1 || stillLayout.captionBottom > height - 110 || stillLayout.opacity < .8 || stillLayout.overflow || !stillLayout.imageReady) throw Error('Mobile photo chapter: '+JSON.stringify(stillLayout));
+      await page.screenshot({ path: `output/playwright/hero-stills-${engine}-mobile.png` });
+    }
     await go(.98);
     const layout = await page.locator('.ivory-panel').evaluate(e => ({
       overflow: document.documentElement.scrollWidth - innerWidth,
@@ -76,5 +103,5 @@ async (page) => {
     videos: document.querySelectorAll('video').length,
   }));
   if (reduced.transform !== 'none' || reduced.layers || reduced.pins || reduced.videos || errors.length) throw Error(JSON.stringify({reduced,errors}));
-  return {engine, entering, settled, hovered, reversed, replayed: true, mobile, reduced, errors};
+  return {engine, stills, entering, settled, hovered, reversed, replayed: true, mobile, reduced, errors};
 }

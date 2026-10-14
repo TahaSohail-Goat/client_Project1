@@ -3,6 +3,6 @@
   mobile: "/media/video/hero_exterior_to_interior_scrub-mobile.mp4",
   poster: "/media/video/hero-exterior-poster.webp",
   fps: 24,
-  // The final 40% is reserved for the extended 3D editorial reveal and reading hold.
-  filmEnd: 0.6,
+  // The film keeps its original scroll distance; the following still-photo chapter extends it.
+  filmEnd: 0.45,
 };
