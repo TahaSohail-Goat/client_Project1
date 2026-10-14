@@ -49,6 +49,19 @@ section[tabindex="-1"]:focus {
   inset: 0;
   overflow: hidden;
 }
+.depth-photo[data-three-ready="true"] .depth-photo-scroll > img {
+  opacity: 0;
+}
+.depth-photo-three {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.depth-photo-three canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .depth-photo-scroll {
   position: absolute;
   inset: 0;
@@ -57,6 +70,7 @@ section[tabindex="-1"]:focus {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 220ms ease-out;
 }
 .depth-photo-corner {
   position: absolute;
@@ -76,13 +90,38 @@ section[tabindex="-1"]:focus {
 }
 .exterior-card:first-child .exterior-frame {
   aspect-ratio: 1.25;
+  background: var(--ivory);
 }
 .exterior-card:nth-child(2) .exterior-frame {
   aspect-ratio: 0.9;
 }
 .exterior-grid {
+  position: relative;
   grid-template-columns: 1.6fr 1fr;
   gap: 7vw;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+.exterior-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transform-origin: 50% 65%;
+}
+.exterior-card .exterior-frame {
+  box-shadow: 0 30px 55px -30px #171c1a45;
+}
+.exterior-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 53px;
+  border: 1px solid #b9967070;
+  transform: translate3d(16px, 18px, -28px);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .exterior-card::before {
+    display: none;
+  }
 }
 .exterior-card:nth-child(2) {
   margin-top: 190px;

@@ -13,15 +13,8 @@ async (page) => {
   });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.setViewportSize({ width: 1440, height: 900 });
-  await visit("selected-work");
+  await page.goto(`${base}/?qa=${Date.now()}`);
   await page.locator('.video-hero[data-video-state="ready"]').waitFor();
-  await page.waitForFunction(
-    () =>
-      Math.abs(
-        document.querySelector("#selected-work").getBoundingClientRect().top -
-          100,
-      ) < 4,
-  );
   const initialModelDownloads = await page.evaluate(
     () =>
       performance
@@ -29,7 +22,16 @@ async (page) => {
         .filter((r) => /model-experience/.test(r.name)).length,
   );
   if (initialModelDownloads)
-    throw Error("WebGL bundle loaded before a model chapter");
+    throw Error("WebGL bundle loaded before the architecture chapter");
+  await visit("selected-work");
+  await page.waitForFunction(
+    () =>
+      Math.abs(
+        document.querySelector("#selected-work").getBoundingClientRect().top -
+          100,
+      ) < 4,
+  );
+  await page.locator('.exterior-card:first-child .depth-photo[data-three-ready="true"] canvas').waitFor({ timeout: 20000 });
   await page.mouse.wheel(0, 1);
   const scroll = async (selector, top = 100) => {
     await page.evaluate(
