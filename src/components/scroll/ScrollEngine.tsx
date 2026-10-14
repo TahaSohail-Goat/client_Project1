@@ -6,6 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "lenis/dist/lenis.css";
 
 gsap.registerPlugin(ScrollTrigger);
+// Keep Lenis's elapsed time aligned with the shared GSAP ticker.
+gsap.ticker.lagSmoothing(0);
 export function ScrollEngine() {
   const { pathname, hash } = useLocation();
   const engine = useRef<Lenis | null>(null);

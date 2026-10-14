@@ -1,4 +1,4 @@
-﻿# Asset usage
+# Asset usage
 
 All 43 client photographs remain accessible through `/#work` and its keyboard lightbox. Project associations are unconfirmed; categories do not represent commissions.
 
@@ -17,10 +17,12 @@ The hero and lightbox use full-resolution images. Lower gallery/editorial photog
 
 ## Motion and 3D
 
-`src/content/hero.ts` selects the photographic exterior/interior journey. Image categories do not establish a shared commission or a real outside-to-inside walkthrough.
+`src/content/videoHero.ts` selects the supplied MP4, mobile encode and first-frame poster. `src/content/hero.ts` retains the photographic fallback journey. Image categories do not establish a shared commission or a real outside-to-inside walkthrough.
 
 The physical-model canvas maps client photographs to planes. The separate housing canvas uses original procedural geometry requested by the user, prominently labelled a conceptual study, not a client project. Both use demand rendering and provide fallbacks; see `ANIMATION_SPEC.md`.
 
 `references/` retains the supplied video and contact sheets for design review. The reference video depicts another site and is never used as production footage. No stock or AI photography is included.
 
 Publication permission, photographer credits and higher-resolution masters remain launch requirements in `CLIENT_ACTION_REQUIRED.md`.
+
+The newly supplied hero_exterior_to_interior_scrub.mp4 is authorized for the homepage hero and is preserved unchanged as its canonical desktop asset in public/media/video/. The 768px mobile rendition is an intentional derivative for smaller downloads and decode cost. Neither film has embedded typography; all headings remain HTML.

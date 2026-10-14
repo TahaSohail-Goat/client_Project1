@@ -1,446 +1,147 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+﻿import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { photo } from "../../content/media";
-import { heroChapters, heroCopy } from "../../content/hero";
+import { videoHero } from "../../content/videoHero";
+import { heroChapters } from "../../content/hero";
 import { site } from "../../content/site";
-import { PhotoImage } from "../PhotoImage";
+import { useVideoScrub } from "../../hooks/useVideoScrub";
 import { Arrow } from "../Arrow";
 import { EditorialHeading } from "../type/EditorialHeading";
 import { FacadePanelReveal } from "./FacadePanelReveal";
+import { PhotographicHero } from "./PhotographicHero";
 
 gsap.registerPlugin(ScrollTrigger);
-export function HeroScene() {
-  const ref = useRef<HTMLElement>(null);
-  const [loadStory, setLoadStory] = useState(false);
-  const [staticStory, setStaticStory] = useState(false);
-  const requested = useRef(false);
-  const prepareStory = useCallback(() => {
-    if (!requested.current) {
-      requested.current = true;
-      setLoadStory(true);
-    }
+function canAnimate() {
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  return !saveData && !matchMedia("(prefers-reduced-motion: reduce), (max-height: 500px)").matches;
+}
+function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
+  const root = useRef<HTMLElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const progress = useRef(0);
+  const [enabled, setEnabled] = useState(canAnimate);
+  // Keep the loaded rendition through resizes to avoid decoder resets and re-downloads.
+  const [small] = useState(() => matchMedia("(max-width: 767px)").matches);
+  const source = enabled ? small ? videoHero.mobile : videoHero.desktop : null;
+  const { ready, buffering, requestSeek } = useVideoScrub(video, progress, source, onFailure);
+  useEffect(() => {
+    const preference = matchMedia("(prefers-reduced-motion: reduce), (max-height: 500px)");
+    const update = () => setEnabled(canAnimate());
+    preference.addEventListener("change", update);
+    return () => preference.removeEventListener("change", update);
   }, []);
   useLayoutEffect(() => {
+    if (!enabled) { progress.current = 0; return; }
     const mm = gsap.matchMedia();
-    mm.add(
-      {
-        desktop: "(min-width: 768px)",
-        mobile: "(max-width: 767px)",
-        reduced: "(prefers-reduced-motion: reduce)",
-        short:
-          "(max-height: 500px), (max-width: 767px) and (max-height: 650px)",
-      },
-      (context) => {
-        const root = ref.current!;
-        const frames = Array.from(
-          root.querySelectorAll<HTMLElement>("[data-journey-frame]"),
-        );
-        const buttons = Array.from(
-          root.querySelectorAll<HTMLButtonElement>(".journey-chapters button"),
-        );
-        const progressBar = root.querySelector<HTMLElement>(
-          ".journey-progress-fill",
-        )!;
-        const status = root.querySelector<HTMLElement>(".journey-status")!;
-        const intro = root.querySelector<HTMLElement>(".hero-copy")!;
-        const panel = root.querySelector<HTMLElement>(".ivory-panel")!;
-        const fallback = !!(
-          context.conditions?.reduced || context.conditions?.short
-        );
-        setStaticStory(fallback);
-        if (fallback) {
-          setLoadStory(true);
-          return;
-        }
-        const desktop = !!context.conditions?.desktop;
-        let lastChapter = -1;
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            id: "hero",
-            trigger: root,
-            start: "top top",
-            end: () => `+=${window.innerHeight * (desktop ? 4.8 : 3.4)}`,
-            pin: true,
-            scrub: desktop ? 0.6 : 0.35,
-            invalidateOnRefresh: true,
-            anticipatePin: 1,
-          },
+    mm.add({ desktop: "(min-width: 768px)", mobile: "(max-width: 767px)" }, (context) => {
+      const node = root.current!;
+      const opening = node.querySelector<HTMLElement>(".video-opening")!;
+      const interior = node.querySelector<HTMLElement>(".video-interior-copy")!;
+      const editorial = node.querySelector<HTMLElement>(".video-editorial")!;
+      const panel = node.querySelector<HTMLElement>(".ivory-panel")!;
+      const buttons = Array.from(node.querySelectorAll<HTMLButtonElement>(".journey-chapters button"));
+      const bar = node.querySelector<HTMLElement>(".journey-progress-fill")!;
+      const status = node.querySelector<HTMLElement>(".journey-status")!;
+      const desktop = context.conditions?.desktop;
+      let chapter = -1;
+      const playhead = { p: 0 };
+      gsap.set(panel, { clipPath: "inset(100% 0% 0% 0%)" });
+      gsap.set(interior, { opacity: 0, y: 24 });
+      gsap.set(".video-editorial .vision-line > span", { yPercent: 112 });
+      gsap.set([".video-editorial .vision-copy", ".video-editorial .vision-kicker"], { opacity: 0 });
+      gsap.set(".video-editorial .vision-composition", { clipPath: "inset(100% 0% 0% 0%)", y: 24 });
+      gsap.from(".video-opening .editorial-heading__line > span", { opacity: 0.45, yPercent: 25, rotation: -1.5, duration: 0.8, stagger: 0.12, ease: "power3.out" });
+      const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: {
+        id: "hero", trigger: node, start: "top top", end: () => `+=${innerHeight * (desktop ? 4.8 : 3.4)}`,
+        pin: true, scrub: desktop ? 0.45 : 0.25, invalidateOnRefresh: true, anticipatePin: 1,
+      }});
+      tl.to(playhead, { p: 1, duration: 1 }, 0)
+        .to(opening, { opacity: 0, y: -44, duration: 0.18 }, 0.12)
+        .to(interior, { opacity: 1, y: 0, duration: 0.055 }, 0.56)
+        .fromTo(".video-interior-copy .editorial-heading__line > span", { yPercent: 65, rotation: -2 }, { yPercent: 0, rotation: 0, stagger: 0.02, duration: 0.06, immediateRender: false }, 0.57)
+        .to(interior, { opacity: 0, y: -20, duration: 0.07 }, 0.71)
+        .to(".video-hero .hero-top", { opacity: 0, duration: 0.06 }, 0.77)
+        .to(panel, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.15 }, 0.8)
+        .to(".video-editorial .vision-kicker", { opacity: 1, duration: 0.04 }, 0.85)
+        .to(".video-editorial .vision-line > span", { yPercent: 0, stagger: 0.018, duration: 0.065 }, 0.85)
+        .to(".video-editorial .vision-composition", { clipPath: "inset(0% 0% 0% 0%)", y: 0, duration: 0.065 }, 0.885)
+        .to(".video-editorial .vision-copy", { opacity: 1, duration: 0.05 }, 0.91)
+        .to(".video-hero .journey-controls", { color: "#171c1a", duration: 0.04 }, 0.8);
+      const update = () => {
+        const p = playhead.p;
+        progress.current = Math.min(1, p / videoHero.filmEnd);
+        requestSeek();
+        node.dataset.progress = p.toFixed(4);
+        bar.style.transform = `scaleX(${p})`;
+        opening.inert = p > 0.3;
+        opening.setAttribute("aria-hidden", String(p > 0.3));
+        interior.setAttribute("aria-hidden", String(p < 0.56 || p > 0.78));
+        editorial.inert = p < 0.95;
+        editorial.setAttribute("aria-hidden", String(p < 0.95));
+        const next = p < 0.19 ? 0 : p < 0.5 ? 1 : p < 0.7 ? 2 : p < 0.84 ? 3 : 4;
+        if (next === chapter) return;
+        chapter = next;
+        node.dataset.chapter = heroChapters[next].id;
+        status.textContent = `${String(next + 1).padStart(2, "0")} / ${heroChapters[next].label}`;
+        buttons.forEach((button, i) => {
+          if (i === next) button.setAttribute("aria-current", "step");
+          else button.removeAttribute("aria-current");
         });
-        gsap.set(
-          [
-            ".journey-exterior",
-            ".journey-within",
-            ".journey-detail",
-            ".hero-finish",
-          ],
-          { opacity: 0 },
-        );
-        gsap.set(".journey-caption", { opacity: 0, y: 24 });
-        gsap.set(".journey-caption .editorial-heading__line > span", {
-          opacity: 0,
-          yPercent: 115,
-          rotation: -1.5,
-        });
-        gsap.set(".journey-aperture", { opacity: 0, scale: 0.8 });
-        gsap.set(".ivory-panel", { clipPath: "inset(100% 0% 0% 0%)" });
-        gsap.set(".vision-line span", { yPercent: 112 });
-        gsap.set([".vision-copy", ".vision-kicker"], { opacity: 0 });
-        gsap.set(".vision-composition", {
-          clipPath: "inset(100% 0% 0% 0%)",
-          y: 28,
-        });
-        // One 12-unit timeline: establish, approach, aperture entry, interior atmosphere, ivory finish.
-        tl.to(
-          ".hero-photo",
-          {
-            scale: 1.1,
-            xPercent: -0.8,
-            yPercent: -1.5,
-            rotationY: desktop ? 1.2 : 0,
-            duration: 2.4,
-          },
-          0,
-        )
-          .to(".hero-copy", { opacity: 0, y: -45, duration: 0.75 }, 1.15)
-          .fromTo(
-            ".journey-exterior",
-            { opacity: 1, clipPath: "inset(0% 100% 0% 0%)", xPercent: 4 },
-            {
-              opacity: 1,
-              clipPath: "inset(0% 0% 0% 0%)",
-              xPercent: 0,
-              duration: 1.1,
-              immediateRender: false,
-            },
-            1.8,
-          )
-          .fromTo(
-            ".journey-exterior .journey-camera",
-            { scale: 1.02, rotationY: desktop ? -1.5 : 0 },
-            {
-              scale: 1.09,
-              rotationY: 0,
-              xPercent: -0.5,
-              duration: 2.2,
-              immediateRender: false,
-            },
-            1.8,
-          )
-          .to(".caption-outside", { opacity: 1, y: 0, duration: 0.45 }, 2.45)
-          .to(
-            ".caption-outside .editorial-heading__line > span",
-            { opacity: 1, yPercent: 0, rotation: 0, stagger: 0.08, duration: 0.38 },
-            2.48,
-          )
-          .to(".caption-outside", { opacity: 0, y: -18, duration: 0.4 }, 3.4)
-          .to(
-            ".journey-aperture",
-            { opacity: 0.7, scale: 1, duration: 0.4 },
-            3.25,
-          )
-          .fromTo(
-            ".journey-within",
-            {
-              opacity: 1,
-              clipPath: desktop
-                ? "inset(24% 36% 24% 36%)"
-                : "inset(28% 22% 28% 22%)",
-            },
-            {
-              opacity: 1,
-              clipPath: "inset(0% 0% 0% 0%)",
-              duration: 1.45,
-              immediateRender: false,
-            },
-            3.6,
-          )
-          .to(
-            ".journey-exterior .journey-camera",
-            { scale: 1.02, duration: 1.3 },
-            3.6,
-          )
-          .to(
-            ".journey-aperture",
-            { opacity: 0, scale: 1.8, duration: 0.7 },
-            3.85,
-          )
-          .fromTo(
-            ".journey-within .journey-camera",
-            { scale: 1.035, yPercent: 1 },
-            {
-              scale: 1.1,
-              yPercent: -1.5,
-              duration: 3.15,
-              immediateRender: false,
-            },
-            3.6,
-          )
-          .to(".caption-within", { opacity: 1, y: 0, duration: 0.5 }, 4.9)
-          .to(
-            ".caption-within .editorial-heading__line > span",
-            { opacity: 1, yPercent: 0, rotation: 0, stagger: 0.08, duration: 0.38 },
-            4.94,
-          )
-          .to(".caption-within", { opacity: 0, y: -20, duration: 0.4 }, 6.25)
-          .fromTo(
-            ".journey-detail",
-            { opacity: 1, clipPath: "inset(100% 0% 0% 0%)", yPercent: 3 },
-            {
-              opacity: 1,
-              clipPath: "inset(0% 0% 0% 0%)",
-              yPercent: 0,
-              duration: 1.15,
-              immediateRender: false,
-            },
-            6.3,
-          )
-          .fromTo(
-            ".journey-detail .journey-camera",
-            { scale: 1.06, xPercent: -1.2, rotationY: desktop ? 1 : 0 },
-            {
-              scale: 1.1,
-              xPercent: 0.6,
-              rotationY: 0,
-              duration: 2.45,
-              immediateRender: false,
-            },
-            6.3,
-          )
-          .to(".caption-detail", { opacity: 1, y: 0, duration: 0.45 }, 7.05)
-          .to(
-            ".caption-detail .editorial-heading__line > span",
-            { opacity: 1, yPercent: 0, rotation: 0, stagger: 0.08, duration: 0.38 },
-            7.08,
-          )
-          .to(".caption-detail", { opacity: 0, y: -20, duration: 0.4 }, 8.25)
-          .fromTo(
-            ".hero-finish",
-            { opacity: 0, clipPath: "inset(0% 0% 0% 0%)" },
-            { opacity: 1, duration: 0.55, immediateRender: false },
-            8.5,
-          )
-          .fromTo(
-            ".facade-photo",
-            { scale: 1.02 },
-            {
-              scale: 1.08,
-              yPercent: -1,
-              duration: 1.45,
-              immediateRender: false,
-            },
-            8.5,
-          )
-          .to(".hero-top", { opacity: 0, duration: 0.4 }, 8.65)
-          .to(
-            ".ivory-panel",
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2 },
-            9.15,
-          )
-          .to(".vision-kicker", { opacity: 1, duration: 0.4 }, 9.65)
-          .to(
-            ".vision-line span",
-            { yPercent: 0, stagger: 0.15, duration: 0.65 },
-            9.7,
-          )
-          .to(
-            ".vision-composition",
-            { clipPath: "inset(0% 0% 0% 0%)", y: 0, duration: 0.75 },
-            10.2,
-          )
-          .to(".vision-copy", { opacity: 1, duration: 0.5 }, 10.55)
-          .to(".journey-controls", { color: "#252b23", duration: 0.16 }, 9.15)
-          .to({}, { duration: 0.8 }, 11.2);
-        const update = () => {
-          const time = tl.time();
-          const index =
-            time < 2.3
-              ? 0
-              : time < 4.4
-                ? 1
-                : time < 6.8
-                  ? 2
-                  : time < 9.35
-                    ? 3
-                    : 4;
-          progressBar.style.transform = `scaleX(${tl.progress()})`;
-          intro.inert = time > 1.9;
-          panel.inert = time < 11.05;
-          if (time > 0.06) prepareStory();
-          if (index === lastChapter) return;
-          lastChapter = index;
-          root.dataset.chapter = heroChapters[index].id;
-          status.textContent = `${String(index + 1).padStart(2, "0")} / ${heroChapters[index].label}`;
-          buttons.forEach((button, i) =>
-            button.setAttribute("aria-current", i === index ? "step" : "false"),
-          );
-          frames.forEach((frame, i) => {
-            frame.setAttribute("aria-hidden", String(i !== index));
-            frame.inert = i !== index;
-          });
-        };
-        tl.eventCallback("onUpdate", update);
-        update();
-        return () => {
-          frames.forEach((frame) => {
-            frame.removeAttribute("aria-hidden");
-            frame.inert = false;
-          });
-          intro.inert = false;
-          panel.inert = false;
-          progressBar.style.transform = "";
-          delete root.dataset.chapter;
-        };
-      },
-      ref,
-    );
+      };
+      tl.eventCallback("onUpdate", update);
+      update();
+      return () => {
+        for (const element of [opening, interior, editorial]) { element.inert = false; element.removeAttribute("aria-hidden"); }
+        delete node.dataset.progress;
+        delete node.dataset.chapter;
+        bar.style.transform = "";
+      };
+    }, root);
     return () => mm.revert();
-  }, [prepareStory]);
-  const jump = (progress: number) => {
-    prepareStory();
+  }, [enabled, requestSeek]);
+  const jump = (p: number) => {
     const trigger = ScrollTrigger.getById("hero");
-    if (!trigger) return;
-    window.dispatchEvent(
-      new CustomEvent("studio:scroll-to", {
-        detail: trigger.start + (trigger.end - trigger.start) * progress,
-      }),
-    );
+    if (trigger) window.dispatchEvent(new CustomEvent("studio:scroll-to", { detail: trigger.start + (trigger.end - trigger.start) * p }));
   };
-  const caption = (
-    className: string,
-    chapter: string,
-    lines: readonly string[],
-  ) => (
-    <div className={`journey-caption ${className}`}>
-      <p className="eyebrow">{chapter}</p>
-      <EditorialHeading lead={lines[0]} emphasis={lines[1]} />
+  return <section ref={root} className={`hero video-hero ${ready ? "film-ready" : ""}`} aria-labelledby="hero-title"
+    data-scene="hero" data-static={!enabled} data-video-state={!enabled ? "static" : ready ? "ready" : "loading"}>
+    <div className="video-media" aria-hidden="true">
+      <img className="video-poster" src={videoHero.poster} width="1280" height="720" alt="" fetchPriority="high" />
+      {source && <video ref={video} className="hero-video" src={source} poster={videoHero.poster} preload="auto" muted playsInline disablePictureInPicture tabIndex={-1} />}
+      <div className="video-shade" />
     </div>
-  );
-  const image = (slug: string) => (
-    <div className="journey-camera">
-      {(loadStory || staticStory) && (
-        <PhotoImage item={photo(slug)} className="journey-photo" full />
-      )}
+    <div className="hero-top"><span className="eyebrow">Architecture & Interior Design</span><span className="eyebrow">An exterior-to-interior journey</span></div>
+    <div className="hero-copy video-opening">
+      <p className="eyebrow">eco28 / Form & feeling</p>
+      <EditorialHeading as="h1" id="hero-title" lead={site.hero[0]} emphasis={site.hero[1]} />
+      <div className="hero-actions"><Link to="/#work" className="line-link">Explore the work <Arrow diagonal /></Link><Link to="/#contact" className="quiet-link">Discuss a project</Link></div>
     </div>
-  );
-  return (
-    <section
-      className="hero hero-journey"
-      ref={ref}
-      aria-labelledby="hero-title"
-      data-scene="hero"
-    >
-      <div className="hero-world">
-        <figure className="journey-plane journey-arrival" data-journey-frame>
-          <PhotoImage
-            item={photo(heroChapters[0].slug)}
-            className="hero-photo journey-photo"
-            priority
-            full
-          />
-          <div className="journey-photo-shade" />
-          <div className="hero-copy">
-            <p className="eyebrow">01 / Form & feeling</p>
-            <EditorialHeading
-              as="h1"
-              id="hero-title"
-              lead={site.hero[0]}
-              emphasis={site.hero[1]}
-            />
-            <div className="hero-actions">
-              <Link to="/#work" className="line-link">
-                Explore the work <Arrow diagonal />
-              </Link>
-              <Link to="/#contact" className="quiet-link">
-                Discuss a project
-              </Link>
-            </div>
-          </div>
-        </figure>
-        <figure className="journey-plane journey-exterior" data-journey-frame>
-          {image(heroChapters[1].slug)}
-          <div className="journey-photo-shade" />
-          {caption(
-            "caption-outside",
-            "02 / Architecture in perspective",
-            heroCopy.outside,
-          )}
-          <figcaption className="journey-static-caption">
-            Architecture / A different perspective
-          </figcaption>
-        </figure>
-        <figure className="journey-plane journey-within" data-journey-frame>
-          {image(heroChapters[2].slug)}
-          <div className="journey-photo-shade" />
-          {caption(
-            "caption-within",
-            "03 / The interior collection",
-            heroCopy.within,
-          )}
-          <figcaption className="journey-static-caption">
-            Interior study / Living & dining
-          </figcaption>
-        </figure>
-        <figure className="journey-plane journey-detail" data-journey-frame>
-          {image(heroChapters[3].slug)}
-          <div className="journey-photo-shade" />
-          {caption(
-            "caption-detail",
-            "04 / Interior atmosphere",
-            heroCopy.detail,
-          )}
-          <figcaption className="journey-static-caption">
-            Interior study / Lounge & light
-          </figcaption>
-        </figure>
+    <div className="video-interior-copy">
+      <p className="eyebrow">Spaces for everyday life</p>
+      <EditorialHeading lead="Outside." emphasis="Then within." />
+    </div>
+    <p className="video-loading" role="status" aria-live="polite">
+      {enabled && !ready ? "Preparing the film…" : buffering ? "Preparing this view…" : ""}
+    </p>
+    <div className="video-editorial"><FacadePanelReveal embedded /></div>
+    <div className="journey-controls">
+      <div className="journey-control-row">
+        <span className="journey-status eyebrow" role="status">01 / Arrival</span>
+        <nav className="journey-chapters" aria-label="Opening sequence chapters">
+          {heroChapters.map((chapter, i) => <button key={chapter.id} type="button" onClick={() => jump(videoHero.chapterProgress[i])}
+            aria-label={`Jump to ${chapter.label} chapter`} aria-current={i === 0 ? "step" : undefined}>
+            <span className="chapter-number">0{i + 1}</span><span className="chapter-word">{chapter.label}</span>
+          </button>)}
+        </nav>
+        <Link className="journey-skip" to="/#selected-work">Skip sequence <span aria-hidden="true">↓</span></Link>
       </div>
-      <div className="journey-aperture" aria-hidden="true">
-        <i />
-        <i />
-        <i />
-        <i />
-      </div>
-      <div className="hero-top">
-        <span className="eyebrow">Architecture & Interior Design</span>
-        <span className="eyebrow">{heroCopy.collection}</span>
-      </div>
-      <div data-journey-frame className="journey-finish-frame">
-        <FacadePanelReveal embedded />
-      </div>
-      <div className="journey-controls">
-        <div className="journey-control-row">
-          <span className="journey-status eyebrow" role="status">
-            01 / Arrival
-          </span>
-          <nav
-            className="journey-chapters"
-            aria-label="Opening sequence chapters"
-            onPointerEnter={prepareStory}
-            onFocusCapture={prepareStory}
-          >
-            {heroChapters.map((chapter, i) => (
-              <button
-                key={chapter.id}
-                type="button"
-                onClick={() => jump(chapter.progress)}
-                aria-label={`Jump to ${chapter.label} chapter`}
-                aria-current={i === 0 ? "step" : "false"}
-              >
-                <span className="chapter-number">0{i + 1}</span>
-                <span className="chapter-word">{chapter.label}</span>
-              </button>
-            ))}
-          </nav>
-          <a className="journey-skip" href="#selected-work">
-            Skip sequence <span aria-hidden="true">&darr;</span>
-          </a>
-        </div>
-        <div className="journey-progress" aria-hidden="true">
-          <span className="journey-progress-fill" />
-        </div>
-      </div>
-    </section>
-  );
+      <div className="journey-progress" aria-hidden="true"><span className="journey-progress-fill" /></div>
+    </div>
+  </section>;
+}
+export function HeroScene() {
+  const [failed, setFailed] = useState(false);
+  const onFailure = useCallback(() => setFailed(true), []);
+  return failed ? <PhotographicHero notice="Film unavailable. Explore the photographic journey." /> : <ScrollVideoHero onFailure={onFailure} />;
 }

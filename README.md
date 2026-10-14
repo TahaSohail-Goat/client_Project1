@@ -25,7 +25,7 @@ The eco28 experience is a single continuous page at `/`, with anchor navigation:
 - `/#work`: all 43 client photographs, category filters and a keyboard-accessible lightbox.
 - `/#studio` and `/#expertise`: studio introduction and the two confirmed disciplines.
 - `/#contact`: validated inquiry preview until a real destination is configured.
-- The photographic hero, interiors, materials, physical-model photographs and editorial chapters remain part of the same page. Legacy `/work`, `/studio` and `/contact` paths load the single-page experience for compatibility.
+- The scroll-scrubbed video hero, interiors, materials, physical-model photographs and editorial chapters remain part of the same page. The original photographic hero is retained as the film-loading/decoding failure fallback. Legacy `/work`, `/studio` and `/contact` paths load the single-page experience for compatibility.
 
 Edit studio identity and approved editorial copy in `src/content/site.ts`; opening chapter labels/bookmarks are in `src/content/hero.ts`. Photo metadata comes from `docs/ASSET_MANIFEST.json` through `src/content/media.ts`. Photos are not assigned to projects. Detail pages, team biographies, locations, awards and unconfirmed services are intentionally deferred.
 
@@ -37,7 +37,7 @@ The frontend contains no receiver, service credentials or server. Implement serv
 
 ## Assets and delivery
 
-Only `public/media/*.webp` is published. Original JPEGs and the motion-reference MP4 stay outside the deployment output. Responsive 480px and 768px WebP copies retain the source ratio and are never upscaled. Hero/facade and lightbox use full supplied WebP resolution. Space Grotesk, Instrument Serif Italic and Manrope are bundled locally through Fontsource; see `TYPOGRAPHY_SYSTEM.md`.
+Optimized photographs and the supplied hero film are served from `public/media`. Original JPEGs and the motion-reference MP4 stay outside the deployment output. Responsive 480px and 768px WebP copies retain the source ratio and are never upscaled. Hero/facade and lightbox use full supplied WebP resolution. Space Grotesk, Instrument Serif Italic and Manrope are bundled locally through Fontsource; see `TYPOGRAPHY_SYSTEM.md`.
 
 Deploy the contents of `dist/` to a static host with SPA fallback for `/work`, `/studio` and `/contact`. `vercel.json` and `public/_redirects` provide common host configurations; no hosting account is connected or deployment performed. The reference video is never used as website footage. `noindex,nofollow` and a disallow-all `robots.txt` remain until branding, publication permission and launch content are approved; update both at launch. Verify host-specific rewrites and response headers before launch.
 
@@ -46,3 +46,18 @@ Deploy the contents of `dist/` to a static host with SPA fallback for `/work`, `
 GSAP owns scrubbed pins, Motion owns separate editorial/navigation/gallery nodes, and Lenis optionally smooths desktop scroll. Lazy Three.js/R3F/Drei render the housing study and the preserved model-photo planes. Both canvases render on demand; DPR is capped at 1.5 for housing and 1.4 for photographs. Their shared WebGL bundle is fetched only near an eligible model chapter. Mobile uses native scrolling, while reduced motion removes pins and WebGL. See the animation specification for responsive budgets and fallbacks.
 
 See `ANIMATION_SPEC.md`, `ASSET_USAGE.md`, `TYPOGRAPHY_SYSTEM.md` and `CLIENT_ACTION_REQUIRED.md`. Local screenshots and browser evidence are in `output/playwright/` (ignored by Git). The original project brief and implementation blueprint remain in `docs/`; this README describes the current single-page structure.
+
+## Homepage film
+
+`public/media/video/hero_exterior_to_interior_scrub.mp4` is the supplied 8-second, 1280×720, 24fps H.264 film, preserved unchanged with its existing all-intra frames and front-loaded MP4 index. The 768×432 mobile encode retains all-intra seeking, and the first-frame WebP poster loads immediately. This film is distinct from the older reference screen recordings.
+
+GSAP drives a single normalized scroll playhead and the HTML typography/panel timeline. `src/hooks/useVideoScrub.ts` maps it to paused `currentTime`, quantizes to source frames and coalesces seeks until the decoder is ready. It never calls `play()` or enables autoplay. Lenis uses the existing shared GSAP ticker and ScrollTrigger notifications; touch uses native document scroll. Reduced motion, Save-Data and very short screens show the poster and editorial content without fetching the film or adding a hero pin. Loading and failed-media states keep content accessible.
+
+Run the production preview, then the repository smoke test with Playwright CLI:
+
+```sh
+npx --yes --package @playwright/cli playwright-cli -s=studio open http://127.0.0.1:4173/
+npx --yes --package @playwright/cli playwright-cli -s=studio run-code --filename=scripts/browser-smoke.js
+```
+
+Chrome and WebKit are the available local test targets. WebKit coverage does not substitute for actual Safari/iPhone hardware validation. The deployment host must preserve `video/mp4` and HTTP byte-range responses for scrubbing; the local production preview returns `206 Partial Content` for range requests.

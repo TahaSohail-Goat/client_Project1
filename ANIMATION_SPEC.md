@@ -2,17 +2,27 @@
 
 The supplied 3.90-second, 640×368 recording was decoded and inspected at 0.5-second intervals, alongside both supplied contact sheets. Its facade push-in, rising editorial panel and split-image settlement inform motion only. Neither its footage nor its property content is included.
 
+
+## Default video hero
+
+- **Assets:** supplied 8-second, 1280×720 H.264/all-intra/24fps MP4 (7,271,665 bytes), preserved byte-for-byte at `public/media/video/hero_exterior_to_interior_scrub.mp4`. A 768×432 all-intra mobile rendition is 2,579,207 bytes; first-frame WebP poster is 93,198 bytes. All three are typography-free. Older `references/` recordings are never used as site footage.
+- **One document scroll:** `HeroScene` owns one GSAP ScrollTrigger pin. Desktop scroll budget is 4.8 extra viewports; mobile is 3.4. GSAP scrub is 0.45/0.25 seconds. There is no nested scroll container, autoplay, loop or independent video playback. Lenis remains optional desktop smoothing on the shared GSAP ticker with lag smoothing disabled.
+- **Seeking:** normalized progress 0–0.9 maps to film time 0–(duration minus one frame). Targets round to 24fps. A single RAF and the native `seeked` event coalesce pending targets, avoiding repeated seeking while the decoder is busy. Video-frame callbacks track decoded frames; visibility cleanup removes callbacks/listeners, pauses and releases media. Responsive source selection is stable across resize to avoid re-downloading the film.
+- **Typography:** Space Grotesk 700 and Instrument Serif Italic 400 remain selectable HTML. Opening copy fades/moves upward at 12–30%; an interior lockup reveals at 56–65% and fades at 71–78%. Chapter seeks are 0%, 25%, 65%, 73%, 98%, aligned to the supplied film.
+- **Editorial handoff:** ivory wipes upward at 80–95%; heading, copy and masked client photography reveal within the panel. The last 5% is a readable hold. Inert/ARIA state follows visible content; the controls and Skip link remain available. At pin release the ivory surface joins the next ivory section without a background cut.
+- **Fallbacks:** the first-frame poster stays visible while decoding; a polite loading label does not block navigation. Film error or 30-second initial decode timeout mounts the preserved `PhotographicHero`. Reduced motion, Save-Data or <=500px height show ordinary poster/editorial content, with no MP4 request or hero pin. Compact phone/laptop layouts reserve space for controls.
+- **QA:** Chrome and WebKit production tests cover forward/reverse frame seeking, no independent playback, panel reversal, section skip, filters, keyboard lightbox and anchors. Responsive checks cover 390×844, 390×640 and 1366×600. Loading/failure and reduced-motion checks use isolated contexts to bypass media caching. Actual Safari/iOS hardware is unavailable in this Windows workspace and remains a launch check.
 ## Ownership
 
 | Component                            | Owner                                             | Behavior                                                                   |
 | ------------------------------------ | ------------------------------------------------- | -------------------------------------------------------------------------- |
-| HeroScene                            | GSAP/ScrollTrigger                                | Five-chapter pinned photographic opening, perspective and reversible masks |
+| HeroScene                            | GSAP/ScrollTrigger                                | Pinned video playhead, responsive HTML typography and reversible ivory wipe |
 | FacadePanelReveal                    | Parent HeroScene GSAP timeline                    | Embedded ivory/editorial finale; no separate homepage pin                  |
 | InteriorSequence                     | One GSAP/ScrollTrigger timeline                   | Four masked scene swaps, captions and indicators                           |
 | ExteriorWorks                        | Motion on image wrapper; CSS hover on child image | Gentle ±3% vertical parallax, asymmetric composition                       |
 | Materials, Approach, Studio, Inquiry | Motion                                            | Small opacity/22px translations, reversible viewport reveals               |
 | Header                               | Motion and React state                            | Mobile menu transition; focus management and Escape                        |
-| WorkPage/lightbox                    | Motion on cards; native dialog                    | Filter entrances, full-frame viewing and keyboard controls                 |
+| PortfolioSection/lightbox                    | Motion on cards; native dialog                    | Filter entrances, full-frame viewing and keyboard controls                 |
 | ScaleModelScene / PhotoPlanes        | GSAP numeric progress → R3F/Three/Drei            | Photograph planes only, bounded depth and tilt                             |
 | ScrollEngine                         | Lenis via GSAP ticker                             | Optional fine-pointer desktop smoothing; one RAF source                    |
 

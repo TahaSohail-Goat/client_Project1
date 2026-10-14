@@ -15,6 +15,7 @@ import "./styles/responsive.css";
 import "./styles/hero-journey.css";
 import "./styles/navigation.css";
 import "./styles/housing-study.css";
+import "./styles/video-hero.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,5 +1,7 @@
 # CODEX MASTER BRIEF (V2) — CINEMATIC ARCHITECTURE & INTERIOR DESIGN STUDIO
 
+> Current user-approved revision: the homepage now uses the supplied `hero_exterior_to_interior_scrub.mp4` as a paused, scroll-scrubbed film. The historical photographic hero instructions below apply to the preserved media-failure fallback. See `README.md` and `ANIMATION_SPEC.md` for the current implementation.
+
 ## Your role, definitive scope and instructions
 
 You are Codex operating in the **current existing website repository**. The Fiverr client has now confirmed the business category: **ARCHITECTURE AND INTERIOR DESIGN STUDIO SHOWCASING ITS WORK**. Build a premium, technically rigorous, cinematic **studio portfolio website** — NOT a real-estate broker, property-sales portal, agent directory, single-house listing or development-sales website. The brand name, exact project grouping and contact details remain unconfirmed; work honestly with configurable text/labels.
