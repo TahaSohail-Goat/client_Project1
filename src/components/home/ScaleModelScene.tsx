@@ -91,6 +91,7 @@ export function ScaleModelScene() {
   }, []);
   return (
     <section
+      id="model-studies"
       ref={ref}
       className="section-pad model-section"
       aria-labelledby="model-title"

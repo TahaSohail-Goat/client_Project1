@@ -76,14 +76,16 @@ export function ScrollEngine() {
           ScrollTrigger.refresh();
           engine.current?.resize();
           if (hash) {
+            const offset = Number(element.getAttribute("data-scroll-offset") ?? 100);
             if (engine.current)
               engine.current.scrollTo(element as HTMLElement, {
                 immediate: true,
                 force: true,
+                offset: 100 - offset,
               });
             else
               window.scrollTo({
-                top: element.getBoundingClientRect().top + scrollY - 100,
+                top: element.getBoundingClientRect().top + scrollY - offset,
                 behavior: "instant",
               });
             (element as HTMLElement).tabIndex = -1;

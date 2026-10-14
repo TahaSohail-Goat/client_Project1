@@ -6,6 +6,7 @@ import { Arrow } from "../Arrow";
 
 const navigation = [
   { label: "Work", id: "work" },
+  { label: "3D study", id: "housing" },
   { label: "Approach", id: "approach" },
   { label: "Studio", id: "studio" },
   { label: "Expertise", id: "expertise" },
@@ -99,7 +100,7 @@ export function Header() {
         const target = document.getElementById(id);
         if (!target) return;
         window.dispatchEvent(new CustomEvent("studio:scroll-to", {
-          detail: target.getBoundingClientRect().top + scrollY - 100,
+          detail: target.getBoundingClientRect().top + scrollY - Number(target.dataset.scrollOffset ?? 100),
         }));
         target.tabIndex = -1;
         target.focus({ preventScroll: true });

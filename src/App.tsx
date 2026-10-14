@@ -8,6 +8,7 @@ import { ExteriorWorks } from "./components/home/ExteriorWorks";
 import { InteriorSequence } from "./components/home/InteriorSequence";
 import { MaterialsScene } from "./components/home/MaterialsScene";
 import { ScaleModelScene } from "./components/home/ScaleModelScene";
+import { HousingStudy } from "./components/home/HousingStudy";
 import { ApproachEditorial } from "./components/home/ApproachEditorial";
 import { StudioExpertise } from "./components/home/StudioExpertise";
 import { ConsultationCTA } from "./components/home/ConsultationCTA";
@@ -23,6 +24,7 @@ function Home() {
       <ExteriorWorks />
       <InteriorSequence />
       <MaterialsScene />
+      <HousingStudy />
       <ScaleModelScene />
       <ApproachEditorial />
       <StudioExpertise />

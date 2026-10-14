@@ -70,3 +70,14 @@ The depth is a photographic illusion: CSS perspective, planar transforms, croppi
 `gsap.matchMedia` owns scene setup/reversion, scoped to each section. Route changes refresh measurements after lazy content mounts; Lenis dimensions are resized before anchor navigation. CSS scroll padding handles fixed-header offsets. Lenis uses `autoRaf:false` and one GSAP ticker callback, with native scroll on touch/mobile/reduced motion. All ticker/listener/observer/scene resources are cleaned up on unmount. Resize while inside a scene is included in browser QA.
 
 Primary implementation references: [ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/), [Lenis](https://github.com/darkroomengineering/lenis), [Motion React](https://motion.dev/docs/react), [R3F](https://r3f.docs.pmnd.rs/getting-started/introduction).
+
+## Conceptual housing study (requested after the original handoff)
+
+- Added between materials and physical-model photographs on the single page, accessible via `/#housing` and the navbar’s **3D study** link.
+- Original procedural courtyard-house geometry is explicitly labelled a conceptual study, not a client project or reconstruction. Client photography and the physical-model photo effect remain intact.
+- React Three Fiber renders Three.js geometry/materials/lights. Drei supplies slab-edge detail. The roof assembly lifts 3.2 units and slides back 2.8 units as the camera orbits toward an overhead interior view. Rotation, roof movement and camera framing are deterministic functions of normalized progress and reverse on upward scroll.
+- GSAP ScrollTrigger is the sole scroll controller. Desktop/tablet >=768px and >=651px: pin to the viewport for 2.5 extra viewport heights, scrub 0.65. Small or short screens: ordinary flow, unpinned scroll-linked movement. Chapter buttons jump to 8%, 54%, 94% through the existing Lenis/native scroll bridge.
+- Dynamic canvas import begins within 900px of the section, with WebGL2 capability detection and Save-Data respect. Demand rendering invalidates only when scroll progress or size changes; DPR is capped at 1.5. No downloaded model, HDR environment, autoplay loop, nested scroller or postprocessing is required.
+- Reduced motion, Save-Data, missing WebGL or lost context display an SVG generated from the same geometry, retain all explanatory text and remove the pin. Model/canvas size is reserved so rendering readiness does not move nearby content.
+- Browser QA: forward and reverse chapter navigation, mobile no-pin/no-overflow, reduced-motion static poster/no-canvas/no-pin, plus WebGL fallback. Build and lint checks recorded with the change.
+- Primary API guidance: [R3F demand rendering](https://r3f.docs.pmnd.rs/advanced/scaling-performance), [GSAP ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/).
