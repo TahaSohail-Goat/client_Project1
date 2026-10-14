@@ -1,33 +1,70 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+﻿import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { site } from "../../content/site";
 import { Arrow } from "../Arrow";
 
 const navigation = [
-  { label: "Work", href: "/#work" },
-  { label: "Approach", href: "/#approach" },
-  { label: "Studio", href: "/#studio" },
-  { label: "Expertise", href: "/#expertise" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Work", id: "work" },
+  { label: "Approach", id: "approach" },
+  { label: "Studio", id: "studio" },
+  { label: "Expertise", id: "expertise" },
+  { label: "Contact", id: "contact" },
 ];
+
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const reduced = useReducedMotion();
+
+  useEffect(() => { setOpen(false); }, [location]);
+
   useEffect(() => {
-    setOpen(false);
-  }, [location]);
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 24);
+      let current = "";
+      let nearest = -Infinity;
+      for (const item of navigation) {
+        const top = document.getElementById(item.id)?.getBoundingClientRect().top;
+        if (top !== undefined && top <= 160 && top > nearest) {
+          current = item.id;
+          nearest = top;
+        }
+      }
+      setActive(current);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, []);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1100px)");
+    const closeOnDesktop = () => { if (desktop.matches) setOpen(false); };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     const prior = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const backgrounds = document.querySelectorAll<HTMLElement>("main, footer");
-    backgrounds.forEach((element) => {
-      element.inert = true;
-    });
+    backgrounds.forEach((element) => { element.inert = true; });
     panel.current?.querySelector<HTMLElement>("a")?.focus();
     const keyboard = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -35,102 +72,84 @@ export function Header() {
         toggle.current?.focus();
       }
       if (event.key === "Tab") {
-        const targets = [
-          toggle.current!,
-          ...Array.from(
-            panel.current?.querySelectorAll<HTMLElement>("a") ?? [],
-          ),
-        ];
-        const first = targets[0],
-          last = targets.at(-1)!;
+        const targets = [toggle.current!, ...Array.from(
+          panel.current?.querySelectorAll<HTMLElement>("a") ?? [],
+        )];
+        const first = targets[0], last = targets.at(-1)!;
         if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
+          event.preventDefault(); last.focus();
         } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
+          event.preventDefault(); first.focus();
         }
       }
     };
     document.addEventListener("keydown", keyboard);
     return () => {
       document.body.style.overflow = prior;
-      backgrounds.forEach((element) => {
-        element.inert = false;
-      });
+      backgrounds.forEach((element) => { element.inert = false; });
       document.removeEventListener("keydown", keyboard);
     };
   }, [open]);
+
+  const navigate = (id: string) => {
+    setOpen(false);
+    // A repeated anchor still navigates after the user has scrolled away.
+    if (location.hash === `#${id}`) {
+      requestAnimationFrame(() => {
+        const target = document.getElementById(id);
+        if (!target) return;
+        window.dispatchEvent(new CustomEvent("studio:scroll-to", {
+          detail: target.getBoundingClientRect().top + scrollY - 100,
+        }));
+        target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      });
+    }
+  };
+
   return (
     <>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <header className="header">
-        <Link to="/" className="wordmark" aria-label={`${site.name} home`}>
-          <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-            <path
-              d="M3 28V4h26v24M9 28V10h14v18M1 28h30"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-            />
-          </svg>
-          <span>
-            {site.name}
-            <small>ARCHITECTURE & INTERIORS</small>
-          </span>
+      <a className="skip-link" href="#main">Skip to content</a>
+      <header className={`header ${scrolled ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
+        <Link to="/#main" className="wordmark" aria-label={`${site.name} home`}
+          tabIndex={open ? -1 : undefined} onClick={() => navigate("main")}>
+          <span className="wordmark-name">eco<span>28</span><i aria-hidden="true" /></span>
+          <span className="wordmark-description">Architecture<br />& Interior Design</span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
-          {navigation.map((item) => (
-            <NavLink
-              key={item.label}
-              to={item.href}
-              className={({ isActive }) =>
-                isActive && !item.href.includes("#") ? "active" : undefined
-              }
-            >
-              {item.label}
-            </NavLink>
+          {navigation.filter((item) => item.id !== "contact").map((item) => (
+            <Link key={item.id} to={`/#${item.id}`}
+              aria-current={active === item.id ? "location" : undefined}
+              className={active === item.id ? "active" : undefined}
+              onClick={() => navigate(item.id)}>{item.label}</Link>
           ))}
         </nav>
-        <Link to="/#contact" className="header-inquiry">
-          Discuss a project <Arrow diagonal />
+        <Link to="/#contact" className="header-inquiry" aria-label="Discuss a project with eco28" onClick={() => navigate("contact")}>
+          Let’s talk <span><Arrow diagonal /></span>
         </Link>
-        <button
-          className="menu-toggle"
-          ref={toggle}
-          onClick={() => setOpen(!open)}
-          aria-expanded={open}
-          aria-controls="mobile-navigation"
-          aria-label={open ? "Close navigation" : "Open navigation"}
-        >
+        <button className="menu-toggle" ref={toggle} onClick={() => setOpen(!open)}
+          aria-expanded={open} aria-controls="mobile-navigation"
+          aria-label={open ? "Close navigation" : "Open navigation"}>
           <span>{open ? "Close" : "Menu"}</span>
-          <i className={open ? "is-open" : ""} />
+          <i className={open ? "is-open" : ""} aria-hidden="true"><b /><b /></i>
         </button>
       </header>
       <AnimatePresence>
         {open && (
-          <m.div
-            id="mobile-navigation"
-            ref={panel}
-            className="mobile-navigation"
-            initial={{ opacity: 0, y: reduced ? 0 : -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduced ? 0 : 0.25 }}
-          >
+          <m.div id="mobile-navigation" ref={panel} className="mobile-navigation" data-lenis-prevent
+            role="dialog" aria-modal="true" aria-label="Site navigation"
+            initial={{ opacity: 0, y: reduced ? 0 : -12 }} animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : 0.22 }}>
+            <div className="mobile-navigation-intro"><span className="eyebrow">Explore eco28</span><span>Architecture & interiors</span></div>
             <nav aria-label="Mobile navigation">
               {navigation.map((item, index) => (
-                <Link key={item.label} to={item.href}>
-                  <small>0{index + 1}</small>
-                  {item.label}
-                  <Arrow diagonal />
+                <Link key={item.id} to={`/#${item.id}`} onClick={() => navigate(item.id)}
+                  aria-current={active === item.id ? "location" : undefined}>
+                  <small>0{index + 1}</small><span>{item.label}</span><Arrow diagonal />
                 </Link>
               ))}
             </nav>
-            <p>Architecture & Interior Design</p>
-            <span className="eyebrow">Brand name pending approval</span>
+            <div className="mobile-navigation-footer"><p>Space, seen <em>as a whole.</em></p><span className="eyebrow">eco28 / Architecture & Interior Design</span></div>
           </m.div>
         )}
       </AnimatePresence>

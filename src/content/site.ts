@@ -1,7 +1,7 @@
 // All editorial copy is draft copy for approval. No project associations are implied.
 export const site = {
-  name: "STUDIO NAME",
-  brandPending: true,
+  name: "eco28",
+  brandPending: false,
   disciplines: "Architecture & Interior Design",
   hero: ["Design, made", "tangible."],
   statement: ["Space. Light.", "A way of living."],

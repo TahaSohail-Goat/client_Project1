@@ -55,8 +55,10 @@ export function ScrollEngine() {
     };
   }, []);
   useEffect(() => {
-    engine.current?.scrollTo(0, { immediate: true, force: true });
-    window.scrollTo({ top: 0, behavior: "instant" });
+    if (!hash) {
+      engine.current?.scrollTo(0, { immediate: true, force: true });
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
     let frame = 0;
     let timeout = 0;
     let finished = false;
@@ -84,6 +86,8 @@ export function ScrollEngine() {
                 top: element.getBoundingClientRect().top + scrollY - 100,
                 behavior: "instant",
               });
+            (element as HTMLElement).tabIndex = -1;
+            (element as HTMLElement).focus({ preventScroll: true });
           }
         });
       });

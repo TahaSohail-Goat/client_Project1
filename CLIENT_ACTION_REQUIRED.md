@@ -2,7 +2,7 @@
 
 Confirmed scope: architecture and interior design studio portfolio. The local demo can be reviewed now; it has not been deployed.
 
-1. Replace `STUDIO NAME` with the approved studio name and supply its logo/brand guide. The small architectural mark is a temporary graphic, not an approved logo. Approve typography, colors and draft editorial copy in `src/content/site.ts`.
+1. The studio name is confirmed as `eco28` and is used throughout the site. The navigation uses a typographic wordmark; supply a logo/brand guide if a separate logo is required. Typography and palette are locked; draft editorial copy in `src/content/site.ts` still needs approval.
 2. Confirm permission to publish all 43 images and provide required photographer credits. Photo provenance is supplied by the handoff and `DesktopAssests`; no public-use authorization is assumed.
 3. Map photographs to actual commissions if case studies are desired. Until then they remain a category-based collection without names, addresses, dates, budgets, built status or invented associations.
 4. Supply a verified email or inquiry endpoint. Approve privacy language and implement server-side delivery/spam controls. The present form only creates a local “Not sent” preview. See README for the `{received:true}` endpoint contract.
