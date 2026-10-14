@@ -1,6 +1,6 @@
 # Architecture & Interior Design Studio Portfolio
 
-A local React/TypeScript implementation of the supplied studio handoff. This folder initially contained the handoff only, with no application or Git history. After the user authorized building here, the original package was committed on `main`; application work is on `feat/architecture-studio-cinematic`.
+A single-page eco28 architecture and interior design portfolio built with React, TypeScript and Vite. Runtime sections live in `src/components/sections`; cinematic chapters live in `src/components/home`. Optimized client images have one canonical location in `public/media`, with unique original masters retained separately.
 
 ## Run
 
@@ -45,4 +45,4 @@ Deploy the contents of `dist/` to a static host with SPA fallback for `/work`, `
 
 GSAP owns scrubbed pins, Motion owns separate editorial/navigation/gallery nodes, and Lenis optionally smooths desktop scroll. Lazy Three.js/R3F/Drei render the housing study and the preserved model-photo planes. Both canvases render on demand; DPR is capped at 1.5 for housing and 1.4 for photographs. Their shared WebGL bundle is fetched only near an eligible model chapter. Mobile uses native scrolling, while reduced motion removes pins and WebGL. See the animation specification for responsive budgets and fallbacks.
 
-See `ANIMATION_SPEC.md`, `ASSET_USAGE.md`, `IMPLEMENTATION_PROGRESS.md` and `CLIENT_ACTION_REQUIRED.md`. Local screenshots and browser evidence are in `output/playwright/` (ignored by Git). The original handoff instructions remain untouched in `docs/`.
+See `ANIMATION_SPEC.md`, `ASSET_USAGE.md`, `TYPOGRAPHY_SYSTEM.md` and `CLIENT_ACTION_REQUIRED.md`. Local screenshots and browser evidence are in `output/playwright/` (ignored by Git). The original project brief and implementation blueprint remain in `docs/`; this README describes the current single-page structure.

@@ -1,5 +1,5 @@
 import { Route, Routes, Link, useLocation } from "react-router-dom";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { ScrollEngine } from "./components/scroll/ScrollEngine";
@@ -12,9 +12,12 @@ import { HousingStudy } from "./components/home/HousingStudy";
 import { ApproachEditorial } from "./components/home/ApproachEditorial";
 import { StudioExpertise } from "./components/home/StudioExpertise";
 import { ConsultationCTA } from "./components/home/ConsultationCTA";
-import WorkPage from "./pages/WorkPage";
-import { StudioExpertiseSection, StudioIntro } from "./pages/StudioPage";
-import ContactPage from "./pages/ContactPage";
+import PortfolioSection from "./components/sections/PortfolioSection";
+import {
+  StudioExpertiseSection,
+  StudioIntro,
+} from "./components/sections/StudioSections";
+import InquirySection from "./components/sections/InquirySection";
 import { site } from "./content/site";
 
 function Home() {
@@ -29,10 +32,10 @@ function Home() {
       <ApproachEditorial />
       <StudioExpertise />
       <ConsultationCTA />
-      <WorkPage />
+      <PortfolioSection />
       <StudioIntro />
       <StudioExpertiseSection />
-      <ContactPage />
+      <InquirySection />
     </>
   );
 }
@@ -64,21 +67,12 @@ export default function App() {
       <ScrollEngine />
       <Header />
       <main id="main" tabIndex={-1}>
-        <Suspense
-          fallback={
-            <div className="route-loading" role="status">
-              Opening chapter…
-            </div>
-          }
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/work" element={<Home />} />
-            <Route path="/studio" element={<Home />} />
-            <Route path="/contact" element={<Home />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          {["/", "/work", "/studio", "/contact"].map((path) => (
+            <Route key={path} path={path} element={<Home />} />
+          ))}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </main>
       <Footer />
     </>

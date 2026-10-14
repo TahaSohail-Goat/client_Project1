@@ -12,7 +12,7 @@ The most important experience is a **visually spectacular, smooth, reversible, s
 
 1. Audit the existing repo first: git status/branch, app framework, React and package versions, layout and routes, CSS system, components, media, existing features, build/test/lint commands, SEO, dependencies, and deployment configuration. Do not assume a fresh Next.js project. Summarize what exists and what can be reused. Run a baseline build if feasible, document preexisting issues.
 2. Protect work: do **not** `git reset --hard`, force-pull, delete/reinitialize project, clobber uncommitted changes, modify secrets, or break existing flows. Create branch `feat/architecture-studio-cinematic` if git status/branch safety allows. If uncommitted changes block a clean branch, report and use safe non-destructive steps.
-3. Read completely: `architecture_codex_handoff/README_START_HERE.md`, `docs/IMPLEMENTATION_BLUEPRINT.md`, `docs/ASSET_MANIFEST.json`, `docs/CLIENT_REQUIREMENTS_TO_CONFIRM.md`. Inspect the original photos/contact sheets and actual reference MP4 frames before choosing crops.
+3. Read completely: `architecture_codex_handoff/README.md`, `docs/IMPLEMENTATION_BLUEPRINT.md`, `docs/ASSET_MANIFEST.json`, `CLIENT_ACTION_REQUIRED.md`. Inspect the original photos/contact sheets and actual reference MP4 frames before choosing crops.
 4. Produce a short audit + implementation checklist and list the precise animation responsibility per component. Continue automatically through safe non-destructive implementation; only request user approval for important unresolved scope/content, destructive actions, paid services, or deployments.
 5. Prefer the existing stack and styling. Use TypeScript if the repo supports it. Keep good semantic HTML, reliable routing and mobile responsiveness. Do not introduce services, external assets, or unauthorized brand claims by assumption.
 
@@ -35,7 +35,7 @@ Implement in this order:
 
 **01 — Exterior HERO / 'Design, Made Tangible' (creative placeholder only)**
 
-- Primary asset `client_assets/web_ready/exterior-driveway-golden-hour.webp`; optional responsive alternate `exterior-front-twilight.webp`. Do NOT blur or needlessly upsize the original 1080px exteriors.
+- Primary asset `public/media/exterior-driveway-golden-hour.webp`; optional responsive alternate `exterior-front-twilight.webp`. Do NOT blur or needlessly upsize the original 1080px exteriors.
 - Full-screen architecture facade, elegant editorial typography, small brand/chapter label, readable project/studio CTA links. Visually composed first viewport; do not wait for the user to scroll to see studio purpose.
 - 170–200vh *approximate* scroll budget, with pinned visual occupying viewport. Scrub progress drives slight scale (say 1.00→1.08), camera-like pan, headline translation/opacity and transition cue. **Scrolling upward must reverse every element.** No stuttering, abrupt cut, giant empty spacer or broken sticky behavior.
 - Keep architecture geometry unchanged; subtle gradient only for text legibility; responsive `object-position` to avoid clipping roof/window massing.
@@ -145,7 +145,7 @@ Build component boundaries so photo and copy content can change from a small dat
 
 1. `ANIMATION_SPEC.md`: each scene's ref, scroll range, GSAP timeline stages, transform bounds, responsive fallback and library ownership.
 2. `ASSET_USAGE.md`: all 18 photo filenames, where they appear, category and image-association warnings; list image export choices.
-3. `IMPLEMENTATION_PROGRESS.md`: work completed by phase, tested commands/results, screenshots/recordings when available, measured perf evidence vs targets, remaining issues.
+3. `README.md`: current structure, run/build commands, verification workflow and remaining launch requirements. Local browser evidence lives in ignored `output/playwright/`.
 4. `CLIENT_ACTION_REQUIRED.md`: studio name/logo, photo-to-project mapping, approval, contact/form destination, services, copy and high-res sources.
 5. Project README instructions to run/build and package/bundling notes, no leaked secrets.
 

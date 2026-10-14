@@ -6,3 +6,5 @@ dist/
 output/
 .playwright-cli/
 *.tsbuildinfo
+# Supplemental client masters and reference clips stay local; web exports are in public/media.
+DesktopAssests/

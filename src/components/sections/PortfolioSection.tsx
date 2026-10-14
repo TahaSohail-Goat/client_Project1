@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import { m, useReducedMotion } from "motion/react";
-import { media, type Category, type Photo } from "../content/media";
-import { PhotoImage } from "../components/PhotoImage";
-import { Arrow } from "../components/Arrow";
-import { AccessibleLightbox } from "../components/portfolio/AccessibleLightbox";
+import { media, type Category, type Photo } from "../../content/media";
+import { PhotoImage } from "../PhotoImage";
+import { Arrow } from "../Arrow";
+import { AccessibleLightbox } from "../portfolio/AccessibleLightbox";
 
 const categories: ("All" | Category)[] = [
   "All",
@@ -11,7 +11,7 @@ const categories: ("All" | Category)[] = [
   "Interiors",
   "Model Studies",
 ];
-export default function WorkPage() {
+export default function PortfolioSection() {
   const [params, setParams] = useSearchParams();
   const category = categories.includes(params.get("category") as Category)
     ? params.get("category")!

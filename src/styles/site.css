@@ -175,16 +175,6 @@ select {
   object-position: 50% 45%;
   will-change: transform;
 }
-.hero-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.16) 15%,
-    transparent 35%,
-    rgba(11, 19, 11, 0.68) 100%
-  );
-}
 .hero-top {
   position: absolute;
   top: calc(var(--header-height) + 28px);
@@ -215,33 +205,6 @@ select {
 }
 .hero-actions .line-link {
   min-width: 210px;
-}
-.hero-bottom {
-  position: absolute;
-  bottom: 30px;
-  left: var(--gutter);
-  right: var(--gutter);
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  font-size: 10px;
-  line-height: 1.6;
-}
-.hero-caption {
-  text-align: right;
-}
-.scroll-cue {
-  display: flex;
-  gap: 25px;
-  align-items: center;
-}
-.scroll-cue span {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #ffffff70;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
 }
 .facade-scene {
   height: 100svh;
@@ -328,17 +291,6 @@ figcaption {
 figcaption span {
   color: var(--muted);
 }
-.static-intro {
-  min-height: 75vh;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 35px;
-}
-.static-intro h2 {
-  font-size: clamp(50px, 6vw, 95px);
-}
 .footer {
   padding: 50px var(--gutter) 25px;
   display: grid;
@@ -391,12 +343,6 @@ figcaption span {
 html,
 body {
   overflow-x: clip;
-}
-.route-loading {
-  min-height: 80vh;
-  display: grid;
-  place-items: center;
-  font-size: 12px;
 }
 .section-heading {
   display: flex;
@@ -1215,18 +1161,6 @@ body {
   .hero-actions .line-link {
     min-width: 180px;
   }
-  .hero-bottom {
-    bottom: 27px;
-  }
-  .hero-caption {
-    display: none;
-  }
-  .hero-bottom > span {
-    max-width: 120px;
-  }
-  .scroll-cue {
-    gap: 12px;
-  }
   .facade-scene {
     min-height: 650px;
   }
@@ -1284,9 +1218,6 @@ body {
   }
   .footer > div {
     flex-wrap: wrap;
-  }
-  .static-intro {
-    min-height: 60vh;
   }
 }
 @media (max-width: 767px) {

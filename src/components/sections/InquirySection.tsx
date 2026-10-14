@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { site } from "../content/site";
-import { Arrow } from "../components/Arrow";
+import { site } from "../../content/site";
+import { Arrow } from "../Arrow";
 type Inquiry = {
   name: string;
   email: string;
   discipline: string;
   message: string;
 };
-export default function ContactPage() {
+export default function InquirySection() {
   const [draft, setDraft] = useState<Inquiry | null>(null);
   const [status, setStatus] = useState<
     "idle" | "sending" | "received" | "error" | "email"

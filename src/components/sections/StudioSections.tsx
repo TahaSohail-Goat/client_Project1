@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { site } from "../content/site";
-import { photo } from "../content/media";
-import { PhotoImage } from "../components/PhotoImage";
-import { Reveal } from "../components/Reveal";
-import { Arrow } from "../components/Arrow";
-import { ConsultationCTA } from "../components/home/ConsultationCTA";
+import { site } from "../../content/site";
+import { photo } from "../../content/media";
+import { PhotoImage } from "../PhotoImage";
+import { Reveal } from "../Reveal";
+import { Arrow } from "../Arrow";
 export function StudioIntro() {
   return (
     <>
@@ -102,15 +101,5 @@ export function StudioExpertiseSection() {
         following client approval.
       </p>
     </section>
-  );
-}
-
-export default function StudioPage() {
-  return (
-    <>
-      <StudioIntro />
-      <StudioExpertiseSection />
-      <ConsultationCTA />
-    </>
   );
 }

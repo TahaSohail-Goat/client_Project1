@@ -67,7 +67,7 @@ export function ScrollEngine() {
       if (finished) return;
       const element = hash
         ? document.getElementById(decodeURIComponent(hash.slice(1)))
-        : document.querySelector("main > :not(.route-loading)");
+        : document.querySelector("main > :first-child");
       if (!element) return;
       finished = true;
       observer.disconnect();
