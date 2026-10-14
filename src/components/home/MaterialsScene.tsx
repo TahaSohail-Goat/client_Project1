@@ -19,8 +19,9 @@ import { CanvasBoundary } from "../three/CanvasBoundary";
 
 gsap.registerPlugin(ScrollTrigger);
 const MaterialsCanvas = lazy(() => import("../three/MaterialsCanvas"));
+const sceneScreens = 3.2;
 const immersiveQuery =
-  "(min-width: 1024px) and (min-height: 760px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
+  "(min-width: 1024px) and (min-height: 560px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
 function canImmerse() {
   const connection = (
     navigator as Navigator & { connection?: { saveData?: boolean } }
@@ -80,19 +81,21 @@ export function MaterialsScene() {
         () => {
           root
             .current!.querySelectorAll<HTMLElement>(".material-photo")
-            .forEach((frame) => {
+            .forEach((frame, index) => {
               gsap.fromTo(
                 frame,
-                { opacity: 0.6, y: 24 },
+                { opacity: 0.6, y: 40, scale: 0.94, rotation: index ? 2 : -2 },
                 {
                   opacity: 1,
                   y: 0,
+                  scale: 1,
+                  rotation: 0,
                   ease: "power2.out",
                   scrollTrigger: {
                     trigger: frame,
                     start: "top 95%",
-                    end: "top 60%",
-                    scrub: 0.4,
+                    end: "top 45%",
+                    scrub: 0.5,
                   },
                 },
               );
@@ -107,6 +110,12 @@ export function MaterialsScene() {
     const context = gsap.context(() => {
       const large = node.querySelector(".material-large .material-photo")!;
       const small = node.querySelector(".material-small .material-photo")!;
+      const captions = node.querySelectorAll<HTMLElement>(
+        ".material-shot-caption",
+      );
+      const links = node.querySelectorAll<HTMLElement>(
+        ".material-caption-links a",
+      );
       gsap.set("#materials-title .cinematic-word", {
         yPercent: 0,
         opacity: 1,
@@ -114,120 +123,124 @@ export function MaterialsScene() {
         x: 0,
         rotateZ: 0,
       });
+      gsap.set(captions, { autoAlpha: 0, y: 36 });
+      const update = () => {
+        const p = progress.current;
+        node.dataset.progress = p.toFixed(4);
+        node.dataset.phase =
+          p < 0.26 ? "arrival" : p < 0.62 ? "light" : "texture";
+        captions.forEach((caption, index) =>
+          caption.setAttribute(
+            "aria-hidden",
+            String(index === 0 ? p < 0.28 || p > 0.65 : p < 0.66),
+          ),
+        );
+        links.forEach((link, index) => {
+          link.dataset.active = String(index === (p < 0.62 ? 0 : 1));
+        });
+        redraw.current?.();
+      };
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
           id: "materials",
           trigger: node,
           start: "top top",
-          end: () => `+=${innerHeight * 2.8}`,
+          end: () => `+=${innerHeight * sceneScreens}`,
           pin: true,
-          scrub: 0.6,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
-        onUpdate: () => {
-          node.dataset.progress = progress.current.toFixed(4);
-          redraw.current?.();
-        },
+        onUpdate: update,
       });
       tl.fromTo(progress, { current: 0 }, { current: 1, duration: 1 }, 0)
-        .fromTo(
-          "#materials-title em .cinematic-word",
-          { yPercent: 90, opacity: 0, rotateX: 24, x: -14, rotateZ: -3 },
-          {
-            yPercent: 0,
-            opacity: 1,
-            rotateX: 0,
-            x: 0,
-            rotateZ: 0,
-            duration: 0.16,
-            ease: "power2.out",
-          },
-          0,
+        .to(
+          ".materials .section-heading",
+          { autoAlpha: 0, y: -55, duration: 0.16 },
+          0.12,
         )
-        .fromTo(
-          ".materials-canvas",
-          { opacity: 0.65 },
-          { opacity: 1, duration: 0.25 },
-          0,
+        .to(".material-scroll-cue", { opacity: 0, y: 16, duration: 0.1 }, 0.12)
+        .to(
+          captions[0],
+          { autoAlpha: 1, y: 0, duration: 0.14, ease: "power2.out" },
+          0.29,
+        )
+        .to(captions[0], { autoAlpha: 0, y: -28, duration: 0.1 }, 0.55)
+        .to(
+          captions[1],
+          { autoAlpha: 1, y: 0, duration: 0.14, ease: "power2.out" },
+          0.66,
         )
         .fromTo(
           large,
           {
-            x: -70,
-            y: 30,
-            rotationY: -22,
-            rotationZ: -3,
-            z: -140,
-            scale: 0.87,
-            transformPerspective: 1600,
+            xPercent: 12,
+            z: -220,
+            rotationY: -28,
+            rotationZ: -2,
+            scale: 0.88,
+            transformPerspective: 1400,
           },
           {
-            x: 0,
-            y: 0,
-            rotationY: -4,
-            rotationZ: 0,
-            z: 0,
-            scale: 1,
-            duration: 0.3,
-          },
-          0,
-        )
-        .fromTo(
-          small,
-          {
-            x: 80,
-            y: -28,
-            rotationY: 24,
-            rotationZ: 4,
-            z: -200,
-            scale: 0.8,
-            transformPerspective: 1600,
-          },
-          {
-            x: 0,
-            y: 0,
-            rotationY: 7,
-            rotationZ: 0,
-            z: 0,
-            scale: 1,
-            duration: 0.3,
-          },
-          0,
-        )
-        .to(
-          large,
-          { x: 55, z: 100, rotationY: 4, scale: 1.04, duration: 0.28 },
-          0.3,
-        )
-        .to(
-          small,
-          { x: 35, z: -100, rotationY: -10, scale: 0.9, duration: 0.28 },
-          0.3,
-        )
-        .to(
-          large,
-          { x: -40, z: -65, rotationY: 12, scale: 0.95, duration: 0.24 },
-          0.58,
-        )
-        .to(
-          small,
-          { x: -45, z: 110, rotationY: -4, scale: 1.05, duration: 0.24 },
-          0.58,
-        )
-        .to(
-          [large, small],
-          {
-            x: 0,
-            y: 0,
-            z: 0,
+            xPercent: -28,
+            z: 180,
             rotationY: 0,
             rotationZ: 0,
-            scale: 1,
-            duration: 0.18,
+            scale: 1.2,
+            duration: 0.5,
           },
-          0.82,
+          0,
+        )
+        .to(
+          large,
+          {
+            xPercent: -80,
+            z: -220,
+            rotationY: -55,
+            rotationZ: -5,
+            scale: 0.7,
+            opacity: 0.25,
+            duration: 0.35,
+          },
+          0.55,
+        )
+        .fromTo(
+          small,
+          {
+            xPercent: 110,
+            yPercent: 20,
+            rotationY: 35,
+            rotationZ: 8,
+            z: -300,
+            scale: 0.75,
+            opacity: 0.35,
+            transformPerspective: 1400,
+          },
+          {
+            xPercent: 0,
+            yPercent: 0,
+            rotationY: 5,
+            rotationZ: 0,
+            z: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.26,
+          },
+          0.25,
+        )
+        .to(
+          small,
+          {
+            xPercent: -18,
+            yPercent: -15,
+            rotationY: -8,
+            rotationZ: -3,
+            z: 350,
+            scale: 1.65,
+            duration: 0.3,
+          },
+          0.6,
         )
         .fromTo(
           ".material-progress span",
@@ -235,10 +248,15 @@ export function MaterialsScene() {
           { scaleX: 1, duration: 1 },
           0,
         );
+      update();
     }, root);
     return () => {
       context.revert();
       delete node.dataset.progress;
+      delete node.dataset.phase;
+      node
+        .querySelectorAll(".material-shot-caption")
+        .forEach((caption) => caption.removeAttribute("aria-hidden"));
     };
   }, [immersive]);
   useEffect(() => {
@@ -254,6 +272,8 @@ export function MaterialsScene() {
       aria-labelledby="materials-title"
       data-immersive={immersive}
       data-renderer={webgl ? "webgl" : "fallback"}
+      data-scroll-distance={sceneScreens}
+      data-scroll-offset="0"
     >
       <div className="section-heading">
         <div>
@@ -270,6 +290,10 @@ export function MaterialsScene() {
           Small moments that shape a space.
         </p>
       </div>
+      <p className="material-scroll-cue">
+        <span>Scroll for a closer look</span>
+        <span aria-hidden="true">↓</span>
+      </p>
       <div className="material-stage">
         <div className="materials-grid">
           {materialStudies.map((study, index) => (
@@ -288,8 +312,8 @@ export function MaterialsScene() {
                     item={photo(study.slug)}
                     sizes={
                       index === 0
-                        ? "(min-width:768px) 55vw, 100vw"
-                        : "(min-width:768px) 27vw, 100vw"
+                        ? "(min-width:768px) 85vw, 100vw"
+                        : "(min-width:768px) 45vw, 100vw"
                     }
                   />
                 </div>
@@ -307,7 +331,7 @@ export function MaterialsScene() {
               {index === 1 && (
                 <div className="material-static-copy">
                   <p className="material-copy">
-                    A collection of details, seen through the studio’s interior
+                    A collection of details, seen through the studio's interior
                     photography.
                   </p>
                   <Link className="line-link" to="/?category=Interiors#work">
@@ -332,6 +356,20 @@ export function MaterialsScene() {
               </Suspense>
             </CanvasBoundary>
           )}
+        </div>
+      </div>
+      <div className="material-readout">
+        <div className="material-shot-caption">
+          <p className="eyebrow">01 / Display & light</p>
+          <h3>
+            Light.<em>In the detail.</em>
+          </h3>
+        </div>
+        <div className="material-shot-caption">
+          <p className="eyebrow">02 / Texture & reflection</p>
+          <h3>
+            Texture.<em>Brought closer.</em>
+          </h3>
         </div>
       </div>
       <div className="material-controls">

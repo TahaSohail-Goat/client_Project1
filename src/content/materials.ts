@@ -1,7 +1,7 @@
 export const materialStudies = [
   { slug: "interior-display-wall", label: "Display & light", number: "01" },
   {
-    slug: "interior-bathroom-warmstone",
+    slug: "interior-study-shelf",
     label: "Texture & reflection",
     number: "02",
   },

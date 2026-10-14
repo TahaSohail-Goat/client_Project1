@@ -21,32 +21,36 @@ type Pose = [
   rotateZ: number,
   scale: number,
 ];
-// Arrival, display-wall focus, bathroom focus, then a composed exit.
-const beats = [0, 0.3, 0.58, 0.82, 1];
+// The camera enters the display photograph, then hands over to the timber study.
+const photoWidths = [7.2, 6.4];
+const beats = [0, 0.22, 0.5, 0.65, 0.85, 1];
 const poses: Pose[][] = [
   [
-    [-3.5, -0.2, -2.8, -0.35, 0.08, -0.04, 0.9],
-    [-2.3, -0.1, 0.1, -0.08, 0, 0, 1],
-    [-1.65, 0, 0.8, 0.06, -0.02, 0.01, 1.03],
-    [-3.2, -0.1, -0.55, 0.22, 0.04, -0.02, 0.95],
-    [-2.3, -0.1, 0, 0, 0, 0, 1],
+    [2.05, 0.25, -0.3, -0.24, 0.04, -0.04, 1.1],
+    [0.6, 0.05, 0, -0.06, 0, -0.01, 1.12],
+    [0, 0, 0, 0, 0, 0, 1.08],
+    [-4, -0.2, -2, -0.75, 0.06, -0.05, 0.9],
+    [-5.8, 0.4, -4, -1.05, 0, -0.1, 0.86],
+    [-5.5, 0.35, -3.5, -1, 0, -0.08, 0.86],
   ],
   [
-    [5, 0.4, -3.4, 0.42, -0.08, 0.07, 0.9],
-    [4.15, 0.15, -0.5, 0.18, 0, 0.01, 1],
-    [4.8, 0.1, -1.2, -0.2, 0.03, -0.02, 0.85],
-    [3.6, 0.1, 1, -0.06, -0.03, 0.01, 1],
-    [4.1, 0.1, 0, 0, 0, 0, 1],
+    [3.5, -1.45, 1, 0.26, -0.02, 0.1, 0.7],
+    [3.4, -1, -0.5, 0.35, 0, 0.08, 0.65],
+    [4.5, -0.6, -2.2, 0.6, -0.1, 0.1, 0.6],
+    [2.4, 0, 0, 0.45, 0.04, 0.04, 1],
+    [1.15, 0, 0.4, -0.05, 0.01, -0.02, 1.1],
+    [1.15, 0, 0.35, -0.02, 0, 0, 1.08],
   ],
 ];
 
-function poseAt(p: number, index: number): Pose {
-  const segment = Math.min(
-    beats.length - 2,
-    Math.max(0, beats.findIndex((beat) => beat > p) - 1),
-  );
-  const from = p >= 1 ? 3 : segment;
+function segmentAt(p: number) {
+  const next = beats.findIndex((beat) => beat > p);
+  const from = next < 0 ? beats.length - 2 : Math.max(0, next - 1);
   const t = MathUtils.smoothstep(p, beats[from], beats[from + 1]);
+  return { from, t };
+}
+function poseAt(p: number, index: number): Pose {
+  const { from, t } = segmentAt(p);
   return poses[index][from].map((value, axis) =>
     MathUtils.lerp(value, poses[index][from + 1][axis], t),
   ) as Pose;
@@ -91,18 +95,38 @@ function Photographs({
     });
     if (camera instanceof PerspectiveCamera) {
       const halfField = Math.tan((camera.fov * Math.PI) / 360);
-      const distance =
-        Math.max(11.8 / (size.width / size.height), 4.3) / (2 * halfField);
+      const displayDistance =
+        Math.min(
+          7.2 / photo(materialStudies[0].slug).aspect_ratio / (2 * halfField),
+          7.2 / (2 * halfField * (size.width / size.height)),
+        ) * 0.9;
+      const detailDistance =
+        Math.max(
+          photoWidths[1] /
+            photo(materialStudies[1].slug).aspect_ratio /
+            (2 * halfField),
+          photoWidths[1] / (2 * halfField * (size.width / size.height)),
+        ) * 1.38;
+      const distances = [
+        6.6,
+        displayDistance + 0.6,
+        displayDistance,
+        detailDistance + 0.4,
+        detailDistance,
+        detailDistance,
+      ];
+      const { from, t } = segmentAt(p);
+      const distance = MathUtils.lerp(distances[from], distances[from + 1], t);
       camera.position.set(
-        Math.sin(p * Math.PI * 2) * 0.25 + pointer.x * 0.1,
-        pointer.y * 0.05,
-        distance - Math.sin(p * Math.PI) * 0.3,
+        Math.sin(p * Math.PI * 2) * 0.1 + pointer.x * 0.05,
+        pointer.y * 0.025,
+        distance,
       );
-      camera.lookAt(-0.1, 0, 0);
+      camera.lookAt(0, 0, 0);
     }
   });
   return materialStudies.map((study, index) => {
-    const width = index === 0 ? 7.2 : 2.5;
+    const width = photoWidths[index];
     const height = width / photo(study.slug).aspect_ratio;
     return (
       <group
