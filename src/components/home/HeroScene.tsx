@@ -350,10 +350,10 @@ export function HeroScene() {
               emphasis={site.hero[1]}
             />
             <div className="hero-actions">
-              <Link to="/work" className="line-link">
+              <Link to="/#work" className="line-link">
                 Explore the work <Arrow diagonal />
               </Link>
-              <Link to="/contact" className="quiet-link">
+              <Link to="/#contact" className="quiet-link">
                 Discuss a project
               </Link>
             </div>

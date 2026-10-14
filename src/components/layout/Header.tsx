@@ -5,11 +5,11 @@ import { site } from "../../content/site";
 import { Arrow } from "../Arrow";
 
 const navigation = [
-  { label: "Work", href: "/work" },
+  { label: "Work", href: "/#work" },
   { label: "Approach", href: "/#approach" },
-  { label: "Studio", href: "/studio" },
-  { label: "Expertise", href: "/studio#expertise" },
-  { label: "Contact", href: "/contact" },
+  { label: "Studio", href: "/#studio" },
+  { label: "Expertise", href: "/#expertise" },
+  { label: "Contact", href: "/#contact" },
 ];
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -94,7 +94,7 @@ export function Header() {
             </NavLink>
           ))}
         </nav>
-        <Link to="/contact" className="header-inquiry">
+        <Link to="/#contact" className="header-inquiry">
           Discuss a project <Arrow diagonal />
         </Link>
         <button

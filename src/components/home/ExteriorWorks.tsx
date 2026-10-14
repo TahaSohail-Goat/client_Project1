@@ -26,7 +26,7 @@ function ExteriorCard({
     <Link
       className="exterior-card"
       ref={ref}
-      to={`/work?category=Architecture&photo=${item.slug}`}
+      to={`/?category=Architecture&photo=${item.slug}#work`}
     >
       <div className="exterior-frame">
         <m.div style={{ y: reduced ? 0 : y }}>
@@ -61,7 +61,7 @@ export function ExteriorWorks() {
             <em>an idea.</em>
           </h2>
         </div>
-        <Link className="line-link" to="/work?category=Architecture">
+        <Link className="line-link" to="/?category=Architecture#work">
           View architecture <Arrow diagonal />
         </Link>
       </Reveal>

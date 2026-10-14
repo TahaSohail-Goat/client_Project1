@@ -21,7 +21,7 @@ export function ConsultationCTA() {
           <br />
           Tell us what you have in mind.
         </p>
-        <Link className="inquiry-button" to="/contact">
+        <Link className="inquiry-button" to="/#contact">
           Discuss a project <Arrow diagonal />
         </Link>
       </div>

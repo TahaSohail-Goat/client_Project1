@@ -5,10 +5,10 @@ import { PhotoImage } from "../components/PhotoImage";
 import { Reveal } from "../components/Reveal";
 import { Arrow } from "../components/Arrow";
 import { ConsultationCTA } from "../components/home/ConsultationCTA";
-export default function StudioPage() {
+export function StudioIntro() {
   return (
     <>
-      <section className="page-heading section-pad studio-heading">
+      <section className="page-heading section-pad studio-heading" id="studio">
         <p className="eyebrow">The studio / Architecture & Interior Design</p>
         <h1>
           Space, seen
@@ -38,64 +38,78 @@ export default function StudioPage() {
           <p>{site.approach}</p>
         </Reveal>
       </section>
-      <section
-        className="section-pad expertise"
-        id="expertise"
-        aria-labelledby="expertise-title"
-      >
-        <p className="eyebrow">The two disciplines</p>
-        <h2 id="expertise-title">
-          Architecture.
-          <br />
-          <em>Interior Design.</em>
-        </h2>
-        <Reveal className="expertise-row">
-          <div id="architecture">
-            <span className="eyebrow">01 / Architecture</span>
-            <h3>
-              Form, light
-              <br />
-              and proportion.
-            </h3>
-            <p>
-              Explore the exterior studies: a collection of facades,
-              garden-facing elevations and architectural perspectives.
-            </p>
-            <Link className="line-link" to="/work?category=Architecture">
-              View architecture <Arrow diagonal />
-            </Link>
-          </div>
-          <PhotoImage
-            item={photo("exterior-side-landscape")}
-            sizes="(min-width:768px) 50vw, 100vw"
-          />
-        </Reveal>
-        <Reveal className="expertise-row">
-          <div id="interior-design">
-            <span className="eyebrow">02 / Interior Design</span>
-            <h3>
-              Spaces for
-              <br />
-              everyday life.
-            </h3>
-            <p>
-              Explore the interior studies, from living and dining spaces to
-              bedrooms, wardrobes and quiet details.
-            </p>
-            <Link className="line-link" to="/work?category=Interiors">
-              View interiors <Arrow diagonal />
-            </Link>
-          </div>
-          <PhotoImage
-            item={photo("interior-dining-living")}
-            sizes="(min-width:768px) 50vw, 100vw"
-          />
-        </Reveal>
-        <p className="portfolio-note">
-          Detailed services, studio biography and process will be added
-          following client approval.
-        </p>
-      </section>
+    </>
+  );
+}
+
+export function StudioExpertiseSection() {
+  return (
+    <section
+      className="section-pad expertise"
+      id="expertise"
+      aria-labelledby="expertise-title"
+    >
+      <p className="eyebrow">The two disciplines</p>
+      <h2 id="expertise-title">
+        Architecture.
+        <br />
+        <em>Interior Design.</em>
+      </h2>
+      <Reveal className="expertise-row">
+        <div id="architecture">
+          <span className="eyebrow">01 / Architecture</span>
+          <h3>
+            Form, light
+            <br />
+            and proportion.
+          </h3>
+          <p>
+            Explore the exterior studies: a collection of facades,
+            garden-facing elevations and architectural perspectives.
+          </p>
+          <Link className="line-link" to="/?category=Architecture#work">
+            View architecture <Arrow diagonal />
+          </Link>
+        </div>
+        <PhotoImage
+          item={photo("exterior-side-landscape")}
+          sizes="(min-width:768px) 50vw, 100vw"
+        />
+      </Reveal>
+      <Reveal className="expertise-row">
+        <div id="interior-design">
+          <span className="eyebrow">02 / Interior Design</span>
+          <h3>
+            Spaces for
+            <br />
+            everyday life.
+          </h3>
+          <p>
+            Explore the interior studies, from living and dining spaces to
+            bedrooms, wardrobes and quiet details.
+          </p>
+          <Link className="line-link" to="/?category=Interiors#work">
+            View interiors <Arrow diagonal />
+          </Link>
+        </div>
+        <PhotoImage
+          item={photo("interior-dining-living")}
+          sizes="(min-width:768px) 50vw, 100vw"
+        />
+      </Reveal>
+      <p className="portfolio-note">
+        Detailed services, studio biography and process will be added
+        following client approval.
+      </p>
+    </section>
+  );
+}
+
+export default function StudioPage() {
+  return (
+    <>
+      <StudioIntro />
+      <StudioExpertiseSection />
       <ConsultationCTA />
     </>
   );

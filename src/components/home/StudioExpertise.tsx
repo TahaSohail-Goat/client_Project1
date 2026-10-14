@@ -29,14 +29,14 @@ export function StudioExpertise() {
           the spaces around us.
         </p>
         <div className="expertise-list">
-          <Link to="/studio#architecture">
+          <Link to="/#architecture">
             Architecture <Arrow diagonal />
           </Link>
-          <Link to="/studio#interior-design">
+          <Link to="/#interior-design">
             Interior Design <Arrow diagonal />
           </Link>
         </div>
-        <Link className="line-link" to="/studio">
+        <Link className="line-link" to="/#studio">
           Explore the studio <Arrow diagonal />
         </Link>
       </Reveal>

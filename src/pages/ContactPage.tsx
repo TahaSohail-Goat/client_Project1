@@ -68,7 +68,7 @@ export default function ContactPage() {
   };
   return (
     <>
-      <section className="page-heading section-pad contact-heading">
+      <section className="page-heading section-pad contact-heading" id="contact">
         <p className="eyebrow">Contact / Begin a conversation</p>
         <h1>
           What do you
@@ -115,7 +115,7 @@ export default function ContactPage() {
               </p>
             </div>
           )}
-          <Link className="line-link" to="/work">
+          <Link className="line-link" to="/#work">
             Explore the work <Arrow diagonal />
           </Link>
         </aside>

@@ -40,7 +40,7 @@ export default function WorkPage() {
   };
   return (
     <>
-      <section className="page-heading section-pad work-heading">
+      <section className="page-heading section-pad work-heading" id="work">
         <p className="eyebrow">The portfolio / An image collection</p>
         <h1>
           Selected <em>work.</em>

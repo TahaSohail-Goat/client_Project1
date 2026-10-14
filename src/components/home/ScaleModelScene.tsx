@@ -138,7 +138,7 @@ export function ScaleModelScene() {
         {models.map((item, i) => (
           <Link
             key={item.slug}
-            to={`/work?category=Model+Studies&photo=${item.slug}`}
+            to={`/?category=Model+Studies&photo=${item.slug}#work`}
           >
             <PhotoImage item={item} sizes="(min-width:768px) 30vw, 100vw" />
             <p className="image-meta">

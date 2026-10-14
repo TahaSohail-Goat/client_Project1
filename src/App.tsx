@@ -1,5 +1,5 @@
 import { Route, Routes, Link, useLocation } from "react-router-dom";
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { ScrollEngine } from "./components/scroll/ScrollEngine";
@@ -11,10 +11,10 @@ import { ScaleModelScene } from "./components/home/ScaleModelScene";
 import { ApproachEditorial } from "./components/home/ApproachEditorial";
 import { StudioExpertise } from "./components/home/StudioExpertise";
 import { ConsultationCTA } from "./components/home/ConsultationCTA";
+import WorkPage from "./pages/WorkPage";
+import { StudioExpertiseSection, StudioIntro } from "./pages/StudioPage";
+import ContactPage from "./pages/ContactPage";
 import { site } from "./content/site";
-const WorkPage = lazy(() => import("./pages/WorkPage"));
-const StudioPage = lazy(() => import("./pages/StudioPage"));
-const ContactPage = lazy(() => import("./pages/ContactPage"));
 
 function Home() {
   return (
@@ -27,6 +27,10 @@ function Home() {
       <ApproachEditorial />
       <StudioExpertise />
       <ConsultationCTA />
+      <WorkPage />
+      <StudioIntro />
+      <StudioExpertiseSection />
+      <ContactPage />
     </>
   );
 }
@@ -67,9 +71,9 @@ export default function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/work" element={<WorkPage />} />
-            <Route path="/studio" element={<StudioPage />} />
-            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/work" element={<Home />} />
+            <Route path="/studio" element={<Home />} />
+            <Route path="/contact" element={<Home />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

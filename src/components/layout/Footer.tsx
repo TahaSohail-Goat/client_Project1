@@ -8,8 +8,8 @@ export function Footer() {
       </Link>
       <p>Architecture & Interior Design</p>
       <div>
-        <Link to="/work">Explore work</Link>
-        <Link to="/contact">Contact</Link>
+        <Link to="/#work">Explore work</Link>
+        <Link to="/#contact">Contact</Link>
         <a href="#main">Back to top ↑</a>
       </div>
       <small>

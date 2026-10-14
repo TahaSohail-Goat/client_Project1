@@ -118,7 +118,7 @@ export function FacadePanelReveal({
               ↗
             </span>
             <p>{site.intro}</p>
-            <Link to="/work?category=Architecture" className="line-link">
+            <Link to="/?category=Architecture#work" className="line-link">
               Architectural perspectives <Arrow diagonal />
             </Link>
           </div>

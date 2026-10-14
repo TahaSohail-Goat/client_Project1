@@ -27,7 +27,7 @@ export function MaterialsScene() {
       <div className="materials-grid">
         <Reveal className="material-large">
           <Link
-            to="/work?category=Interiors&photo=interior-display-wall"
+            to="/?category=Interiors&photo=interior-display-wall#work"
             className="material-photo"
           >
             <PhotoImage
@@ -42,7 +42,7 @@ export function MaterialsScene() {
         </Reveal>
         <Reveal className="material-small">
           <Link
-            to="/work?category=Interiors&photo=interior-bathroom-warmstone"
+            to="/?category=Interiors&photo=interior-bathroom-warmstone#work"
             className="material-photo"
           >
             <PhotoImage
@@ -58,7 +58,7 @@ export function MaterialsScene() {
             A collection of details, seen through the studio’s interior
             photography.
           </p>
-          <Link className="line-link" to="/work?category=Interiors">
+          <Link className="line-link" to="/?category=Interiors#work">
             Explore interior studies <Arrow diagonal />
           </Link>
         </Reveal>

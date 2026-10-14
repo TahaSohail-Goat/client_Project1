@@ -118,7 +118,7 @@ export function InteriorSequence() {
         <h2 id="interior-title">
           Life, on the <em>inside.</em>
         </h2>
-        <Link to="/work?category=Interiors" className="line-link">
+        <Link to="/?category=Interiors#work" className="line-link">
           All 25 interiors <Arrow diagonal />
         </Link>
       </div>

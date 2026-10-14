@@ -23,7 +23,7 @@ export function ApproachEditorial() {
         </span>
         <Reveal>
           <p>{site.approach}</p>
-          <Link to="/studio" className="line-link">
+          <Link to="/#studio" className="line-link">
             Meet the studio <Arrow diagonal />
           </Link>
         </Reveal>
