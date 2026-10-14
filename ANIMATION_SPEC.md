@@ -5,6 +5,8 @@ The supplied 3.90-second, 640×368 recording was decoded and inspected at 0.5-se
 
 ## Default video hero
 
+The latest UI revision removes the hero's entire bottom chapter rail: chapter buttons, current-chapter status, progress line and Skip sequence link. This applies to both the video hero and photographic fallback. Pinning, forward/reverse scrubbing, headings and the ivory transition remain scroll-controlled; the main navigation still links directly to website sections. Historical bookmark descriptions below describe earlier UI iterations.
+
 - **Assets:** supplied 8-second, 1280×720 H.264/all-intra/24fps MP4 (7,271,665 bytes), preserved byte-for-byte at `public/media/video/hero_exterior_to_interior_scrub.mp4`. A 768×432 all-intra mobile rendition is 2,579,207 bytes; first-frame WebP poster is 93,198 bytes. All three are typography-free. Older `references/` recordings are never used as site footage.
 - **One document scroll:** `HeroScene` owns one GSAP ScrollTrigger pin. Desktop scroll budget is 4.8 extra viewports; mobile is 3.4. GSAP scrub is 0.45/0.25 seconds. There is no nested scroll container, autoplay, loop or independent video playback. Lenis remains optional desktop smoothing on the shared GSAP ticker with lag smoothing disabled.
 - **Seeking:** normalized progress 0–0.9 maps to film time 0–(duration minus one frame). Targets round to 24fps. A single RAF and the native `seeked` event coalesce pending targets, avoiding repeated seeking while the decoder is busy. Video-frame callbacks track decoded frames; visibility cleanup removes callbacks/listeners, pauses and releases media. Responsive source selection is stable across resize to avoid re-downloading the film.

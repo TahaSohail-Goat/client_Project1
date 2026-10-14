@@ -130,78 +130,6 @@
   bottom: -1px;
   border-width: 0 0 1px 1px;
 }
-.journey-controls {
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: 28px;
-  color: var(--paper);
-  z-index: 6;
-  transition: color 0.5s ease;
-}
-.journey-control-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 28px;
-}
-.journey-status {
-  min-width: 135px;
-}
-.journey-chapters {
-  display: flex;
-  gap: clamp(12px, 2vw, 32px);
-}
-.journey-chapters button {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 0;
-  background: transparent;
-  padding: 14px 0;
-  font-size: 10px;
-  color: inherit;
-  opacity: 1;
-  transition: opacity 0.25s;
-}
-.journey-chapters button:hover,
-.journey-chapters button[aria-current="step"] {
-  opacity: 1;
-}
-.chapter-number {
-  font-size: 9px;
-}
-.journey-chapters button[aria-current="step"] .chapter-number {
-  text-decoration: underline;
-  text-underline-offset: 5px;
-}
-.journey-chapters button[aria-current="step"] .chapter-word {
-  text-decoration: underline;
-  text-underline-offset: 5px;
-}
-.journey-skip {
-  min-height: 44px;
-  font-size: 10px;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-.journey-progress {
-  height: 1px;
-  background: color-mix(in srgb, var(--ivory) 28%, transparent);
-  margin-top: 12px;
-  overflow: hidden;
-}
-.journey-progress-fill {
-  height: 100%;
-  width: 100%;
-  background: var(--chapter-accent);
-  display: block;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: background-color 0.5s ease;
-}
 .journey-static-caption {
   display: none;
 }
@@ -216,39 +144,6 @@
   .journey-caption .eyebrow {
     font-size: 9px;
     margin-bottom: 20px;
-  }
-  .journey-control-row {
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .journey-status {
-    min-width: 0;
-    flex: 1;
-    font-size: 9px;
-  }
-  .journey-chapters {
-    width: 100%;
-    order: 3;
-    gap: 0;
-    justify-content: space-between;
-  }
-  .journey-chapters button {
-    padding: 12px 5px;
-    font-size: 9px;
-    gap: 5px;
-  }
-  .chapter-word {
-    font-size: 9px;
-  }
-  .journey-skip {
-    font-size: 9px;
-  }
-  .journey-controls {
-    bottom: 20px;
-  }
-  .journey-progress {
-    margin-top: 4px;
   }
   .journey-aperture {
     width: 58%;
@@ -332,7 +227,6 @@
     min-height: 620px;
   }
   .journey-caption,
-  .journey-controls,
   .journey-aperture {
     display: none;
   }

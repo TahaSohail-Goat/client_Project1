@@ -37,13 +37,6 @@ export function PhotographicHero({ notice }: { notice?: string }) {
         const frames = Array.from(
           root.querySelectorAll<HTMLElement>("[data-journey-frame]"),
         );
-        const buttons = Array.from(
-          root.querySelectorAll<HTMLButtonElement>(".journey-chapters button"),
-        );
-        const progressBar = root.querySelector<HTMLElement>(
-          ".journey-progress-fill",
-        )!;
-        const status = root.querySelector<HTMLElement>(".journey-status")!;
         const intro = root.querySelector<HTMLElement>(".hero-copy")!;
         const panel = root.querySelector<HTMLElement>(".ivory-panel")!;
         const fallback = !!(
@@ -251,7 +244,6 @@ export function PhotographicHero({ notice }: { notice?: string }) {
             10.2,
           )
           .to(".vision-copy", { opacity: 1, duration: 0.5 }, 10.55)
-          .to(".journey-controls", { color: "#252b23", duration: 0.16 }, 9.15)
           .to({}, { duration: 0.8 }, 11.2);
         const update = () => {
           const time = tl.time();
@@ -265,17 +257,12 @@ export function PhotographicHero({ notice }: { notice?: string }) {
                   : time < 9.35
                     ? 3
                     : 4;
-          progressBar.style.transform = `scaleX(${tl.progress()})`;
           intro.inert = time > 1.9;
           panel.inert = time < 11.05;
           if (time > 0.06) prepareStory();
           if (index === lastChapter) return;
           lastChapter = index;
           root.dataset.chapter = heroChapters[index].id;
-          status.textContent = `${String(index + 1).padStart(2, "0")} / ${heroChapters[index].label}`;
-          buttons.forEach((button, i) =>
-            button.setAttribute("aria-current", i === index ? "step" : "false"),
-          );
           frames.forEach((frame, i) => {
             frame.setAttribute("aria-hidden", String(i !== index));
             frame.inert = i !== index;
@@ -290,7 +277,6 @@ export function PhotographicHero({ notice }: { notice?: string }) {
           });
           intro.inert = false;
           panel.inert = false;
-          progressBar.style.transform = "";
           delete root.dataset.chapter;
         };
       },
@@ -298,17 +284,6 @@ export function PhotographicHero({ notice }: { notice?: string }) {
     );
     return () => mm.revert();
   }, [prepareStory]);
-  const jump = (progress: number) => {
-    prepareStory();
-    ScrollTrigger.refresh();
-    const trigger = ScrollTrigger.getById("hero");
-    if (!trigger) return;
-    window.dispatchEvent(
-      new CustomEvent("studio:scroll-to", {
-        detail: trigger.start + (trigger.end - trigger.start) * progress,
-      }),
-    );
-  };
   const caption = (
     className: string,
     chapter: string,
@@ -410,38 +385,6 @@ export function PhotographicHero({ notice }: { notice?: string }) {
       </div>
       <div data-journey-frame className="journey-finish-frame">
         <FacadePanelReveal embedded />
-      </div>
-      <div className="journey-controls">
-        <div className="journey-control-row">
-          <span className="journey-status eyebrow" role="status">
-            01 / Arrival
-          </span>
-          <nav
-            className="journey-chapters"
-            aria-label="Opening sequence chapters"
-            onPointerEnter={prepareStory}
-            onFocusCapture={prepareStory}
-          >
-            {heroChapters.map((chapter, i) => (
-              <button
-                key={chapter.id}
-                type="button"
-                onClick={() => jump(chapter.progress)}
-                aria-label={`Jump to ${chapter.label} chapter`}
-                aria-current={i === 0 ? "step" : "false"}
-              >
-                <span className="chapter-number">0{i + 1}</span>
-                <span className="chapter-word">{chapter.label}</span>
-              </button>
-            ))}
-          </nav>
-          <a className="journey-skip" href="#selected-work">
-            Skip sequence <span aria-hidden="true">&darr;</span>
-          </a>
-        </div>
-        <div className="journey-progress" aria-hidden="true">
-          <span className="journey-progress-fill" />
-        </div>
       </div>
     </section>
   );

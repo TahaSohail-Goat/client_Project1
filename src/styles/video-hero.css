@@ -26,15 +26,11 @@
 .video-editorial .hero-finish { position: absolute; inset: 0; height: 100%; min-height: 0; opacity: 1; background: transparent; }
 .video-editorial .ivory-panel { position: absolute; }
 .video-editorial .facade-establish { display: none; }
-.video-hero .journey-controls { transition: none; }
-.video-hero:not([data-static="true"]) .journey-controls { display: block; }
-.video-hero .journey-progress { background: rgb(132 145 122 / 35%); }
 /* Preserve the poster, copy and editorial content when motion or data is limited. */
 .video-hero[data-static="true"] { height: auto; min-height: 100svh; overflow: visible; padding-top: 100svh; }
 .video-hero[data-static="true"] .video-media { height: 100svh; }
 .video-hero[data-static="true"] .video-opening { top: 43svh; bottom: auto; }
 .video-hero[data-static="true"] .video-interior-copy,
-.video-hero[data-static="true"] .journey-controls,
 .video-hero[data-static="true"] .video-loading { display: none; }
 .video-hero[data-static="true"] .video-editorial { position: relative; inset: auto; }
 .video-hero[data-static="true"] .hero-finish { position: relative; height: auto; opacity: 1; }

@@ -5,18 +5,25 @@ async (page) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("http://127.0.0.1:4173/");
   await page.locator('.video-hero[data-video-state="ready"]').waitFor();
+  if (await page.locator('.journey-controls, .journey-chapters, .journey-status, .journey-progress, .journey-skip').count()) throw Error('Removed hero controls remain');
   const idleTime = await page.locator('video').evaluate(v => v.currentTime);
   await page.waitForTimeout(350);
   if (await page.locator('video').evaluate(v => !v.paused || v.autoplay || Math.abs(v.currentTime) > 0.01)) throw Error('Video played independently');
   const seek = async (name, p) => {
     const start = Date.now();
-    await page.getByRole('button', {name:`Jump to ${name} chapter`,exact:true}).click();
+    await page.evaluate(progress => {
+      const hero = document.querySelector('.video-hero');
+      const spacer = hero.parentElement;
+      const start = spacer.getBoundingClientRect().top + scrollY;
+      const distance = spacer.offsetHeight - hero.offsetHeight;
+      window.dispatchEvent(new CustomEvent('studio:scroll-to', { detail: start + distance * progress }));
+    }, p);
     await page.waitForFunction(expectedProgress => {
       const v = document.querySelector('video');
       const target = Math.min(1, expectedProgress / 0.9) * (v.duration - 1/24);
       return !v.seeking && Math.abs(v.currentTime-target)<0.08;
     }, p);
-    return {time:await page.locator('video').evaluate(v=>v.currentTime),settleMs:Math.round(Date.now()-start)};
+    return {chapter:name,time:await page.locator('video').evaluate(v=>v.currentTime),settleMs:Math.round(Date.now()-start)};
   };
   const approach = await seek('Approach',0.25);
   const within = await seek('Within',0.65);
@@ -25,7 +32,10 @@ async (page) => {
   const panel = await page.locator('.video-editorial .ivory-panel').evaluate(e => getComputedStyle(e).clipPath);
   const arrival = await seek('Arrival',0);
   if(await page.locator('.video-opening').evaluate(e=>Number(getComputedStyle(e).opacity)<0.99))throw Error('Headline did not reverse');
-  await page.getByRole('link',{name:'Skip sequence',exact:true}).click();
+  await page.evaluate(() => {
+    const section = document.querySelector('#selected-work');
+    window.dispatchEvent(new CustomEvent('studio:scroll-to', { detail: section.getBoundingClientRect().top + scrollY - 100 }));
+  });
   await page.waitForFunction(()=>Math.abs(document.querySelector('#selected-work').getBoundingClientRect().top-100)<4);
   await page.goto("http://127.0.0.1:4173/work?category=Interiors");
   await page.locator(".work-card").first().waitFor();

@@ -40,9 +40,6 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
       const interior = node.querySelector<HTMLElement>(".video-interior-copy")!;
       const editorial = node.querySelector<HTMLElement>(".video-editorial")!;
       const panel = node.querySelector<HTMLElement>(".ivory-panel")!;
-      const buttons = Array.from(node.querySelectorAll<HTMLButtonElement>(".journey-chapters button"));
-      const bar = node.querySelector<HTMLElement>(".journey-progress-fill")!;
-      const status = node.querySelector<HTMLElement>(".journey-status")!;
       const desktop = context.conditions?.desktop;
       let chapter = -1;
       const playhead = { p: 0 };
@@ -66,14 +63,12 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
         .to(".video-editorial .vision-kicker", { opacity: 1, duration: 0.04 }, 0.85)
         .to(".video-editorial .vision-line > span", { yPercent: 0, stagger: 0.018, duration: 0.065 }, 0.85)
         .to(".video-editorial .vision-composition", { clipPath: "inset(0% 0% 0% 0%)", y: 0, duration: 0.065 }, 0.885)
-        .to(".video-editorial .vision-copy", { opacity: 1, duration: 0.05 }, 0.91)
-        .to(".video-hero .journey-controls", { color: "#171c1a", duration: 0.04 }, 0.8);
+        .to(".video-editorial .vision-copy", { opacity: 1, duration: 0.05 }, 0.91);
       const update = () => {
         const p = playhead.p;
         progress.current = Math.min(1, p / videoHero.filmEnd);
         requestSeek();
         node.dataset.progress = p.toFixed(4);
-        bar.style.transform = `scaleX(${p})`;
         opening.inert = p > 0.3;
         opening.setAttribute("aria-hidden", String(p > 0.3));
         interior.setAttribute("aria-hidden", String(p < 0.56 || p > 0.78));
@@ -83,11 +78,6 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
         if (next === chapter) return;
         chapter = next;
         node.dataset.chapter = heroChapters[next].id;
-        status.textContent = `${String(next + 1).padStart(2, "0")} / ${heroChapters[next].label}`;
-        buttons.forEach((button, i) => {
-          if (i === next) button.setAttribute("aria-current", "step");
-          else button.removeAttribute("aria-current");
-        });
       };
       tl.eventCallback("onUpdate", update);
       update();
@@ -95,16 +85,10 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
         for (const element of [opening, interior, editorial]) { element.inert = false; element.removeAttribute("aria-hidden"); }
         delete node.dataset.progress;
         delete node.dataset.chapter;
-        bar.style.transform = "";
       };
     }, root);
     return () => mm.revert();
   }, [enabled, requestSeek]);
-  const jump = (p: number) => {
-    ScrollTrigger.refresh();
-    const trigger = ScrollTrigger.getById("hero");
-    if (trigger) window.dispatchEvent(new CustomEvent("studio:scroll-to", { detail: trigger.start + (trigger.end - trigger.start) * p }));
-  };
   return <section ref={root} className={`hero video-hero ${ready ? "film-ready" : ""}`} aria-labelledby="hero-title"
     data-scene="hero" data-static={!enabled} data-video-state={!enabled ? "static" : ready ? "ready" : "loading"}>
     <div className="video-media" aria-hidden="true">
@@ -126,19 +110,6 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
       {enabled && !ready ? "Preparing the film…" : buffering ? "Preparing this view…" : ""}
     </p>
     <div className="video-editorial"><FacadePanelReveal embedded /></div>
-    <div className="journey-controls">
-      <div className="journey-control-row">
-        <span className="journey-status eyebrow" role="status">01 / Arrival</span>
-        <nav className="journey-chapters" aria-label="Opening sequence chapters">
-          {heroChapters.map((chapter, i) => <button key={chapter.id} type="button" onClick={() => jump(videoHero.chapterProgress[i])}
-            aria-label={`Jump to ${chapter.label} chapter`} aria-current={i === 0 ? "step" : undefined}>
-            <span className="chapter-number">0{i + 1}</span><span className="chapter-word">{chapter.label}</span>
-          </button>)}
-        </nav>
-        <Link className="journey-skip" to="/#selected-work">Skip sequence <span aria-hidden="true">↓</span></Link>
-      </div>
-      <div className="journey-progress" aria-hidden="true"><span className="journey-progress-fill" /></div>
-    </div>
   </section>;
 }
 export function HeroScene() {
