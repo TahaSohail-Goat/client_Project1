@@ -28,7 +28,8 @@ export function HeroScene() {
         desktop: "(min-width: 768px)",
         mobile: "(max-width: 767px)",
         reduced: "(prefers-reduced-motion: reduce)",
-        short: "(max-height: 650px)",
+        short:
+          "(max-height: 500px), (max-width: 767px) and (max-height: 650px)",
       },
       (context) => {
         const root = ref.current!;

@@ -45,7 +45,7 @@ The depth is a photographic illusion: CSS perspective, planar transforms, croppi
 - Lenis handles chapter seeks with an immediate, forced document position on eligible desktop; native scrolling handles the same event otherwise. No second scroll source or wheel lock is introduced.
 - Intro photo remains eager/high priority. Later hero photographs mount on early scroll progress, chapter hover/focus or chapter selection; they use existing full-size WebPs, not generated frames. Animation targets stay mounted independently of photo loading, and image-error fallbacks remain available.
 - Scrub: 0.6 seconds desktop, 0.35 mobile. Photo-plane perspective: 1200px; all scale bounds <=1.10. Mobile removes Y tilts, reserves a two-row chapter rail and retains the pin with a shorter budget.
-- Reduced motion or height <=650px: no opening pin, no chapter rail/aperture, four ordinary photographic figures plus the ivory editorial content. Every photograph and navigation destination stays available.
+- Reduced motion, mobile height <=650px, or any height <=500px: no opening pin, no chapter rail/aperture, four ordinary photographic figures plus the ivory editorial content. Every photograph and navigation destination stays available.
 - GSAP exclusively owns these nodes. Motion remains on separate navigation/editorial/gallery components; no WebGL package is added to the opening.
 
 ## Interior stage

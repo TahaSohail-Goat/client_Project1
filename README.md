@@ -40,6 +40,6 @@ Deploy the contents of `dist/` to a static host with SPA fallback for `/work`, `
 
 ## Animation and verification
 
-GSAP owns scrubbed pins, Motion owns separate editorial/navigation/gallery nodes, Lenis optionally smooths desktop scroll, and lazy Three/R3F/Drei own only model-photo planes. Mobile uses native scroll; reduced motion bypasses pins and canvas. WebGL renders on demand with DPR capped at 1.4. Its separate large bundle is fetched only near the model chapter on eligible devices.
+GSAP owns scrubbed pins, Motion owns separate editorial/navigation/gallery nodes, Lenis optionally smooths desktop scroll, and lazy Three/R3F/Drei own only model-photo planes. Mobile uses native scroll; reduced motion bypasses pins and canvas. Laptop-height windows retain the extended hero with a compact editorial finish; very short/mobile landscape screens use static photographs. WebGL renders on demand with DPR capped at 1.4. Its separate large bundle is fetched only near the model chapter on eligible devices.
 
 See `ANIMATION_SPEC.md`, `ASSET_USAGE.md`, `IMPLEMENTATION_PROGRESS.md` and `CLIENT_ACTION_REQUIRED.md`. Local screenshots and browser evidence are in `output/playwright/` (ignored by Git). The original handoff instructions remain untouched in `docs/`.
