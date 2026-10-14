@@ -1,10 +1,9 @@
-import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { m, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { photo, type Photo } from "../../content/media";
 import { Arrow } from "../Arrow";
-import { PhotoImage } from "../PhotoImage";
 import { Reveal } from "../Reveal";
+import { DepthPhoto } from "../DepthPhoto";
+import { CinematicHeading } from "../type/CinematicHeading";
 
 function ExteriorCard({
   item,
@@ -15,23 +14,13 @@ function ExteriorCard({
   number: string;
   caption: string;
 }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-3%", "3%"]);
-  const reduced = useReducedMotion();
   return (
     <Link
       className="exterior-card"
-      ref={ref}
       to={`/?category=Architecture&photo=${item.slug}#work`}
     >
       <div className="exterior-frame">
-        <m.div style={{ y: reduced ? 0 : y }}>
-          <PhotoImage item={item} sizes="(min-width: 768px) 60vw, 100vw" />
-        </m.div>
+        <DepthPhoto item={item} sizes="(min-width: 768px) 65vw, 100vw" wide />
         <span className="image-open">
           <Arrow diagonal />
         </span>
@@ -52,19 +41,21 @@ export function ExteriorWorks() {
       id="selected-work"
       aria-labelledby="work-title"
     >
-      <Reveal className="section-heading">
+      <div className="section-heading">
         <div>
           <p className="eyebrow">03 / Architectural perspectives</p>
-          <h2 id="work-title">
-            The shape of
-            <br />
-            <em>an idea.</em>
-          </h2>
+          <CinematicHeading
+            id="work-title"
+            lines={[
+              { text: "The shape of" },
+              { text: "an idea.", italic: true },
+            ]}
+          />
         </div>
         <Link className="line-link" to="/?category=Architecture#work">
           View architecture <Arrow diagonal />
         </Link>
-      </Reveal>
+      </div>
       <div className="exterior-grid">
         <ExteriorCard
           item={photo("supplemental-04")}
@@ -77,13 +68,13 @@ export function ExteriorWorks() {
           caption="An exterior study"
         />
       </div>
-      <div className="section-note">
+      <Reveal className="section-note">
         <span className="eyebrow">A study in perspective</span>
         <p>
           Facades, proportions and the relationship between a building and its
           surroundings.
         </p>
-      </div>
+      </Reveal>
     </section>
   );
 }

@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { site } from "../../content/site";
 import { Reveal } from "../Reveal";
 import { Arrow } from "../Arrow";
+import { CinematicHeading } from "../type/CinematicHeading";
+import { SpatialSignature } from "./SpatialSignature";
 export function ApproachEditorial() {
   return (
     <section
@@ -10,17 +12,15 @@ export function ApproachEditorial() {
       aria-labelledby="approach-title"
     >
       <p className="eyebrow">07 / A way of seeing</p>
-      <Reveal>
-        <h2 id="approach-title">
-          A dialogue between
-          <br />
-          space <em>and life.</em>
-        </h2>
-      </Reveal>
+      <CinematicHeading
+        id="approach-title"
+        lines={[
+          { text: "A dialogue between" },
+          { text: "space and life.", italic: true },
+        ]}
+      />
       <div className="approach-lower">
-        <span className="approach-symbol" aria-hidden="true">
-          ＋
-        </span>
+        <SpatialSignature />
         <Reveal>
           <p>{site.approach}</p>
           <Link to="/#studio" className="line-link">

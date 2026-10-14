@@ -4,17 +4,26 @@ import { useTexture } from "@react-three/drei/core/Texture";
 import { Group, SRGBColorSpace } from "three";
 import { media } from "../../content/media";
 
-const photos = media.filter((item) => item.category === "Model Studies");
+const photos = media
+  .filter((item) => item.category === "Model Studies")
+  .slice(0, 3);
 type Bridge = {
   progress: RefObject<number>;
   redraw: RefObject<(() => void) | null>;
   onReady: () => void;
   onFailure: () => void;
 };
-function Planes({ progress, redraw, onReady }: Bridge) {
+function Planes({ progress, redraw, onReady, onFailure }: Bridge) {
   const group = useRef<Group>(null);
-  const textures = useTexture(photos.map((item) => item.src));
-  const invalidate = useThree((state) => state.invalidate);
+  const textures = useTexture(
+    photos.map((item) => item.src.replace(/\.webp$/, "-768.webp")),
+  );
+  const { invalidate, size, camera, gl } = useThree();
+  useEffect(() => {
+    const canvas = gl.domElement;
+    canvas.addEventListener("webglcontextlost", onFailure);
+    return () => canvas.removeEventListener("webglcontextlost", onFailure);
+  }, [gl, onFailure]);
   useEffect(() => {
     textures.forEach((texture) => {
       texture.colorSpace = SRGBColorSpace;
@@ -33,10 +42,15 @@ function Planes({ progress, redraw, onReady }: Bridge) {
     group.current.rotation.y = (p - 0.5) * 0.075;
     group.current.position.y = (p - 0.5) * 0.18;
     group.current.children.forEach((plane, i) => {
-      plane.rotation.y = (i - 1) * (1 - p) * 0.05;
-      plane.rotation.z = (i - 1) * (1 - p) * 0.025;
-      plane.position.z = Math.sin(p * Math.PI) * (i === 1 ? 0.25 : -0.12);
+      plane.rotation.y = (i - 1) * (1 - p) * 0.14;
+      plane.rotation.z = (i - 1) * (1 - p) * 0.04;
+      plane.position.z = Math.sin(p * Math.PI) * (i === 1 ? 0.5 : -0.2);
+      plane.position.y = Math.sin(p * Math.PI) * (i === 1 ? 0.1 : -0.1);
     });
+    if ("zoom" in camera) {
+      camera.zoom = Math.min(size.width / 10.6, size.height / 4.2);
+      camera.updateProjectionMatrix();
+    }
   });
   return (
     <group ref={group}>
@@ -57,11 +71,6 @@ export default function PhotoPlanes(props: Bridge) {
       dpr={[1, 1.4]}
       frameloop="demand"
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
-      onCreated={({ gl }) => {
-        gl.domElement.addEventListener("webglcontextlost", props.onFailure, {
-          once: true,
-        });
-      }}
     >
       <Suspense fallback={null}>
         <Planes {...props} />

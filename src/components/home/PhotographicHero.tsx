@@ -300,6 +300,7 @@ export function PhotographicHero({ notice }: { notice?: string }) {
   }, [prepareStory]);
   const jump = (progress: number) => {
     prepareStory();
+    ScrollTrigger.refresh();
     const trigger = ScrollTrigger.getById("hero");
     if (!trigger) return;
     window.dispatchEvent(

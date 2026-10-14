@@ -41,7 +41,8 @@ async (page) => {
   const focus = await page.evaluate(() => document.activeElement.className);
   await page.goto("http://127.0.0.1:4173/studio#expertise");
   await page.locator("#expertise").waitFor();
-  await page.waitForTimeout(600);
+  await page.locator('.video-hero[data-video-state="ready"]').waitFor();
+  await page.waitForFunction(() => Math.abs(document.querySelector('#expertise').getBoundingClientRect().top - 100) < 4);
   const anchor = await page.locator("#expertise").evaluate(e => e.getBoundingClientRect().top);
   if (anchor < 80 || anchor > 120) throw Error("Anchor offset: " + anchor);
   await page.emulateMedia({ reducedMotion: "reduce" });

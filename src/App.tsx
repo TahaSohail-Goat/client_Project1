@@ -12,6 +12,7 @@ import { HousingStudy } from "./components/home/HousingStudy";
 import { ApproachEditorial } from "./components/home/ApproachEditorial";
 import { StudioExpertise } from "./components/home/StudioExpertise";
 import { ConsultationCTA } from "./components/home/ConsultationCTA";
+import { ArchitecturalRibbon } from "./components/home/ArchitecturalRibbon";
 import PortfolioSection from "./components/sections/PortfolioSection";
 import {
   StudioExpertiseSection,
@@ -25,6 +26,7 @@ function Home() {
     <>
       <HeroScene />
       <ExteriorWorks />
+      <ArchitecturalRibbon />
       <InteriorSequence />
       <MaterialsScene />
       <HousingStudy />

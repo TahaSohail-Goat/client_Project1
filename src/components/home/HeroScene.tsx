@@ -101,6 +101,7 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
     return () => mm.revert();
   }, [enabled, requestSeek]);
   const jump = (p: number) => {
+    ScrollTrigger.refresh();
     const trigger = ScrollTrigger.getById("hero");
     if (trigger) window.dispatchEvent(new CustomEvent("studio:scroll-to", { detail: trigger.start + (trigger.end - trigger.start) * p }));
   };

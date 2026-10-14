@@ -64,6 +64,50 @@ export function ScrollEngine() {
     let frame = 0;
     let timeout = 0;
     let finished = false;
+    let anchor: HTMLElement | null = null;
+    let userMoved = false;
+    let layoutFrame = 0;
+    const alignAnchor = () => {
+      if (!anchor || userMoved) return;
+      const offset = Number(anchor.dataset.scrollOffset ?? 100);
+      engine.current?.resize();
+      const position = anchor.getBoundingClientRect().top + scrollY - offset;
+      if (engine.current)
+        engine.current.scrollTo(position, { immediate: true, force: true });
+      else window.scrollTo({ top: position, behavior: "instant" });
+    };
+    // Media/canvas readiness can add a pin after initial hash navigation.
+    // Follow those layout changes until the visitor starts their own navigation.
+    const layoutChanged = () => {
+      if (!hash || userMoved) return;
+      cancelAnimationFrame(layoutFrame);
+      layoutFrame = requestAnimationFrame(alignAnchor);
+    };
+    const userIntent = () => {
+      userMoved = true;
+    };
+    const keyboardIntent = (event: KeyboardEvent) => {
+      if (
+        [
+          "Tab",
+          "Enter",
+          "ArrowDown",
+          "ArrowUp",
+          "PageDown",
+          "PageUp",
+          "Home",
+          "End",
+          " ",
+        ].includes(event.key)
+      )
+        userIntent();
+    };
+    ScrollTrigger.addEventListener("refresh", layoutChanged);
+    window.addEventListener("wheel", userIntent, { passive: true });
+    window.addEventListener("touchstart", userIntent, { passive: true });
+    window.addEventListener("pointerdown", userIntent, { passive: true });
+    window.addEventListener("keydown", keyboardIntent);
+    window.addEventListener("studio:scroll-to", userIntent);
     const observer = new MutationObserver(() => locate());
     const locate = () => {
       if (finished) return;
@@ -71,6 +115,7 @@ export function ScrollEngine() {
         ? document.getElementById(decodeURIComponent(hash.slice(1)))
         : document.querySelector("main > :first-child");
       if (!element) return;
+      anchor = hash ? (element as HTMLElement) : null;
       finished = true;
       observer.disconnect();
       frame = requestAnimationFrame(() => {
@@ -78,18 +123,7 @@ export function ScrollEngine() {
           ScrollTrigger.refresh();
           engine.current?.resize();
           if (hash) {
-            const offset = Number(element.getAttribute("data-scroll-offset") ?? 100);
-            if (engine.current)
-              engine.current.scrollTo(element as HTMLElement, {
-                immediate: true,
-                force: true,
-                offset: 100 - offset,
-              });
-            else
-              window.scrollTo({
-                top: element.getBoundingClientRect().top + scrollY - offset,
-                behavior: "instant",
-              });
+            alignAnchor();
             (element as HTMLElement).tabIndex = -1;
             (element as HTMLElement).focus({ preventScroll: true });
           }
@@ -105,6 +139,13 @@ export function ScrollEngine() {
     return () => {
       observer.disconnect();
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(layoutFrame);
+      ScrollTrigger.removeEventListener("refresh", layoutChanged);
+      window.removeEventListener("wheel", userIntent);
+      window.removeEventListener("touchstart", userIntent);
+      window.removeEventListener("pointerdown", userIntent);
+      window.removeEventListener("keydown", keyboardIntent);
+      window.removeEventListener("studio:scroll-to", userIntent);
       window.clearTimeout(timeout);
     };
   }, [pathname, hash]);

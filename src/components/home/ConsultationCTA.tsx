@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Reveal } from "../Reveal";
 import { Arrow } from "../Arrow";
+import { CinematicHeading } from "../type/CinematicHeading";
+import { SpatialSignature } from "./SpatialSignature";
 export function ConsultationCTA() {
   return (
     <section
@@ -8,13 +9,14 @@ export function ConsultationCTA() {
       aria-labelledby="inquiry-title"
     >
       <p className="eyebrow">09 / A new conversation</p>
-      <Reveal>
-        <h2 id="inquiry-title">
-          Let’s shape
-          <br />
-          <em>your next space.</em>
-        </h2>
-      </Reveal>
+      <SpatialSignature className="consultation-signature" />
+      <CinematicHeading
+        id="inquiry-title"
+        lines={[
+          { text: "Let’s shape" },
+          { text: "your next space.", italic: true },
+        ]}
+      />
       <div className="consultation-lower">
         <p>
           Every space begins with a conversation.

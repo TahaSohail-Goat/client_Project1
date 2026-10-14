@@ -13,6 +13,7 @@ import { media } from "../../content/media";
 import { PhotoImage } from "../PhotoImage";
 import { Reveal } from "../Reveal";
 import { CanvasBoundary } from "../three/CanvasBoundary";
+import { CinematicHeading } from "../type/CinematicHeading";
 const PhotoPlanes = lazy(() => import("../three/PhotoPlanes"));
 const models = media.filter((item) => item.category === "Model Studies");
 export function ScaleModelScene() {
@@ -96,27 +97,26 @@ export function ScaleModelScene() {
       className="section-pad model-section"
       aria-labelledby="model-title"
     >
-      <Reveal className="section-heading">
+      <div className="section-heading">
         <div>
           <p className="eyebrow">06 / Concept to form</p>
-          <h2 id="model-title">
-            Ideas you
-            <br />
-            <em>can hold.</em>
-          </h2>
+          <CinematicHeading
+            id="model-title"
+            lines={[{ text: "Ideas you" }, { text: "can hold.", italic: true }]}
+          />
         </div>
         <p className="heading-note">
           Physical model studies.
           <br />
-          Three photographs, three perspectives.
+          Seven photographs, multiple perspectives.
         </p>
-      </Reveal>
+      </div>
       <div
         className={`model-depth-stage ${ready ? "canvas-ready" : ""}`}
         aria-hidden="true"
       >
         <div className="model-depth-fallback">
-          {models.map((item) => (
+          {models.slice(0, 3).map((item) => (
             <PhotoImage key={item.slug} item={item} sizes="30vw" />
           ))}
         </div>
@@ -137,15 +137,14 @@ export function ScaleModelScene() {
       </div>
       <div className="model-grid">
         {models.map((item, i) => (
-          <Link
-            key={item.slug}
-            to={`/?category=Model+Studies&photo=${item.slug}#work`}
-          >
-            <PhotoImage item={item} sizes="(min-width:768px) 30vw, 100vw" />
-            <p className="image-meta">
-              0{i + 1} / {item.title}
-            </p>
-          </Link>
+          <Reveal key={item.slug}>
+            <Link to={`/?category=Model+Studies&photo=${item.slug}#work`}>
+              <PhotoImage item={item} sizes="(min-width:768px) 30vw, 100vw" />
+              <p className="image-meta">
+                0{i + 1} / {item.title}
+              </p>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>

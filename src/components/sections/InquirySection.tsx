@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { site } from "../../content/site";
 import { Arrow } from "../Arrow";
+import { CinematicHeading } from "../type/CinematicHeading";
 type Inquiry = {
   name: string;
   email: string;
@@ -68,13 +69,17 @@ export default function InquirySection() {
   };
   return (
     <>
-      <section className="page-heading section-pad contact-heading" id="contact">
+      <section
+        className="page-heading section-pad contact-heading"
+        id="contact"
+      >
         <p className="eyebrow">Contact / Begin a conversation</p>
-        <h1>
-          What do you
-          <br />
-          <em>have in mind?</em>
-        </h1>
+        <CinematicHeading
+          lines={[
+            { text: "What do you" },
+            { text: "have in mind?", italic: true },
+          ]}
+        />
         <p>Tell us a little about the space you’re imagining.</p>
       </section>
       <section

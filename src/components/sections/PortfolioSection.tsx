@@ -1,9 +1,8 @@
 import { useSearchParams } from "react-router-dom";
-import { m, useReducedMotion } from "motion/react";
 import { media, type Category, type Photo } from "../../content/media";
-import { PhotoImage } from "../PhotoImage";
-import { Arrow } from "../Arrow";
 import { AccessibleLightbox } from "../portfolio/AccessibleLightbox";
+import { PortfolioCard } from "../portfolio/PortfolioCard";
+import { CinematicHeading } from "../type/CinematicHeading";
 
 const categories: ("All" | Category)[] = [
   "All",
@@ -20,7 +19,6 @@ export default function PortfolioSection() {
   const filtered = media.filter(
     (item) => category === "All" || item.category === category,
   );
-  const reduced = useReducedMotion();
   const filter = (value: string) => {
     const next = new URLSearchParams(params);
     next.delete("photo");
@@ -42,9 +40,9 @@ export default function PortfolioSection() {
     <>
       <section className="page-heading section-pad work-heading" id="work">
         <p className="eyebrow">The portfolio / An image collection</p>
-        <h1>
-          Selected <em>work.</em>
-        </h1>
+        <CinematicHeading
+          lines={[{ text: "Selected" }, { text: "work.", italic: true }]}
+        />
         <div className="page-intro">
           <p>
             Architecture, interiors and physical model studies. A collection of
@@ -73,7 +71,7 @@ export default function PortfolioSection() {
             >
               {value}
               <sup>
-                  {value === "All"
+                {value === "All"
                   ? media.length
                   : media.filter((item) => item.category === value).length}
               </sup>
@@ -85,35 +83,17 @@ export default function PortfolioSection() {
         </p>
         <div className="work-grid">
           {filtered.map((item, i) => (
-            <m.button
+            <PortfolioCard
               key={item.slug}
-              id={item.slug}
-              className={`work-card ${item.aspect_ratio < 1 ? "portrait" : ""}`}
-              initial={reduced ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: Math.min(i * 0.025, 0.15) }}
-              onClick={() => open(item)}
-              aria-label={`Open ${item.title} photograph`}
-            >
-              <div className="work-image">
-                <PhotoImage
-                  item={item}
-                  sizes="(min-width:1024px) 44vw, (min-width:768px) 45vw, 100vw"
-                />
-                <span className="image-open">
-                  <Arrow diagonal />
-                </span>
-              </div>
-              <div className="work-card-caption">
-                <h2>{item.title}</h2>
-                <span>{item.category}</span>
-              </div>
-            </m.button>
+              item={item}
+              index={i}
+              onOpen={open}
+            />
           ))}
         </div>
         <p className="portfolio-note">
-          Presented by image category. Project names and associations will be
-          added when confirmed by the studio.
+          Architecture, interiors and physical model studies, presented through
+          the studio’s photographic collection.
         </p>
       </section>
       {active && (

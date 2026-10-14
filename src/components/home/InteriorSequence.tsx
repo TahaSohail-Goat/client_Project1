@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { photo } from "../../content/media";
 import { PhotoImage } from "../PhotoImage";
 import { Arrow } from "../Arrow";
+import { CinematicHeading } from "../type/CinematicHeading";
 export const interiorScenes = [
   {
     slug: "interior-dining-living",
@@ -59,6 +60,12 @@ export function InteriorSequence() {
           },
         });
         gsap.set(frames.slice(1), { clipPath: "inset(0% 0% 100% 0%)" });
+        tl.fromTo(
+          frames[0].querySelector(".interior-photo"),
+          { scale: 1.08, xPercent: -1.5 },
+          { scale: 1.01, xPercent: 0, duration: 1.2 },
+          0,
+        );
         frames.slice(1).forEach((frame, index) => {
           const start = 0.7 + index * 1.05;
           tl.to(
@@ -68,8 +75,8 @@ export function InteriorSequence() {
           )
             .fromTo(
               frame.querySelector(".interior-photo"),
-              { scale: 1.045 },
-              { scale: 1, duration: 0.85 },
+              { scale: 1.1, xPercent: index % 2 === 0 ? 2 : -2 },
+              { scale: 1.01, xPercent: 0, duration: 0.85 },
               start,
             )
             .fromTo(
@@ -78,6 +85,12 @@ export function InteriorSequence() {
               { opacity: 1, y: 0, duration: 0.35 },
               start + 0.25,
             );
+          tl.fromTo(
+            frame.querySelector(".interior-caption h3"),
+            { yPercent: 45, opacity: 0 },
+            { yPercent: 0, opacity: 1, duration: 0.35 },
+            start + 0.35,
+          );
         });
         tl.to({}, { duration: 0.5 });
         let previous = -1;
@@ -115,9 +128,11 @@ export function InteriorSequence() {
     >
       <div className="interior-heading">
         <p className="eyebrow">04 / Spaces within</p>
-        <h2 id="interior-title">
-          Life, on the <em>inside.</em>
-        </h2>
+        <CinematicHeading
+          id="interior-title"
+          className="interior-title-lockup"
+          lines={[{ text: "Life, on the" }, { text: "inside.", italic: true }]}
+        />
         <Link to="/?category=Interiors#work" className="line-link">
           All 25 interiors <Arrow diagonal />
         </Link>
@@ -144,7 +159,7 @@ export function InteriorSequence() {
         ))}
       </div>
       <div className="interior-bottom">
-        <span>Interior perspectives · Project groupings pending</span>
+        <span>Interior perspectives / Living, gathering and quiet spaces</span>
         <div className="interior-indicators" aria-hidden="true">
           {interiorScenes.map((scene, i) => (
             <span key={scene.slug} data-active={i === 0}>

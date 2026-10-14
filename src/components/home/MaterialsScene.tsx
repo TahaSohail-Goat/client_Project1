@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { photo } from "../../content/media";
-import { PhotoImage } from "../PhotoImage";
-import { Reveal } from "../Reveal";
+import { DepthPhoto } from "../DepthPhoto";
+import { CinematicHeading } from "../type/CinematicHeading";
 import { Arrow } from "../Arrow";
 export function MaterialsScene() {
   return (
@@ -9,28 +9,27 @@ export function MaterialsScene() {
       className="section-pad materials"
       aria-labelledby="materials-title"
     >
-      <Reveal className="section-heading">
+      <div className="section-heading">
         <div>
           <p className="eyebrow">05 / The considered detail</p>
-          <h2 id="materials-title">
-            A closer
-            <br />
-            <em>look.</em>
-          </h2>
+          <CinematicHeading
+            id="materials-title"
+            lines={[{ text: "A closer" }, { text: "look.", italic: true }]}
+          />
         </div>
         <p className="heading-note">
           Warmth, texture and shadow.
           <br />
           Small moments that shape a space.
         </p>
-      </Reveal>
+      </div>
       <div className="materials-grid">
-        <Reveal className="material-large">
+        <div className="material-large">
           <Link
             to="/?category=Interiors&photo=interior-display-wall#work"
             className="material-photo"
           >
-            <PhotoImage
+            <DepthPhoto
               item={photo("interior-display-wall")}
               sizes="(min-width:768px) 55vw, 100vw"
             />
@@ -39,13 +38,13 @@ export function MaterialsScene() {
             </span>
           </Link>
           <p className="image-meta">01 / Display & light</p>
-        </Reveal>
-        <Reveal className="material-small">
+        </div>
+        <div className="material-small">
           <Link
             to="/?category=Interiors&photo=interior-bathroom-warmstone#work"
             className="material-photo"
           >
-            <PhotoImage
+            <DepthPhoto
               item={photo("interior-bathroom-warmstone")}
               sizes="(min-width:768px) 27vw, 100vw"
             />
@@ -61,7 +60,7 @@ export function MaterialsScene() {
           <Link className="line-link" to="/?category=Interiors#work">
             Explore interior studies <Arrow diagonal />
           </Link>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

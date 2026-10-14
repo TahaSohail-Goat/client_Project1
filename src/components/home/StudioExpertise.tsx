@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { photo } from "../../content/media";
-import { PhotoImage } from "../PhotoImage";
+import { DepthPhoto } from "../DepthPhoto";
+import { CinematicHeading } from "../type/CinematicHeading";
 import { Reveal } from "../Reveal";
 import { Arrow } from "../Arrow";
 export function StudioExpertise() {
@@ -9,37 +10,40 @@ export function StudioExpertise() {
       className="section-pad studio-home"
       aria-labelledby="studio-home-title"
     >
-      <Reveal className="studio-home-photo">
-        <PhotoImage
+      <div className="studio-home-photo">
+        <DepthPhoto
           item={photo("interior-reading-nook")}
           sizes="(min-width:768px) 48vw, 100vw"
         />
-      </Reveal>
-      <Reveal className="studio-home-copy">
+      </div>
+      <div className="studio-home-copy">
         <p className="eyebrow">08 / The studio</p>
-        <h2 id="studio-home-title">
-          Outside.
-          <br />
-          Inside.
-          <br />
-          <em>Together.</em>
-        </h2>
-        <p>
-          Architecture and interior design. Two connected ways of thinking about
-          the spaces around us.
-        </p>
-        <div className="expertise-list">
-          <Link to="/#architecture">
-            Architecture <Arrow diagonal />
+        <CinematicHeading
+          id="studio-home-title"
+          lines={[
+            { text: "Outside." },
+            { text: "Inside." },
+            { text: "Together.", italic: true },
+          ]}
+        />
+        <Reveal>
+          <p>
+            Architecture and interior design. Two connected ways of thinking
+            about the spaces around us.
+          </p>
+          <div className="expertise-list">
+            <Link to="/#architecture">
+              Architecture <Arrow diagonal />
+            </Link>
+            <Link to="/#interior-design">
+              Interior Design <Arrow diagonal />
+            </Link>
+          </div>
+          <Link className="line-link" to="/#studio">
+            Explore the studio <Arrow diagonal />
           </Link>
-          <Link to="/#interior-design">
-            Interior Design <Arrow diagonal />
-          </Link>
-        </div>
-        <Link className="line-link" to="/#studio">
-          Explore the studio <Arrow diagonal />
-        </Link>
-      </Reveal>
+        </Reveal>
+      </div>
     </section>
   );
 }

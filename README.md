@@ -41,6 +41,12 @@ Optimized photographs and the supplied hero film are served from `public/media`.
 
 Deploy the contents of `dist/` to a static host with SPA fallback for `/work`, `/studio` and `/contact`. `vercel.json` and `public/_redirects` provide common host configurations; no hosting account is connected or deployment performed. The reference video is never used as website footage. `noindex,nofollow` and a disallow-all `robots.txt` remain until branding, publication permission and launch content are approved; update both at launch. Verify host-specific rewrites and response headers before launch.
 
+## Whole-page cinematic experience
+
+The film leads into oversized scroll-linked typography, architectural linework and layered photographic reveals throughout the page. `CinematicHeading` and `DepthPhoto` are reusable components with separate animation ownership: GSAP controls word/mask/image scroll transforms; Motion controls pointer perspective and supporting-copy entrances. The housing model stages a facade approach, lifted roof and overhead interior view, while three physical-model photos receive selective WebGL perspective. The full seven-photo model gallery and all 43 client images remain accessible. Portfolio category controls stay visible while exploring the collection; the contact chapter and oversized eco28 footer finish the same visual language.
+
+`scripts/cinematic-smoke.js` is a Playwright CLI function covering cold section links, reversed word/model animation, lazy model downloads, all filter counts, keyboard navigation, mobile layouts, context loss and reduced motion. `scripts/browser-smoke.js` covers the supplied film and compatibility routes. Run each with an open CLI browser session and the production preview on port 4173, for example `npx --yes --package @playwright/cli playwright-cli -s=qa run-code --filename=scripts/cinematic-smoke.js`. Safari/iPhone hardware checks remain separate from the available Windows WebKit engine testing.
+
 ## Animation and verification
 
 GSAP owns scrubbed pins, Motion owns separate editorial/navigation/gallery nodes, and Lenis optionally smooths desktop scroll. Lazy Three.js/R3F/Drei render the housing study and the preserved model-photo planes. Both canvases render on demand; DPR is capped at 1.5 for housing and 1.4 for photographs. Their shared WebGL bundle is fetched only near an eligible model chapter. Mobile uses native scrolling, while reduced motion removes pins and WebGL. See the animation specification for responsive budgets and fallbacks.
