@@ -1,0 +1,193 @@
+.ivory-panel {
+  perspective: 1800px;
+}
+.vision-depth-stage {
+  position: relative;
+  transform-style: preserve-3d;
+}
+.vision-line {
+  perspective: 1400px;
+}
+.vision-line > span {
+  backface-visibility: hidden;
+}
+.vision-copy {
+  transform-origin: 0 50%;
+}
+.vision-drafting {
+  position: absolute;
+  inset: 18px 24px;
+  width: calc(100% - 48px);
+  height: calc(100% - 36px);
+  color: var(--bronze);
+  opacity: 0;
+  pointer-events: none;
+}
+.ivory-panel .vision-composition {
+  overflow: visible;
+  position: relative;
+  transform-style: preserve-3d;
+}
+.vision-photo-tilt {
+  position: relative;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+.vision-photo-stack {
+  position: relative;
+  height: clamp(220px, 31svh, 380px);
+  transform-style: preserve-3d;
+}
+.vision-photo-sheet {
+  position: absolute;
+  inset: 0;
+  background: var(--ivory);
+  border: 1px solid #b9967099;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+.vision-photo-sheet--back {
+  transform: translate3d(-36px, 24px, -70px) rotate(-4deg);
+  background: #e9e2d7;
+}
+.vision-photo-sheet--middle {
+  transform: translate3d(-18px, 12px, -35px) rotate(-2deg);
+}
+.vision-photo-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform: translateZ(1px);
+  background: var(--ivory);
+  box-shadow:
+    0 30px 55px -24px #171c1a40,
+    0 7px 17px -10px #171c1a26;
+}
+.vision-photo-mask {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.vision-photo-camera {
+  position: absolute;
+  inset: 0;
+}
+.ivory-panel .vision-composition .vision-photo-camera > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
+}
+.vision-photo-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 25%,
+    #fbf8f220 47%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.vision-photo-corners {
+  position: absolute;
+  inset: 12px;
+  pointer-events: none;
+}
+.vision-photo-corners i {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: #f2ede580;
+  border-style: solid;
+}
+.vision-photo-corners i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+.vision-photo-corners i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-width: 1px 1px 0 0;
+}
+.vision-photo-corners i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1px 1px;
+}
+.vision-photo-corners i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1px 1px 0;
+}
+.vision-composition > figcaption {
+  position: relative;
+  margin-top: 27px;
+}
+@media (max-width: 1023px), (max-height: 699px) {
+  .vision-photo-sheet--back {
+    transform: translate3d(-12px, 8px, -70px) rotate(-4deg);
+  }
+  .vision-photo-sheet--middle {
+    transform: translate3d(-6px, 4px, -35px) rotate(-2deg);
+  }
+  .vision-photo-stack {
+    height: clamp(150px, 26svh, 280px);
+  }
+  .vision-composition > figcaption {
+    margin-top: 18px;
+  }
+}
+@media (max-width: 767px) {
+  .vision-photo-stack {
+    height: clamp(140px, 21svh, 205px);
+  }
+  .vision-photo-sheet--back {
+    border-color: #b9967066;
+  }
+  .vision-drafting {
+    inset: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+  }
+}
+@media (max-width: 767px) and (min-height: 501px) and (max-height: 700px) {
+  .video-editorial .vision-composition {
+    display: block;
+  }
+  .vision-photo-stack {
+    height: clamp(105px, 19svh, 133px);
+  }
+  .vision-composition > figcaption {
+    margin-top: 12px;
+    font-size: 8px;
+  }
+  .video-editorial .vision-copy {
+    margin-top: 18px;
+  }
+  .video-editorial .vision-copy .line-link {
+    margin-top: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vision-photo-tilt,
+  .vision-depth-stage,
+  .vision-composition,
+  .vision-photo-camera {
+    transform: none !important;
+  }
+  .vision-photo-sheet,
+  .vision-drafting,
+  .vision-photo-glare {
+    display: none;
+  }
+  .vision-photo-face {
+    box-shadow: none;
+  }
+  .vision-composition > figcaption {
+    margin-top: 12px;
+  }
+}

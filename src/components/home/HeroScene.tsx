@@ -10,6 +10,7 @@ import { Arrow } from "../Arrow";
 import { EditorialHeading } from "../type/EditorialHeading";
 import { FacadePanelReveal } from "./FacadePanelReveal";
 import { PhotographicHero } from "./PhotographicHero";
+import { addVisionDepth } from "./visionDepth";
 
 gsap.registerPlugin(ScrollTrigger);
 function canAnimate() {
@@ -34,47 +35,39 @@ function ScrollVideoHero({ onFailure }: { onFailure: () => void }) {
   useLayoutEffect(() => {
     if (!enabled) { progress.current = 0; return; }
     const mm = gsap.matchMedia();
-    mm.add({ desktop: "(min-width: 768px)", mobile: "(max-width: 767px)" }, (context) => {
+    mm.add({ desktop: "(min-width: 768px)", mobile: "(max-width: 767px)", immersive: "(min-width: 1024px) and (min-height: 700px)" }, (context) => {
       const node = root.current!;
       const opening = node.querySelector<HTMLElement>(".video-opening")!;
       const interior = node.querySelector<HTMLElement>(".video-interior-copy")!;
       const editorial = node.querySelector<HTMLElement>(".video-editorial")!;
-      const panel = node.querySelector<HTMLElement>(".ivory-panel")!;
       const desktop = context.conditions?.desktop;
       let chapter = -1;
       const playhead = { p: 0 };
-      gsap.set(panel, { clipPath: "inset(100% 0% 0% 0%)" });
       gsap.set(interior, { opacity: 0, y: 24 });
-      gsap.set(".video-editorial .vision-line > span", { yPercent: 112 });
-      gsap.set([".video-editorial .vision-copy", ".video-editorial .vision-kicker"], { opacity: 0 });
-      gsap.set(".video-editorial .vision-composition", { clipPath: "inset(100% 0% 0% 0%)", y: 24 });
       gsap.from(".video-opening .editorial-heading__line > span", { opacity: 0.45, yPercent: 25, rotation: -1.5, duration: 0.8, stagger: 0.12, ease: "power3.out" });
       const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: {
-        id: "hero", trigger: node, start: "top top", end: () => `+=${innerHeight * (desktop ? 4.8 : 3.4)}`,
+        id: "hero", trigger: node, start: "top top", end: () => `+=${innerHeight * (desktop ? 7.2 : 5.1)}`,
         pin: true, scrub: desktop ? 0.45 : 0.25, invalidateOnRefresh: true, anticipatePin: 1,
       }});
-      tl.to(playhead, { p: 1, duration: 1 }, 0)
+      tl.to(playhead, { p: 1, duration: 1.5 }, 0)
         .to(opening, { opacity: 0, y: -44, duration: 0.18 }, 0.12)
         .to(interior, { opacity: 1, y: 0, duration: 0.055 }, 0.56)
         .fromTo(".video-interior-copy .editorial-heading__line > span", { yPercent: 65, rotation: -2 }, { yPercent: 0, rotation: 0, stagger: 0.02, duration: 0.06, immediateRender: false }, 0.57)
         .to(interior, { opacity: 0, y: -20, duration: 0.07 }, 0.71)
-        .to(".video-hero .hero-top", { opacity: 0, duration: 0.06 }, 0.77)
-        .to(panel, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.15 }, 0.8)
-        .to(".video-editorial .vision-kicker", { opacity: 1, duration: 0.04 }, 0.85)
-        .to(".video-editorial .vision-line > span", { yPercent: 0, stagger: 0.018, duration: 0.065 }, 0.85)
-        .to(".video-editorial .vision-composition", { clipPath: "inset(0% 0% 0% 0%)", y: 0, duration: 0.065 }, 0.885)
-        .to(".video-editorial .vision-copy", { opacity: 1, duration: 0.05 }, 0.91);
+        .to(".video-hero .hero-top", { opacity: 0, duration: 0.06 }, 0.77);
+      addVisionDepth(tl, node, { start: 0.8, duration: 0.58, immersive: !!context.conditions?.immersive });
       const update = () => {
         const p = playhead.p;
+        const time = tl.time();
         progress.current = Math.min(1, p / videoHero.filmEnd);
         requestSeek();
         node.dataset.progress = p.toFixed(4);
-        opening.inert = p > 0.3;
-        opening.setAttribute("aria-hidden", String(p > 0.3));
-        interior.setAttribute("aria-hidden", String(p < 0.56 || p > 0.78));
-        editorial.inert = p < 0.95;
-        editorial.setAttribute("aria-hidden", String(p < 0.95));
-        const next = p < 0.19 ? 0 : p < 0.5 ? 1 : p < 0.7 ? 2 : p < 0.84 ? 3 : 4;
+        opening.inert = time > 0.3;
+        opening.setAttribute("aria-hidden", String(time > 0.3));
+        interior.setAttribute("aria-hidden", String(time < 0.56 || time > 0.78));
+        editorial.inert = p < 0.92;
+        editorial.setAttribute("aria-hidden", String(p < 0.92));
+        const next = time < 0.19 ? 0 : time < 0.5 ? 1 : time < 0.7 ? 2 : time < 0.84 ? 3 : 4;
         if (next === chapter) return;
         chapter = next;
         node.dataset.chapter = heroChapters[next].id;

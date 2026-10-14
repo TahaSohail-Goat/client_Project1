@@ -9,6 +9,7 @@ import { PhotoImage } from "../PhotoImage";
 import { Arrow } from "../Arrow";
 import { EditorialHeading } from "../type/EditorialHeading";
 import { FacadePanelReveal } from "./FacadePanelReveal";
+import { addVisionDepth } from "./visionDepth";
 
 gsap.registerPlugin(ScrollTrigger);
 export function PhotographicHero({ notice }: { notice?: string }) {
@@ -27,6 +28,7 @@ export function PhotographicHero({ notice }: { notice?: string }) {
     mm.add(
       {
         desktop: "(min-width: 768px)",
+        immersive: "(min-width: 1024px) and (min-height: 700px)",
         mobile: "(max-width: 767px)",
         reduced: "(prefers-reduced-motion: reduce)",
         short:
@@ -55,7 +57,7 @@ export function PhotographicHero({ notice }: { notice?: string }) {
             id: "hero",
             trigger: root,
             start: "top top",
-            end: () => `+=${window.innerHeight * (desktop ? 4.8 : 3.4)}`,
+            end: () => `+=${window.innerHeight * (desktop ? 6.4 : 4.5333333333)}`,
             pin: true,
             scrub: desktop ? 0.6 : 0.35,
             invalidateOnRefresh: true,
@@ -78,14 +80,7 @@ export function PhotographicHero({ notice }: { notice?: string }) {
           rotation: -1.5,
         });
         gsap.set(".journey-aperture", { opacity: 0, scale: 0.8 });
-        gsap.set(".ivory-panel", { clipPath: "inset(100% 0% 0% 0%)" });
-        gsap.set(".vision-line span", { yPercent: 112 });
-        gsap.set([".vision-copy", ".vision-kicker"], { opacity: 0 });
-        gsap.set(".vision-composition", {
-          clipPath: "inset(100% 0% 0% 0%)",
-          y: 28,
-        });
-        // One 12-unit timeline: establish, approach, aperture entry, interior atmosphere, ivory finish.
+        // A shared 16-unit timeline preserves the photo journey and extends its spatial finish.
         tl.to(
           ".hero-photo",
           {
@@ -226,25 +221,9 @@ export function PhotographicHero({ notice }: { notice?: string }) {
             },
             8.5,
           )
-          .to(".hero-top", { opacity: 0, duration: 0.4 }, 8.65)
-          .to(
-            ".ivory-panel",
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2 },
-            9.15,
-          )
-          .to(".vision-kicker", { opacity: 1, duration: 0.4 }, 9.65)
-          .to(
-            ".vision-line span",
-            { yPercent: 0, stagger: 0.15, duration: 0.65 },
-            9.7,
-          )
-          .to(
-            ".vision-composition",
-            { clipPath: "inset(0% 0% 0% 0%)", y: 0, duration: 0.75 },
-            10.2,
-          )
-          .to(".vision-copy", { opacity: 1, duration: 0.5 }, 10.55)
-          .to({}, { duration: 0.8 }, 11.2);
+          .to(".hero-top", { opacity: 0, duration: 0.4 }, 8.65);
+        addVisionDepth(tl, root, { start: 9.15, duration: 5.75, immersive: !!context.conditions?.immersive });
+        tl.to({}, { duration: 1.1 }, 14.9);
         const update = () => {
           const time = tl.time();
           const index =
@@ -258,7 +237,7 @@ export function PhotographicHero({ notice }: { notice?: string }) {
                     ? 3
                     : 4;
           intro.inert = time > 1.9;
-          panel.inert = time < 11.05;
+          panel.inert = time < 14.9;
           if (time > 0.06) prepareStory();
           if (index === lastChapter) return;
           lastChapter = index;

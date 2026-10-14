@@ -55,6 +55,8 @@ See `ANIMATION_SPEC.md`, `ASSET_USAGE.md`, `TYPOGRAPHY_SYSTEM.md` and `CLIENT_AC
 
 ## Homepage film
 
+The “Space. Light. / A way of living.” finale now uses a shared 3D editorial choreography: perspective typography, a forward-swinging photo board, two separated backing planes, drawing-line reveals and fine-pointer tilt. It remains inside the hero's single pin. The extended 7.2/5.1-viewport scroll budget preserves the film's opening timing, then gives the photo sequence room to unfold and settle. The supplied photograph and all text remain normal accessible DOM; the effect adds no WebGL download to the opening. Small screens use lighter angles, and reduced motion shows a static composition. Validate the sequence with `scripts/vision-depth-smoke.js` through Playwright CLI.
+
 `public/media/video/hero_exterior_to_interior_scrub.mp4` is the supplied 8-second, 1280×720, 24fps H.264 film, preserved unchanged with its existing all-intra frames and front-loaded MP4 index. The 768×432 mobile encode retains all-intra seeking, and the first-frame WebP poster loads immediately. This film is distinct from the older reference screen recordings.
 
 GSAP drives a single normalized scroll playhead and the HTML typography/panel timeline. `src/hooks/useVideoScrub.ts` maps it to paused `currentTime`, quantizes to source frames and coalesces seeks until the decoder is ready. It never calls `play()` or enables autoplay. Lenis uses the existing shared GSAP ticker and ScrollTrigger notifications; touch uses native document scroll. Reduced motion, Save-Data and very short screens show the poster and editorial content without fetching the film or adding a hero pin. Loading and failed-media states keep content accessible.
