@@ -71,7 +71,14 @@ export function ScrollEngine() {
       if (!anchor || userMoved) return;
       const offset = Number(anchor.dataset.scrollOffset ?? 100);
       engine.current?.resize();
-      const position = anchor.getBoundingClientRect().top + scrollY - offset;
+      // A pinned element's rectangle follows the viewport. Its trigger retains
+      // the actual chapter entry point through refreshes and media loading.
+      const pinnedChapter = ScrollTrigger.getAll().find(
+        (trigger) => trigger.trigger === anchor && trigger.pin,
+      );
+      const position = pinnedChapter
+        ? pinnedChapter.start - offset
+        : anchor.getBoundingClientRect().top + scrollY - offset;
       if (engine.current)
         engine.current.scrollTo(position, { immediate: true, force: true });
       else window.scrollTo({ top: position, behavior: "instant" });
