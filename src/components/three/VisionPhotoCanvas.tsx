@@ -68,6 +68,7 @@ export default function VisionPhotoCanvas(props: Bridge) {
       orthographic
       camera={{ position: [0, 0, 8], zoom: 150, near: 0.1, far: 20 }}
       dpr={[1, 2]}
+      resize={{ offsetSize: true }}
       frameloop="demand"
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
       onCreated={({ camera, size }) => {

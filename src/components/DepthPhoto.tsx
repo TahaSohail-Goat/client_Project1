@@ -77,8 +77,8 @@ export function DepthPhoto({
         });
         depth.fromTo(
           image,
-          { yPercent: -4, scale: 1.1 },
-          { yPercent: 4, scale: 1.04, ease: "none", duration: 1 },
+          { yPercent: threeD ? -1 : -4, scale: threeD ? 1.035 : 1.1 },
+          { yPercent: threeD ? 1 : 4, scale: threeD ? 1.015 : 1.04, ease: "none", duration: 1 },
           0,
         );
         if (threeD)
@@ -178,7 +178,7 @@ export function DepthPhoto({
       >
         <div className="depth-photo-mask">
           <div className="depth-photo-scroll">
-            <PhotoImage item={item} sizes={sizes} />
+            <PhotoImage item={item} sizes={sizes} full={threeD} />
           </div>
           {canvasEnabled && !canvasFailed && !reduced && (
             <div className="depth-photo-three" aria-hidden="true">

@@ -51,7 +51,7 @@ function PhotoPlane({ item, progress, redraw, onReady, onFailure }: Bridge) {
       camera.position.set(
         (p - 0.5) * 0.22,
         Math.sin(p * Math.PI) * 0.035,
-        coverDistance * (0.96 - Math.sin(p * Math.PI) * 0.055),
+        coverDistance * (0.99 - Math.sin(p * Math.PI) * 0.015),
       );
       camera.lookAt(0, 0, 0);
     }
@@ -80,7 +80,9 @@ export default function ExteriorPerspectiveCanvas(props: Bridge) {
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 36, near: 0.1, far: 20 }}
-      dpr={[1, 1.35]}
+      dpr={[1, 2]}
+      // Measure layout dimensions, not the card's temporary GSAP scale/tilt.
+      resize={{ offsetSize: true }}
       frameloop="demand"
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
     >

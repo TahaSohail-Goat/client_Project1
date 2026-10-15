@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -26,7 +26,10 @@ function ExteriorCard({
       className="exterior-card"
       to={`/?category=Architecture&photo=${item.slug}#work`}
     >
-      <div className="exterior-frame">
+      <div
+        className="exterior-frame"
+        style={{ "--exterior-photo-ratio": item.aspect_ratio } as CSSProperties}
+      >
         <DepthPhoto
           item={item}
           sizes="(min-width: 768px) 65vw, 100vw"

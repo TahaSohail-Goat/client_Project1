@@ -89,7 +89,8 @@ section[tabindex="-1"]:focus {
   aspect-ratio: auto;
 }
 .exterior-card:first-child .exterior-frame {
-  aspect-ratio: 1.25;
+  /* Preserve the wide photograph instead of magnifying a narrow crop. */
+  aspect-ratio: var(--exterior-photo-ratio, 2.2453);
   background: var(--ivory);
 }
 .exterior-card:nth-child(2) .exterior-frame {
