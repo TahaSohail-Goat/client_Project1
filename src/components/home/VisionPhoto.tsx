@@ -74,7 +74,10 @@ export function VisionPhoto({
           />
           <div className="vision-photo-face">
             <div className="vision-photo-mask">
-              <div className="vision-photo-camera" data-three-ready={ready}>
+              <div
+                className="vision-photo-camera"
+                data-three-ready={ready && threeDEnabled && !reduced && !failed}
+              >
                 <PhotoImage
                   item={photo("supplemental-05")}
                   sizes="(min-width: 768px) 52vw, 100vw"

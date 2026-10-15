@@ -12,7 +12,6 @@ import App from "./App";
 import "./styles/tokens.css";
 import "./styles/site.css";
 import "./styles/responsive.css";
-import "./styles/hero-journey.css";
 import "./styles/navigation.css";
 import "./styles/housing-study.css";
 import "./styles/video-hero.css";

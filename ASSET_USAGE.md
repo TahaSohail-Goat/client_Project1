@@ -13,16 +13,16 @@ The gallery contains 11 architecture, 25 interior and 7 physical-model photograp
 
 Each full-size WebP has 480px and 768px variants for responsive `srcSet`. These are intentionally different image sizes, not duplicate copies. The 18 identical copies formerly in `client_assets/web_ready` were removed after SHA-256 comparison with the public originals; 1,757,054 bytes of redundant files were removed.
 
-The hero and lightbox use full-resolution images. Lower gallery/editorial photographs load lazily with reserved dimensions. The supplemental collection is optimized separately with the same responsive path convention. Unique JPEG masters are retained; source masters and reference recordings are never deployed.
+The lightbox uses full-resolution client images. Gallery/editorial photographs load lazily with reserved dimensions. The supplemental collection is optimized separately with the same responsive path convention. Unique JPEG masters are retained; source masters and reference recordings are never deployed. The hero uses a separate licensed film and its first-frame poster.
 
 ## Motion and 3D
 
-`src/content/videoHero.ts` selects the supplied MP4, mobile encode and first-frame poster. `src/content/hero.ts` retains the photographic fallback journey. Image categories do not establish a shared commission or a real outside-to-inside walkthrough.
+`src/content/videoHero.ts` selects the independent 29.17s exterior-to-interior film, mobile encode and first-frame poster. No client photographs are used in the film or its failure fallback. Client photos begin in the separate ivory editorial chapter and continue throughout the portfolio; category counts remain unchanged.
 
 The physical-model canvas maps client photographs to planes. The separate housing canvas uses original procedural geometry requested by the user, prominently labelled a conceptual study, not a client project. Both use demand rendering and provide fallbacks; see `ANIMATION_SPEC.md`.
 
-`references/` retains the supplied video and contact sheets for design review. The reference video depicts another site and is never used as production footage. No stock or AI photography is included.
+`references/` retains the supplied video and contact sheets for design review. The reference recording depicts another site and is never used as production footage. The user authorized free stock footage for the replacement hero on 2026-10-15. See `docs/HERO_MEDIA_SOURCES.md` for the three 4K Pexels sources, photographer credit and license record. Stock media is not added to the client portfolio. No AI generation was used for this film.
 
 Publication permission, photographer credits and higher-resolution masters remain launch requirements in `CLIENT_ACTION_REQUIRED.md`.
 
-The newly supplied hero_exterior_to_interior_scrub.mp4 is authorized for the homepage hero and is preserved unchanged as its canonical desktop asset in public/media/video/. The 768px mobile rendition is an intentional derivative for smaller downloads and decode cost. Neither film has embedded typography; all headings remain HTML.
+The former `hero_exterior_to_interior_scrub.mp4`, its mobile derivative and poster are preserved in `references/retired_hero/`, outside production. Current hero assets are in `public/media/hero-film/`: a 1080p desktop film, 540p mobile film and independent poster. Typography remains selectable HTML.

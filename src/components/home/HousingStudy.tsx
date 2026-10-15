@@ -125,7 +125,21 @@ export function HousingStudy() {
               });
           },
         });
+        // This lazy pin sits before the model ribbon in the document, even
+        // though it is registered later. Measure it before subsequent pins.
+        ScrollTrigger.sort((a: ScrollTrigger, b: ScrollTrigger) => {
+          if (!a.trigger || !b.trigger || a.trigger === b.trigger)
+            return a.start - b.start;
+          return a.trigger.compareDocumentPosition(b.trigger) &
+            Node.DOCUMENT_POSITION_FOLLOWING
+            ? -1
+            : 1;
+        });
+        const refreshFrame = requestAnimationFrame(() =>
+          ScrollTrigger.refresh(),
+        );
         return () => {
+          cancelAnimationFrame(refreshFrame);
           tween.kill();
           progress.current = 0;
           redraw.current?.();

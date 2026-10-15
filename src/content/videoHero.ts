@@ -1,8 +1,11 @@
 ﻿export const videoHero = {
-  desktop: "/media/video/hero_exterior_to_interior_scrub.mp4",
-  mobile: "/media/video/hero_exterior_to_interior_scrub-mobile.mp4",
-  poster: "/media/video/hero-exterior-poster.webp",
+  desktop: "/media/hero-film/spatial-journey.mp4",
+  mobile: "/media/hero-film/spatial-journey-mobile.mp4",
+  poster: "/media/hero-film/terrace-poster.webp",
+  credit: "Rene Strgar",
+  creditUrl:
+    "https://www.pexels.com/video/luxurious-outdoor-patio-with-scenic-view-34874522/",
   fps: 24,
-  // The film keeps its original scroll distance; the following still-photo chapter extends it.
-  filmEnd: 0.45,
+  // Independent licensed film, followed by the client portfolio's ivory chapter.
+  filmEnd: 0.82,
 };

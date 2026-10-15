@@ -1,6 +1,6 @@
 # CODEX MASTER BRIEF (V2) — CINEMATIC ARCHITECTURE & INTERIOR DESIGN STUDIO
 
-> Current user-approved revision: the homepage now uses the supplied `hero_exterior_to_interior_scrub.mp4` as a paused, scroll-scrubbed film. The historical photographic hero instructions below apply to the preserved media-failure fallback. See `README.md` and `ANIMATION_SPEC.md` for the current implementation.
+> Current user-approved revision (2026-10-15): the hero uses a free, licensed, independent exterior-to-interior film sourced from Pexels; client photos are reserved for the editorial/portfolio chapters below. This explicitly replaces the historical client-only hero instructions below. The former 8-second film is archived outside production. See `docs/HERO_MEDIA_SOURCES.md`, `README.md` and `ANIMATION_SPEC.md` for the current implementation.
 
 ## Your role, definitive scope and instructions
 

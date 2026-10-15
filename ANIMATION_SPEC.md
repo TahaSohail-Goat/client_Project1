@@ -5,21 +5,57 @@ The supplied 3.90-second, 640×368 recording was decoded and inspected at 0.5-se
 
 ## Default video hero
 
-The latest UI revision removes the hero's entire bottom chapter rail: chapter buttons, current-chapter status, progress line and Skip sequence link. This applies to both the video hero and photographic fallback. Pinning, forward/reverse scrubbing, headings and the ivory transition remain scroll-controlled; the main navigation still links directly to website sections. Historical bookmark descriptions below describe earlier UI iterations.
+The 2026-10-15 revision replaces the client-based opening film and model-photo
+extension with an independent licensed exterior-to-interior edit. The removed
+chapter rail stays removed. Only a small scroll cue and film credit accompany the
+opening; all text remains selectable HTML.
 
-- **Assets:** supplied 8-second, 1280×720 H.264/all-intra/24fps MP4 (7,271,665 bytes), preserved byte-for-byte at `public/media/video/hero_exterior_to_interior_scrub.mp4`. A 768×432 all-intra mobile rendition is 2,579,207 bytes; first-frame WebP poster is 93,198 bytes. All three are typography-free. Older `references/` recordings are never used as site footage.
-- **One document scroll:** `HeroScene` owns one GSAP ScrollTrigger pin. Desktop scroll budget is 9.6 extra viewports; mobile is 6.8. A 2-unit timeline reserves the film's previous physical scroll length, then stages three still photographs before the ivory editorial finale. GSAP scrub is 0.45/0.25 seconds. There is no nested scroll container, autoplay, loop or independent video playback. Lenis remains optional desktop smoothing on the shared GSAP ticker with lag smoothing disabled.
-- **Seeking:** normalized progress 0–0.45 maps to film time 0–(duration minus one frame). The next ~30% reveals three separate client physical-model photographs—facade, open section and upper perspective—through reversing masks and perspective camera moves. They give the filmed walkthrough a distinct architectural follow-through without repeating its exterior or interior frames. The final ~25% stages the editorial depth reveal and reading hold. Targets round to 24fps. A single RAF and the native `seeked` event coalesce pending targets, avoiding repeated seeking while the decoder is busy. Video-frame callbacks track decoded frames; visibility cleanup removes callbacks/listeners, pauses and releases media. Responsive source selection is stable across resize to avoid re-downloading the film.
-- **Typography:** Space Grotesk 700 and Instrument Serif Italic 400 remain selectable HTML. Opening copy fades/moves upward at 8–20%; an interior lockup reveals at approximately 37–43% and fades at 47–52%. The editorial headline unfolds through a 64° X rotation, depth and staggered vertical masks; its italic line adds diagonal movement. Headings finish flat and readable.
-- **Editorial handoff:** ivory rises after the three still photographs. `addVisionDepth` moves the whole editorial stage from -360px depth, then swings a three-layer photographic board forward from 300px depth to a settled -10° Y / 2° X perspective. Two bronze-edged backing planes separate and settle behind the unaltered client photograph; its mask and camera pan have independent nodes. Drafting lines draw during the transition and disappear at rest. Supporting copy and the directional mark arrive on later beats. The final 8% is a readable hold. Inert/ARIA state enables the editorial content at 92%. The removed chapter rail stays absent.
-- **Ownership and performance:** `addVisionDepth` appends to the existing parent timeline in video, photographic fallback and standalone facade modes; it creates no additional pin or scroll source. CSS perspective renders genuine planar depth with selectable DOM content and one photograph. Motion owns only the inner fine-pointer tilt/glare node; GSAP owns its outer scroll plane. The opening does not fetch Three.js, new video, new textures or fabricated building geometry. At >=1024px / >=700px the full depth treatment runs; smaller/short screens use bounded angles and shorter image planes. Reduced motion removes depth layers and renders ordinary editorial content.
-- **Fallbacks:** the first-frame poster stays visible while decoding; a polite loading label does not block navigation. Film error or 30-second initial decode timeout mounts `PhotographicHero`, whose shared depth finale extends its timeline to 16 units (6.4/4.533 extra viewports). Reduced motion, Save-Data or <=500px height show ordinary poster/editorial content, with no MP4 request or hero pin. Compact phones retain a visible photo and reachable inquiry/work links.
-- **QA:** `scripts/vision-depth-smoke.js` checks different scroll poses, identical replay after reversal, pointer perspective, compact layouts, removed controls and static reduced-motion content. `scripts/browser-smoke.js` covers paused forward/reverse film seeking, filters, keyboard lightbox and section links. Responsive checks cover 390×844, 390×640 and 1366×600. Actual Safari/iOS hardware is unavailable in this Windows workspace and remains a launch check.
+- **Assets:** three related 4K Pexels source clips by Rene Strgar, edited into a
+  silent 29.17-second, 24fps film. Production versions are 1920x1080 (20.8MB) and
+  960x540 (7.9MB); keyframe intervals are 6/4 frames. The matching first-frame WebP
+  serves as the loading, reduced-motion and error view. Source/license details are
+  in `docs/HERO_MEDIA_SOURCES.md`. Old media is retained in `references/retired_hero/`.
+- **Composition:** the terrace establishes the exterior for approximately 9s,
+  followed by dining/living and closer living-room shots. Two 0.65s dissolves join
+  the takes. This is an edited sequence, not a single camera flight. No generated
+  geometry, client photographs or reference-site media appear in the film.
+- **One document scroll:** one `.hero-sequence` GSAP pin; 9.6 desktop / 6.8 mobile
+  extra viewports, with 0.45/0.25s scrub smoothing. The `.video-hero` section and
+  next `.video-editorial` chapter are siblings inside that pin. GSAP owns the
+  playhead and typography; Lenis uses the shared GSAP ticker on desktop.
+- **Seeking:** progress 0-0.82 maps to the entire film, ending one 24fps frame before
+  its duration. The existing hook coalesces requests until `seeked`, never queues
+  stale targets, pauses when hidden and releases media on cleanup. It does not
+  autoplay, loop, call `play()`, or change rendition while resizing.
+- **Typography:** Space Grotesk 700 and Instrument Serif Italic remain responsive
+  DOM text. The opening fades at approximately 7-17% scroll progress. The first
+  interior headline reveals at 32-48%, then the detail headline at 58-78%.
+- **Editorial handoff:** the final 18% raises the ivory panel and choreographs its
+  type, client photo board, backing planes and drafting lines. Its CTAs become
+  focusable at 94%. Client images belong to this following portfolio chapter,
+  outside `.video-hero`; they are never part of the independent film or its fallback.
+- **Fallbacks:** reduced motion, Save-Data, heights <=500px or media failure remove
+  the hero pin and video request, retaining the new independent poster and a
+  normal-flow editorial chapter. Mobile keeps the lighter crop and smaller file.
+- **Verification:** `scripts/browser-smoke.js` checks idle pause, forward/reverse
+  video time, ivory reveal, gallery filters, keyboard lightbox and deep links.
+  `scripts/vision-depth-smoke.js` checks source separation, long duration, editorial
+  reversal, compact layouts and reduced motion. Browser engine checks are distinct
+  from physical Safari/iPhone and Android device review.
 
-The new depth sequence passes Chrome and Windows WebKit checks, including 320×568 compact phones. Photo-plane matrices return to exactly the same settled pose after reverse/replay; small-screen text and images remain inside the viewport with zero horizontal overflow. Chrome media-failure testing verifies the photographic fallback's shared finale, and live resizing from 1440px to 960px retains the scene position and readable content. Full-page checks still decode all 43 photographs and preserve filters, keyboard controls, inquiry preview and lazy WebGL loading.
+Current verification: TypeScript, lint and production bundling pass. Chrome checks
+confirm forward/reverse film seeking, the same 17.75s film pose after resizing
+through 960x700, 390x844 and 1440x900, responsive editorial layouts down to 320x568,
+live reduced-motion switching and independent-poster media failure. WebKit checks
+confirm paused scrubbing, reversal, the ivory handoff, gallery keyboard behavior
+and reduced motion. The full Chrome suite decodes all 43 client photographs,
+preserves 11/25/7/43 filters and verifies inquiry preview without sending anything.
+Lazy housing pins are sorted in document order before later model-ribbon pins,
+preventing overlap when the housing canvas loads or changes viewport mode.
+
 ## Whole-page cinematic direction
 
-The latest client revision extends the cinematic treatment across the single-page eco28 portfolio. The existing film remains the opening; client photographs, confirmed disciplines, navigation, filters and inquiry behavior remain intact.
+The cinematic treatment extends across the single-page eco28 portfolio. The independent licensed film is now the opening; client photographs, confirmed disciplines, navigation, filters and inquiry behavior remain intact.
 
 1. **Foundation:** audited the existing React 19/Vite/TypeScript application and all assets; implemented on `feature/cinematic-studio-experience` with no dependency replacements or additional font families.
 2. **Editorial and photography:** reusable `CinematicHeading` reveals selectable words with a scrubbed, staggered upward movement. Italics add a small diagonal and perspective movement. `DepthPhoto` separates GSAP image drift/masking from Motion pointer perspective. An oversized architecture-to-interiors ribbon moves with document scroll; it has no pin.

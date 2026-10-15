@@ -10,7 +10,7 @@ async (page) => {
   await page.locator('.video-hero[data-video-state="ready"]').waitFor();
   const go = async progress => {
     await page.evaluate(p => {
-      const hero = document.querySelector('.video-hero');
+      const hero = document.querySelector('.hero-sequence');
       const spacer = hero.parentElement;
       const start = spacer.getBoundingClientRect().top + scrollY;
       window.dispatchEvent(new CustomEvent('studio:scroll-to', {
@@ -20,35 +20,38 @@ async (page) => {
     await page.waitForFunction(p => Math.abs(Number(document.querySelector('.video-hero').dataset.progress) - p) < .003, progress);
     await page.waitForTimeout(300);
   };
-  const stills = [];
-  for (const [progress, expectedIndex, expectedImage] of [[.5, 0, 'supplemental-22'], [.6, 1, 'supplemental-23'], [.7, 2, 'supplemental-24']]) {
-    await go(progress);
-    const scene = await page.locator('.video-stills').evaluate(e => ({
-      hidden: e.getAttribute('aria-hidden') === 'true',
-      active: Array.from(e.querySelectorAll('.video-still-slide')).map((slide, index) => ({
-        index,
-        hidden: slide.getAttribute('aria-hidden') === 'true',
-        transform: getComputedStyle(slide.querySelector('.video-still-plane')).transform,
-        imageReady: !!slide.querySelector('img')?.naturalWidth,
-        image: slide.querySelector('img')?.getAttribute('src'),
-      })).filter(slide => !slide.hidden),
-    }));
-    if (scene.hidden || scene.active.length !== 1 || scene.active[0].index !== expectedIndex || !scene.active[0].imageReady || !scene.active[0].image.includes(expectedImage) || !scene.active[0].transform.startsWith('matrix3d')) throw Error('Photo chapter: '+JSON.stringify({progress,scene}));
-    stills.push({progress,...scene});
-    if (progress === .6) await page.screenshot({ path: `output/playwright/hero-stills-${engine}-model-section.png` });
+  const film = await page.locator('.video-hero').evaluate(e => ({
+    duration: e.querySelector('video').duration,
+    source: e.querySelector('video').currentSrc,
+    clientImages: Array.from(e.querySelectorAll('img')).filter(img => !img.src.includes('/hero-film/')).length,
+    retiredStills: document.querySelectorAll('.video-stills').length,
+  }));
+  if (film.duration < 29 || !film.source.includes('/hero-film/') || film.clientImages || film.retiredStills) throw Error('Hero source separation: '+JSON.stringify(film));
+  await go(.5);
+  const resize = [];
+  for (const [width, height] of [[960,700], [390,844], [1440,900]]) {
+    await page.setViewportSize({width, height});
+    await page.waitForFunction(() => {
+      const p = Number(document.querySelector('.hero-sequence').dataset.progress);
+      const sequence = document.querySelector('.hero-sequence');
+      const distance = sequence.parentElement.offsetHeight - sequence.offsetHeight;
+      const video = document.querySelector('.video-hero video');
+      return Math.abs(p - .5) < .003 && Math.abs(scrollY - distance * .5) < 3 && !video.seeking && Math.abs(video.currentTime - 17.75) < .08;
+    });
+    const view = await page.locator('.video-hero video').evaluate(e => ({time:e.currentTime,source:e.currentSrc}));
+    if (view.source !== film.source) throw Error('Resize changed video rendition');
+    resize.push({width,height,...view});
   }
-  await go(.4);
-  if (!(await page.locator('.video-stills').evaluate(e => e.inert && e.getAttribute('aria-hidden') === 'true'))) throw Error('Photo journey did not reverse into the film');
   const pose = () => page.locator('.vision-composition').evaluate(e => ({
     transform: getComputedStyle(e).transform,
     opacity: Number(getComputedStyle(e).opacity),
     clip: getComputedStyle(e.querySelector('.vision-photo-mask')).clipPath,
     layers: e.querySelectorAll('.vision-photo-sheet').length,
   }));
-  await go(.78);
+  await go(.84);
   const entering = await pose();
   await page.screenshot({ path: `output/playwright/vision-${engine}-entering.png` });
-  await go(.86);
+  await go(.9);
   await page.screenshot({ path: `output/playwright/vision-${engine}-forward.png` });
   await go(.98);
   const settled = await pose();
@@ -68,29 +71,26 @@ async (page) => {
   await go(.98);
   const replayed = await pose();
   if (replayed.transform !== settled.transform) throw Error('Photo perspective drifted after reverse');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.locator('.video-hero[data-static="true"]').waitFor();
+  const liveReducedPhoto = await page.locator('.vision-photo-camera > img').evaluate(e => Number(getComputedStyle(e).opacity));
+  if (liveReducedPhoto < .99) throw Error('Live reduced-motion change hid the editorial photograph');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   const mobile = [];
   for (const [width, height] of [[390,844], [390,640], [320,568], [1366,600]]) {
     await page.setViewportSize({width, height});
     await visit();
     await page.locator('.video-hero[data-video-state="ready"]').waitFor();
-    if (width <= 767 && height > 700) {
-      await go(.6);
-      const stillLayout = await page.locator('.video-stills .video-still-slide:not([aria-hidden="true"])').evaluate(e => {
-        const caption = e.querySelector('.video-still-caption').getBoundingClientRect();
-        return { captionTop: caption.top, captionRight: caption.right, captionBottom: caption.bottom, opacity: Number(getComputedStyle(e.querySelector('.video-still-caption')).opacity), overflow: document.documentElement.scrollWidth - innerWidth, imageReady: !!e.querySelector('img')?.naturalWidth };
-      });
-      if (stillLayout.captionTop < 70 || stillLayout.captionRight > width + 1 || stillLayout.captionBottom > height - 110 || stillLayout.opacity < .8 || stillLayout.overflow || !stillLayout.imageReady) throw Error('Mobile photo chapter: '+JSON.stringify(stillLayout));
-      await page.screenshot({ path: `output/playwright/hero-stills-${engine}-model-mobile.png` });
-    }
     await go(.98);
     const layout = await page.locator('.ivory-panel').evaluate(e => ({
       overflow: document.documentElement.scrollWidth - innerWidth,
       copyBottom: e.querySelector('.vision-copy').getBoundingClientRect().bottom,
       imageHeight: e.querySelector('.vision-photo-stack').getBoundingClientRect().height,
       imageBottom: e.querySelector('.vision-composition').getBoundingClientRect().bottom,
+      imageHidden: getComputedStyle(e.querySelector('.vision-composition')).display === 'none',
       controls: document.querySelectorAll('.journey-controls').length,
     }));
-    if (layout.overflow > 1 || layout.copyBottom > height - 5 || layout.imageBottom > height - 5 || layout.imageHeight < 90 || layout.controls) throw Error('Responsive depth layout: '+JSON.stringify({width,height,...layout}));
+    if (layout.overflow > 1 || layout.copyBottom > height - 5 || (!layout.imageHidden && (layout.imageBottom > height - 5 || layout.imageHeight < 90)) || layout.controls) throw Error('Responsive depth layout: '+JSON.stringify({width,height,...layout}));
     mobile.push({width,height,...layout});
     await page.screenshot({ path: `output/playwright/vision-${engine}-${width}-${height}.png` });
   }
@@ -104,5 +104,18 @@ async (page) => {
     videos: document.querySelectorAll('video').length,
   }));
   if (reduced.transform !== 'none' || reduced.layers || reduced.pins || reduced.videos || errors.length) throw Error(JSON.stringify({reduced,errors}));
-  return {engine, stills, entering, settled, hovered, reversed, replayed: true, mobile, reduced, errors};
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.route('**/hero-film/*.mp4', route => route.abort());
+  await visit();
+  await page.locator('.video-hero[data-static="true"]').waitFor();
+  const failure = await page.locator('.hero-sequence').evaluate(e => ({
+    pinned: e.parentElement.classList.contains('pin-spacer'),
+    video: e.querySelectorAll('video').length,
+    poster: e.querySelector('.video-poster').getAttribute('src'),
+    posterReady: e.querySelector('.video-poster').naturalWidth > 0,
+    links: e.querySelectorAll('.video-opening .hero-actions a').length,
+  }));
+  if (failure.pinned || failure.video || !failure.poster.includes('/hero-film/') || !failure.posterReady || failure.links !== 2 || errors.length) throw Error(JSON.stringify({failure,errors}));
+  await page.unroute('**/hero-film/*.mp4');
+  return {engine, film, resize, entering, settled, hovered, reversed, replayed: true, liveReducedPhoto, mobile, reduced, failure, errors};
 }

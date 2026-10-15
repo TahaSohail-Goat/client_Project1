@@ -12,7 +12,7 @@ async (page) => {
   const seek = async (name, p) => {
     const start = Date.now();
     await page.evaluate(progress => {
-      const hero = document.querySelector('.video-hero');
+      const hero = document.querySelector('.hero-sequence');
       const spacer = hero.parentElement;
       const start = spacer.getBoundingClientRect().top + scrollY;
       const distance = spacer.offsetHeight - hero.offsetHeight;
@@ -20,7 +20,7 @@ async (page) => {
     }, p);
     await page.waitForFunction(expectedProgress => {
       const v = document.querySelector('video');
-      const target = Math.min(1, expectedProgress / 0.45) * (v.duration - 1/24);
+      const target = Math.min(1, expectedProgress / Number(document.querySelector('.hero-sequence').dataset.filmEnd)) * (v.duration - 1/24);
       return !v.seeking && Math.abs(v.currentTime-target)<0.08;
     }, p);
     return {chapter:name,time:await page.locator('video').evaluate(v=>v.currentTime),settleMs:Math.round(Date.now()-start)};
