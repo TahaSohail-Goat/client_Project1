@@ -19,6 +19,8 @@ import "./styles/cinematic.css";
 import "./styles/vision-depth.css";
 import "./styles/materials-depth.css";
 import "./styles/models-ribbon.css";
+import "./styles/approach-spatial.css";
+import "./styles/consultation-motion.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

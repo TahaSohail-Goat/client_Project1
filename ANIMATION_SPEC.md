@@ -135,6 +135,22 @@ The depth is a photographic illusion: CSS perspective, planar transforms, croppi
 
 ## Scroll lifecycle
 
+### A way of seeing — spatial dialogue
+
+- Six bevelled, open frames form an abstract spatial sculpture, replacing the small drafting symbol in section 07. This is a graphic study rather than a client building or project reconstruction.
+- React Three Fiber/Three.js render the metal frames, central wire cube, orbit and drafting grid; Drei provides edge detail. Scroll opens the frame stack, changes its orientation and camera position, then closes it from a different angle. The entire pose is a deterministic function of progress and reverses when scrolling upward.
+- GSAP owns the scroll timeline and a 1.8-viewport pin on fine-pointer displays at least 1024px wide and 760px tall. Typography remains selectable HTML, with its existing staggered word reveals and a separate depth plane. Copy and a three-part progress rule follow the sequence.
+- Motion springs drive pointer-responsive rotation, ambient light movement and link hover. Scroll and pointer values update refs without a React render on every frame. The canvas uses demand rendering, DPR capped at 2 and layout-size measurement independent of animated transforms; its module loads only within 500px of the section.
+- Mobile and short displays use six animated SVG frames in normal document flow. Reduced motion produces a static illustration and readable text, with no canvas or pin. Save-Data and lost/unsupported WebGL restore the same lightweight illustration; context failure also removes the pin. All observers, springs, timeline handlers and context listeners are cleaned up.
+- `scripts/approach-smoke.js` covers desktop framing, forward/reverse scroll, pointer response, keyboard studio navigation, context loss, mobile/short viewports and reduced-motion behavior.
+
+### A new conversation — right-hand sculpture
+
+- The consultation chapter's static drafting mark is replaced by two nested, six-sided CSS 3D cubes with an orbital marker. Face planes expand and close while the outer and inner assemblies counter-rotate on a reversible GSAP scroll timeline. The section stays in normal flow without a pin.
+- Motion springs add pointer tilt on fine-pointer devices. A gentle seven-second float runs only while the section is visible. Separate DOM wrappers prevent scroll, float and pointer transforms from overwriting one another. Reduced-motion changes stop the float, reset pointer tilt and revert the scroll sequence immediately.
+- Desktop keeps the graphic on the right, clear of the headline and usable inquiry button. On small screens it occupies its own row above the copy and full-width inquiry button. The decoration is hidden from assistive technology and uses no images, model downloads or extra WebGL context.
+- `scripts/consultation-smoke.js` verifies scroll rotation, reversal, visible floating, pointer tilt, keyboard contact navigation, 320px layouts and live reduced motion.
+
 `gsap.matchMedia` owns scene setup/reversion, scoped to each section. Route changes refresh measurements after lazy content mounts; Lenis dimensions are resized before anchor navigation. Deep-link alignment follows ScrollTrigger refreshes while media adds a pin, then stops following as soon as the visitor uses wheel, touch, pointer or scrolling keys. This prevents late media readiness from stranding a section link inside the hero. CSS scroll padding handles fixed-header offsets. Lenis uses `autoRaf:false` and one GSAP ticker callback, with native scroll on touch/mobile/reduced motion. All ticker/listener/observer/scene resources are cleaned up on unmount. Resize while inside a scene is included in browser QA.
 
 Primary implementation references: [ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/), [Lenis](https://github.com/darkroomengineering/lenis), [Motion React](https://motion.dev/docs/react), [R3F](https://r3f.docs.pmnd.rs/getting-started/introduction).

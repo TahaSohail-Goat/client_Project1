@@ -1,0 +1,228 @@
+.approach-spatial {
+  isolation: isolate;
+  perspective: 1800px;
+  background: #171c1a;
+  --approach-progress: 0;
+}
+.approach-ambient {
+  position: absolute;
+  z-index: -1;
+  width: 70vw;
+  height: 70vw;
+  max-width: 1100px;
+  max-height: 1100px;
+  left: -18%;
+  top: 4%;
+  pointer-events: none;
+  background: radial-gradient(ellipse, #84917a16, transparent 64%);
+}
+.approach-heading-group,
+.approach-lower {
+  position: relative;
+}
+.approach-heading-group > .eyebrow {
+  color: var(--bronze);
+  margin-bottom: 34px;
+}
+.approach-title-plane {
+  transform-style: preserve-3d;
+  transform-origin: 0 50%;
+}
+.approach-spatial .approach-lower {
+  grid-template-columns: 1.3fr 1fr;
+  gap: 7vw;
+  margin-top: 32px;
+}
+.approach-visual {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  height: clamp(300px, 33vw, 480px);
+  perspective: 1200px;
+}
+.approach-fallback,
+.approach-three {
+  position: absolute;
+  inset: 0 0 28px;
+  color: var(--bronze);
+  transition: opacity 300ms ease-out;
+}
+.approach-fallback svg {
+  width: 100%;
+  height: 100%;
+}
+.approach-spatial[data-renderer="webgl"] .approach-fallback {
+  opacity: 0;
+}
+.approach-three {
+  pointer-events: none;
+}
+.approach-three canvas {
+  display: block;
+}
+.approach-visual-orbit {
+  position: absolute;
+  inset: 3% 5% 10%;
+  border: 1px solid #b9967038;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.approach-visual figcaption {
+  position: absolute;
+  inset: auto 8px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #b9967033;
+  color: #c4c5b8;
+  font-size: 10px;
+}
+.approach-visual figcaption span {
+  color: inherit;
+}
+.approach-copy {
+  position: relative;
+  max-width: 450px;
+  padding-top: 24px;
+}
+.approach-copy-rule {
+  display: block;
+  width: 42px;
+  height: 1px;
+  background: var(--bronze);
+  margin-bottom: 23px;
+}
+.approach-spatial .approach-copy p {
+  font-size: clamp(16px, 1.25vw, 21px);
+  line-height: 1.75;
+  max-width: 440px;
+}
+.approach-spatial .line-link {
+  min-width: 220px;
+  padding-bottom: 14px;
+}
+.approach-spatial .line-link:focus-visible {
+  outline-offset: 8px;
+}
+.approach-phases {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 45px;
+  padding-bottom: 18px;
+}
+.approach-phase {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: #979d91;
+  transition: color 250ms;
+}
+.approach-phase small {
+  font-size: 8px;
+  color: #91917f;
+}
+.approach-phase[data-active="true"],
+.approach-phase[data-active="true"] small {
+  color: var(--bronze);
+}
+.approach-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #b996702b;
+}
+.approach-track > span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--bronze);
+  transform: scaleX(var(--approach-progress));
+  transform-origin: left;
+}
+
+@media (min-width: 1024px) and (min-height: 760px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .approach-spatial[data-pinned="true"] {
+    height: 100svh;
+    min-height: 760px;
+    display: flex;
+    flex-direction: column;
+    padding-top: clamp(105px, 12svh, 140px);
+    padding-bottom: 35px;
+  }
+  .approach-spatial[data-pinned="true"] .approach-heading-group > .eyebrow {
+    margin-bottom: 22px;
+  }
+  .approach-spatial[data-pinned="true"] .cinematic-heading {
+    font-size: clamp(64px, 6.8vw, 125px);
+  }
+  .approach-spatial[data-pinned="true"] .approach-lower {
+    flex: 1;
+    min-height: 0;
+    margin-top: 14px;
+  }
+  .approach-spatial[data-pinned="true"] .approach-visual {
+    height: 100%;
+    min-height: 275px;
+  }
+}
+@media (max-width: 1023px) {
+  .approach-spatial .approach-lower {
+    gap: 35px;
+  }
+  .approach-spatial .approach-visual {
+    height: clamp(265px, 40vw, 400px);
+  }
+  .approach-spatial .approach-copy {
+    padding-top: 0;
+  }
+}
+@media (max-width: 767px) {
+  .approach-spatial .approach-lower {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-top: 10px;
+  }
+  .approach-heading-group > .eyebrow {
+    margin-bottom: 30px;
+  }
+  .approach-spatial .approach-copy {
+    max-width: none;
+  }
+  .approach-spatial .approach-copy p {
+    font-size: 15px;
+  }
+  .approach-spatial .approach-phases {
+    margin-top: 32px;
+  }
+  .approach-spatial .approach-visual {
+    height: 275px;
+  }
+  .approach-spatial .approach-copy-rule {
+    margin-bottom: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .approach-spatial .approach-title-plane,
+  .approach-spatial .approach-fallback,
+  .approach-spatial .approach-visual-orbit,
+  .approach-spatial .approach-copy {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .approach-spatial .approach-three,
+  .approach-spatial .approach-ambient {
+    display: none;
+  }
+  .approach-fallback-frame {
+    transform: none !important;
+  }
+  .approach-track > span {
+    transform: scaleX(1);
+  }
+}

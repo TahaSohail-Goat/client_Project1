@@ -1,0 +1,151 @@
+.consultation > .cinematic-heading {
+  max-width: 72%;
+}
+.consultation-sculpture {
+  --cube-size: clamp(170px, 18vw, 310px);
+  --cube-half: calc(var(--cube-size) * 0.5);
+  --cube-spread: 0px;
+  position: absolute;
+  right: var(--gutter);
+  top: 70px;
+  width: clamp(260px, 31vw, 540px);
+  height: clamp(280px, 32vw, 540px);
+  perspective: 1100px;
+  pointer-events: none;
+}
+.consultation-sculpture-float,
+.consultation-sculpture-pointer,
+.consultation-orbit-turn {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.consultation-cube {
+  position: absolute;
+  width: var(--cube-size);
+  height: var(--cube-size);
+  left: 50%;
+  top: 50%;
+  margin-left: calc(var(--cube-size) * -0.5);
+  margin-top: calc(var(--cube-size) * -0.5);
+  transform-style: preserve-3d;
+}
+.consultation-cube--outer {
+  transform: rotateX(-18deg) rotateY(35deg) rotateZ(-6deg);
+}
+.consultation-cube--inner {
+  --cube-size: clamp(68px, 7.8vw, 128px);
+  --cube-half: calc(var(--cube-size) * 0.5);
+  --cube-spread: 0px;
+  transform: rotateX(28deg) rotateY(-25deg);
+}
+.consultation-cube-face {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #f2ede5cc;
+  background: #171c1a04;
+  backface-visibility: visible;
+}
+.consultation-cube-face::after {
+  content: "";
+  position: absolute;
+  inset: 7%;
+  border: 1px solid #f2ede522;
+}
+.consultation-cube-face--front {
+  transform: translateZ(calc(var(--cube-half) + var(--cube-spread)));
+}
+.consultation-cube-face--back {
+  transform: rotateY(180deg)
+    translateZ(calc(var(--cube-half) + var(--cube-spread)));
+}
+.consultation-cube-face--left {
+  transform: rotateY(-90deg)
+    translateZ(calc(var(--cube-half) + var(--cube-spread)));
+}
+.consultation-cube-face--right {
+  transform: rotateY(90deg)
+    translateZ(calc(var(--cube-half) + var(--cube-spread)));
+}
+.consultation-cube-face--top {
+  transform: rotateX(90deg)
+    translateZ(calc(var(--cube-half) + var(--cube-spread)));
+}
+.consultation-cube-face--bottom {
+  transform: rotateX(-90deg)
+    translateZ(calc(var(--cube-half) + var(--cube-spread)));
+}
+.consultation-cube--inner .consultation-cube-face {
+  border-color: #171c1a99;
+  background: #b9967014;
+}
+.consultation-cube--inner .consultation-cube-face::after {
+  display: none;
+}
+.consultation-sculpture-orbit {
+  position: absolute;
+  inset: 4%;
+  border: 1px dashed #f2ede57a;
+  border-radius: 50%;
+  transform: rotateX(63deg) rotateY(-14deg);
+  transform-style: preserve-3d;
+}
+.consultation-sculpture-orbit i {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--charcoal);
+}
+.consultation-sculpture-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px;
+  background: var(--ivory);
+  border-radius: 50%;
+  box-shadow: 0 0 24px #f2ede580;
+}
+@media (max-width: 1023px) and (min-width: 768px) {
+  .consultation > .cinematic-heading {
+    max-width: 68%;
+    font-size: 7.8vw;
+  }
+  .consultation-sculpture {
+    right: 12px;
+    top: 100px;
+    width: 28vw;
+    height: 32vw;
+    --cube-size: 16vw;
+  }
+}
+@media (max-width: 767px) {
+  .consultation > .cinematic-heading {
+    max-width: none;
+  }
+  .consultation-sculpture {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 260px;
+    height: 260px;
+    margin: 18px 0 5px auto;
+    --cube-size: 145px;
+  }
+  .consultation-cube--inner {
+    --cube-size: 60px;
+  }
+  .consultation .consultation-lower {
+    margin-top: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .consultation-sculpture-float,
+  .consultation-sculpture-pointer {
+    transform: none !important;
+  }
+}
