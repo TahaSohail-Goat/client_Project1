@@ -22,7 +22,7 @@ Development: `http://127.0.0.1:5173`. Production preview: `http://127.0.0.1:4173
 The eco28 experience is a single continuous page at `/`, with anchor navigation:
 
 - `/#housing`: scroll-pinned procedural courtyard-house study with reversible orbit, roof lift and interior reveal. It is labelled conceptual geometry, not a client project. Small screens use an unpinned sequence; reduced motion or unavailable WebGL shows an SVG fallback.
-- `/#work`: all 43 client photographs, category filters and a keyboard-accessible lightbox.
+- `/#work`: all 43 client photographs in a Motion-powered spatial gallery with eight animated arrangements, category filters and a keyboard-accessible lightbox. Drag/swipe, horizontal wheel, keyboard arrows and the on-screen controls navigate photographs. Phones have a compact layout selector; reduced motion uses the ordinary photo grid.
 - `/#studio` and `/#expertise`: studio introduction and the two confirmed disciplines.
 - `/#contact`: validated inquiry preview until a real destination is configured.
 - The scroll-scrubbed hero now uses independent licensed footage, with the client photographs beginning in the next editorial/portfolio chapters. Its own first-frame poster handles media failure and reduced motion. Legacy `/work`, `/studio` and `/contact` paths load the single-page experience for compatibility.

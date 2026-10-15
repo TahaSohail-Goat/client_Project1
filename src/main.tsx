@@ -21,6 +21,7 @@ import "./styles/materials-depth.css";
 import "./styles/models-ribbon.css";
 import "./styles/approach-spatial.css";
 import "./styles/consultation-motion.css";
+import "./styles/spatial-gallery.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import type { Photo } from "../../content/media";
 import { PhotoImage } from "../PhotoImage";
+import { m } from "motion/react";
+import { useMotionPreference } from "../../hooks/useMotionPreference";
 export function AccessibleLightbox({
   items,
   active,
@@ -13,6 +15,7 @@ export function AccessibleLightbox({
   onClose: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const reduced = useMotionPreference();
   const initialPhoto = useRef(active.slug);
   const index = items.findIndex((item) => item.slug === active.slug);
   const change = (delta: number) =>
@@ -66,9 +69,17 @@ export function AccessibleLightbox({
           Close <span aria-hidden="true">×</span>
         </button>
       </div>
-      <div className="lightbox-image">
+      <m.div
+        key={active.slug}
+        className="lightbox-image"
+        initial={
+          reduced ? false : { opacity: 0, scale: 0.91, y: 24, rotateX: 4 }
+        }
+        animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+        transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
         <PhotoImage key={active.slug} item={active} full priority />
-      </div>
+      </m.div>
       <div className="lightbox-caption">
         <div>
           <h2 id="lightbox-title">{active.title}</h2>

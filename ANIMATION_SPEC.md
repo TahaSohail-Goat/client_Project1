@@ -135,6 +135,15 @@ The depth is a photographic illusion: CSS perspective, planar transforms, croppi
 
 ## Scroll lifecycle
 
+### Selected work — spatial gallery
+
+- The portfolio at `/#work` now presents the 43 supplied photographs in an original Motion-powered gallery, visually referencing [Motion's Gallery Showcase](https://examples.motion.dev/react/gallery-showcase). No Motion+ source, package, access token or stock imagery is included; Motion+ Gallery itself requires a paid membership.
+- Eight independently implemented arrangements: diagonal list, grid, helix, barrel, ring, sphere, stack and coverflow. Layouts interpolate from their actual current poses, including when interrupted, with a small stagger and selectable Scatter, Flow or Fade transitions. CSS perspective keeps the photo planes in real 3D space without another WebGL context.
+- A shared Motion spring handles horizontal dragging, swiping, horizontal/Shift-wheel input, previous/next buttons and keyboard arrows/Home/End. Motion values update photo matrices without React rendering on every animation frame. Vertical scrolling and touch panning continue through the page normally. Number keys 1–8 switch layouts only while the gallery itself has focus.
+- Architecture/Interiors/Model Studies filters, counts, photo deep links and the accessible native-dialog lightbox are preserved. Filters retain the selected layout. The opening photos mix supplied disciplines; titles describe photographs rather than invented projects. Responsive images preserve their original aspect ratios; the lightbox loads the full source, with an independent expansion entrance.
+- Layout controls, selected-photo details and explicit navigation remain available on small screens. Reduced motion swaps the spatial scene for the original ordinary grid and removes layout/drag animation. All 43 images remain accessible in that version.
+- `scripts/spatial-gallery-smoke.js` covers all arrangements, layout reversal/interruption, drag click suppression, keyboard/lightbox focus, category counts, image decoding, small viewports and live reduced-motion switching.
+
 ### A way of seeing — spatial dialogue
 
 - Six bevelled, open frames form an abstract spatial sculpture, replacing the small drafting symbol in section 07. This is a graphic study rather than a client building or project reconstruction.
