@@ -80,6 +80,7 @@ export function VisionPhoto({
               >
                 <PhotoImage
                   item={photo("supplemental-05")}
+                  full
                   sizes="(min-width: 768px) 52vw, 100vw"
                 />
                 {threeDEnabled && !reduced && !failed && (

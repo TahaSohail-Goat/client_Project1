@@ -13,9 +13,9 @@ type Bridge = {
 
 function Photograph({ progress, redraw, onReady, onFailure }: Bridge) {
   const assembly = useRef<Group>(null);
-  const texture = useTexture(
-    photo("supplemental-05").src.replace(/\.webp$/, "-768.webp"),
-  );
+  // The animated plane can fill over 1,000 CSS pixels. Keep the client's
+  // full-resolution source instead of enlarging the small gallery derivative.
+  const texture = useTexture(photo("supplemental-05").src);
   const { invalidate, size, gl } = useThree();
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function VisionPhotoCanvas(props: Bridge) {
     <Canvas
       orthographic
       camera={{ position: [0, 0, 8], zoom: 150, near: 0.1, far: 20 }}
-      dpr={[1, 1.35]}
+      dpr={[1, 2]}
       frameloop="demand"
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
       onCreated={({ camera, size }) => {
