@@ -120,14 +120,14 @@ async (page) => {
   await page.mouse.wheel(0, 1);
   await scroll("#model-studies", 100);
   await page
-    .locator(".model-depth-stage.canvas-ready")
+    .locator('.model-section[data-renderer="webgl"]')
     .waitFor({ timeout: 15000 });
   const planeFallbacks = await page
-    .locator(".model-depth-fallback img")
+    .locator('.model-ribbon-photo[data-depth="true"] img')
     .count();
   if (
     planeFallbacks !== 3 ||
-    (await page.locator(".model-grid a").count()) !== 7
+    (await page.locator(".model-ribbon-card").count()) !== 7
   )
     throw Error("Physical model collection changed");
   await screenshot("model-photos");

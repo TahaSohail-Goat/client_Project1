@@ -1,29 +1,27 @@
-import { Suspense, useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei/core/Texture";
 import { Group, SRGBColorSpace } from "three";
-import { media } from "../../content/media";
+import {
+  modelStudies,
+  modelPose,
+  type ModelRibbonLayout,
+} from "../../content/models";
 
-const photos = media
-  .filter((item) => item.category === "Model Studies")
-  .slice(0, 3);
+const photos = modelStudies.slice(0, 3);
 type Bridge = {
   progress: RefObject<number>;
+  layout: RefObject<ModelRibbonLayout>;
   redraw: RefObject<(() => void) | null>;
   onReady: () => void;
   onFailure: () => void;
 };
-function Planes({ progress, redraw, onReady, onFailure }: Bridge) {
-  const group = useRef<Group>(null);
+function Planes({ progress, layout, redraw, onReady, onFailure }: Bridge) {
+  const groups = useRef<(Group | null)[]>([]);
   const textures = useTexture(
     photos.map((item) => item.src.replace(/\.webp$/, "-768.webp")),
   );
-  const { invalidate, size, camera, gl } = useThree();
-  useEffect(() => {
-    const canvas = gl.domElement;
-    canvas.addEventListener("webglcontextlost", onFailure);
-    return () => canvas.removeEventListener("webglcontextlost", onFailure);
-  }, [gl, onFailure]);
+  const { invalidate, gl, size } = useThree();
   useEffect(() => {
     textures.forEach((texture) => {
       texture.colorSpace = SRGBColorSpace;
@@ -32,49 +30,51 @@ function Planes({ progress, redraw, onReady, onFailure }: Bridge) {
     redraw.current = invalidate;
     invalidate();
     onReady();
+    gl.domElement.addEventListener("webglcontextlost", onFailure);
     return () => {
+      gl.domElement.removeEventListener("webglcontextlost", onFailure);
       redraw.current = null;
     };
-  }, [textures, invalidate, onReady, redraw]);
+  }, [textures, invalidate, onReady, onFailure, redraw, gl]);
+  useEffect(() => invalidate(), [invalidate, size]);
   useFrame(() => {
-    if (!group.current) return;
-    const p = progress.current;
-    group.current.rotation.y = (p - 0.5) * 0.075;
-    group.current.position.y = (p - 0.5) * 0.18;
-    group.current.children.forEach((plane, i) => {
-      plane.rotation.y = (i - 1) * (1 - p) * 0.14;
-      plane.rotation.z = (i - 1) * (1 - p) * 0.04;
-      plane.position.z = Math.sin(p * Math.PI) * (i === 1 ? 0.5 : -0.2);
-      plane.position.y = Math.sin(p * Math.PI) * (i === 1 ? 0.1 : -0.1);
+    groups.current.forEach((group, index) => {
+      const frame = layout.current.frames[index];
+      if (!group || !frame) return;
+      const pose = modelPose(layout.current, progress.current, index);
+      group.position.set(
+        pose.x - size.width / 2,
+        size.height / 2 - frame.y - frame.height / 2 - pose.y,
+        0,
+      );
+      group.rotation.set(0, -pose.rotateY, -pose.rotateZ);
+      group.scale.set(frame.width * pose.scale, frame.height * pose.scale, 1);
     });
-    if ("zoom" in camera) {
-      camera.zoom = Math.min(size.width / 10.6, size.height / 4.2);
-      camera.updateProjectionMatrix();
-    }
   });
-  return (
-    <group ref={group}>
-      {photos.map((item, i) => (
-        <mesh key={item.slug} position={[(i - 1) * 3.35, 0, 0]}>
-          <planeGeometry args={[2.95, 2.95 / item.aspect_ratio]} />
-          <meshBasicMaterial map={textures[i]} toneMapped={false} />
-        </mesh>
-      ))}
+  return photos.map((item, index) => (
+    <group
+      key={item.slug}
+      ref={(group) => {
+        groups.current[index] = group;
+      }}
+    >
+      <mesh>
+        <planeGeometry args={[1, 1]} />
+        <meshBasicMaterial map={textures[index]} toneMapped={false} />
+      </mesh>
     </group>
-  );
+  ));
 }
 export default function PhotoPlanes(props: Bridge) {
   return (
     <Canvas
       orthographic
-      camera={{ position: [0, 0, 8], zoom: 90, near: 0.1, far: 20 }}
+      camera={{ position: [0, 0, 1000], zoom: 1, near: 0.1, far: 3000 }}
       dpr={[1, 1.4]}
       frameloop="demand"
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
     >
-      <Suspense fallback={null}>
-        <Planes {...props} />
-      </Suspense>
+      <Planes {...props} />
     </Canvas>
   );
 }

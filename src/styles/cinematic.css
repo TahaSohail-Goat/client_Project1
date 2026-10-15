@@ -506,16 +506,6 @@ section[tabindex="-1"]:focus {
 .housing-note[data-active="true"] h3 {
   color: var(--bronze);
 }
-.model-depth-stage {
-  border-top: 1px solid #171c1a18;
-  border-bottom: 1px solid #171c1a18;
-}
-.model-grid > div:nth-child(3n + 2) {
-  margin-top: 45px;
-}
-.model-grid > div:nth-child(3n) {
-  margin-top: 90px;
-}
 .interior-stage::after {
   content: "";
   position: absolute;
@@ -687,9 +677,6 @@ section[tabindex="-1"]:focus {
     top: 10%;
     left: 8%;
     font-size: 110px;
-  }
-  .model-grid > div:nth-child(n) {
-    margin-top: 0;
   }
   .interior-title-lockup {
     white-space: normal;
