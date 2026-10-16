@@ -17,6 +17,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const [overFilm, setOverFilm] = useState(true);
   const toggle = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -29,6 +30,11 @@ export function Header() {
     const update = () => {
       frame = 0;
       setScrolled(window.scrollY > 24);
+      const hero = document.querySelector<HTMLElement>(".video-hero");
+      const bounds = hero?.getBoundingClientRect();
+      const sequence = hero?.closest<HTMLElement>(".hero-sequence");
+      setOverFilm(!!bounds && bounds.top <= 100 && bounds.bottom > 100 &&
+        Number(sequence?.dataset.progress ?? 0) < 0.82);
       let current = "";
       let nearest = -Infinity;
       for (const item of navigation) {
@@ -46,10 +52,12 @@ export function Header() {
     update();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
+    window.addEventListener("studio:hero-surface", schedule);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
+      window.removeEventListener("studio:hero-surface", schedule);
     };
   }, []);
 
@@ -111,11 +119,11 @@ export function Header() {
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <header className={`header ${scrolled ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
+      <header className={`header ${scrolled ? "is-scrolled" : ""} ${overFilm ? "is-over-film" : ""} ${open ? "is-open" : ""}`}>
         <Link to="/#main" className="wordmark" aria-label={`${site.name} home`}
           tabIndex={open ? -1 : undefined} onClick={() => navigate("main")}>
           <span className="wordmark-name">eco<span>28</span><i aria-hidden="true" /></span>
-          <span className="wordmark-description">Architecture<br />& Interior Design</span>
+          <span className="wordmark-description">Architecture & interiors</span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           {navigation.filter((item) => item.id !== "contact").map((item) => (
@@ -126,7 +134,7 @@ export function Header() {
           ))}
         </nav>
         <Link to="/#contact" className="header-inquiry" aria-label="Discuss a project with eco28" onClick={() => navigate("contact")}>
-          Let’s talk <span><Arrow diagonal /></span>
+          Discuss a project <span><Arrow diagonal /></span>
         </Link>
         <button className="menu-toggle" ref={toggle} onClick={() => setOpen(!open)}
           aria-expanded={open} aria-controls="mobile-navigation"

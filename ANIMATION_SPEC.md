@@ -3,7 +3,15 @@
 The supplied 3.90-second, 640×368 recording was decoded and inspected at 0.5-second intervals, alongside both supplied contact sheets. Its facade push-in, rising editorial panel and split-image settlement inform motion only. Neither its footage nor its property content is included.
 
 
-## Default video hero
+## Active four-storey residence hero
+
+The current implementation is specified in [HERO_IMPLEMENTATION.md](HERO_IMPLEMENTATION.md). One procedural four-storey house now supports all eight exterior/interior/stair/terrace/final-reveal scenes. Floor surfaces are 0/3.5/7/10.5m. GSAP owns a 9.2 desktop / 8.6 mobile viewport pin; the first 82% samples the same continuous reversible camera route and the last 18% retains the ivory chapter. Projected SVG callouts and compact floor indicators update with the camera. The original one-storey study below at `#housing` is independent and unchanged.
+
+Three.js/R3F render on demand with locally served CC0 textures, batched geometry, capped DPR and reused shadows. Desktop adds bounded contact shading; mobile omits postprocessing and uses portrait framing. Matching four-storey posters cover loading, reduced motion, Save-Data, short screens and WebGL failure. The sequence is a labelled original concept visualization, not an offline photorealistic film or verified client property. `scripts/residence-smoke.js` is the active hero test; `walkthrough-smoke.js` is historical.
+
+## Retained earlier video hero (historical configuration)
+
+
 
 The 2026-10-15 revision replaces the client-based opening film and model-photo
 extension with an independent licensed exterior-to-interior edit. The removed
@@ -43,7 +51,7 @@ opening; all text remains selectable HTML.
   reversal, compact layouts and reduced motion. Browser engine checks are distinct
   from physical Safari/iPhone and Android device review.
 
-Current verification: TypeScript, lint and production bundling pass. Chrome checks
+Historical film verification: TypeScript, lint and production bundling pass. Chrome checks
 confirm forward/reverse film seeking, the same 17.75s film pose after resizing
 through 960x700, 390x844 and 1440x900, responsive editorial layouts down to 320x568,
 live reduced-motion switching and independent-poster media failure. WebKit checks
@@ -55,7 +63,7 @@ preventing overlap when the housing canvas loads or changes viewport mode.
 
 ## Whole-page cinematic direction
 
-The cinematic treatment extends across the single-page eco28 portfolio. The independent licensed film is now the opening; client photographs, confirmed disciplines, navigation, filters and inquiry behavior remain intact.
+The cinematic treatment extends across the single-page eco28 portfolio. The continuous concept walkthrough is now the opening; client photographs, confirmed disciplines, navigation, filters and inquiry behavior remain intact.
 
 1. **Foundation:** audited the existing React 19/Vite/TypeScript application and all assets; implemented on `feature/cinematic-studio-experience` with no dependency replacements or additional font families.
 2. **Editorial and photography:** reusable `CinematicHeading` reveals selectable words with a scrubbed, staggered upward movement. Italics add a small diagonal and perspective movement. `DepthPhoto` separates GSAP image drift/masking from Motion pointer perspective. An oversized architecture-to-interiors ribbon moves with document scroll; it has no pin.

@@ -1,0 +1,71 @@
+async page => {
+  const engine = page.context().browser().browserType().name();
+  const errors = [], failedAssets = [];
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('response', r => {if(r.status() >= 400 && /\/media\//.test(r.url())) failedAssets.push(r.url());});
+  await page.route('**/*', r => r.continue());
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.setViewportSize({width:1440,height:900});
+  const visit = hash => page.goto(`http://127.0.0.1:4173/?walkthrough-qa=${Date.now()}${hash || ''}`);
+  await visit();
+  await page.locator('.hero-sequence[data-renderer="webgl"]').waitFor({timeout:25000});
+  const camera = () => page.locator('.hero-walkthrough canvas').getAttribute('data-camera');
+  const first = await camera();
+  await page.waitForTimeout(450);
+  if(await camera() !== first || await page.locator('video').count()) throw Error('Scene moved without scroll or retained the old film');
+  const seek = async p => {
+    await page.evaluate(p => {
+      const e=document.querySelector('.hero-sequence'), spacer=e.parentElement;
+      window.dispatchEvent(new CustomEvent('studio:scroll-to',{detail:spacer.getBoundingClientRect().top+scrollY+(spacer.offsetHeight-e.offsetHeight)*p}));
+    },p);
+    await page.waitForFunction(p => document.querySelector('.hero-sequence').dataset.progress===p.toFixed(4),p);
+    await page.waitForTimeout(200);
+    return camera();
+  };
+  const poses={};
+  for(const p of [.15,.28,.39,.53,.67,.8]) poses[p]=await seek(p);
+  if(new Set(Object.values(poses)).size!==6) throw Error('Camera did not travel');
+  const entry=poses[.39].split(',').map(Number);
+  if(entry[2]>=2.9 || entry[0]<-1.55 || entry[0]>1.2) throw Error('Camera missed the open entrance');
+  const backwards = await seek(.39);
+  if(backwards !== poses[.39]) throw Error('Camera reversal drifted');
+  await seek(.98);
+  await page.waitForFunction(()=>getComputedStyle(document.querySelector('.ivory-panel')).clipPath==='inset(0%)');
+  await page.waitForFunction(()=>!document.querySelector('.header').classList.contains('is-over-film'));
+  await page.screenshot({path:`output/playwright/walkthrough-${engine}-ivory.png`});
+  await seek(0);
+  if(await camera() !== first) throw Error('Opening camera did not restore exactly');
+  await page.waitForFunction(()=>document.querySelector('.header').classList.contains('is-over-film'));
+  await page.screenshot({path:`output/playwright/walkthrough-${engine}-exterior.png`});
+  await seek(.53);
+  const before=await camera();
+  await page.setViewportSize({width:960,height:700});await page.waitForTimeout(1000);
+  if(await camera() !== before) throw Error('Resize lost the camera position');
+  await page.setViewportSize({width:1440,height:900});await page.waitForTimeout(1000);
+  const sizes=[];
+  for(const [width,height] of [[390,844],[320,568]]) {
+    await page.setViewportSize({width,height});await visit();
+    await page.locator('.hero-sequence[data-renderer="webgl"]').waitFor({timeout:25000});
+    await seek(.39);
+    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
+    if(overflow>1) throw Error('Mobile overflow');
+    await page.screenshot({path:`output/playwright/walkthrough-${engine}-${width}.png`});
+    await page.getByRole('button',{name:'Open navigation',exact:true}).click();
+    await page.getByRole('dialog',{name:'Site navigation'}).waitFor();
+    if(!await page.locator('main').evaluate(e=>e.inert)) throw Error('Menu did not isolate background');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(()=>document.activeElement?.getAttribute('aria-label')==='Open navigation');
+    sizes.push({width,height,overflow});
+  }
+  await page.setViewportSize({width:1440,height:900});await visit();
+  await page.locator('.hero-sequence[data-renderer="webgl"]').waitFor();
+  await page.locator('.hero-walkthrough canvas').evaluate(c=>c.getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
+  await page.locator('.hero-sequence[data-renderer="static"]').waitFor();
+  if(await page.locator('.hero-sequence .pin-spacer,.hero-walkthrough canvas').count()) throw Error('Context loss retained the scene');
+  const poster=await page.locator('.video-poster').evaluate(async im=>{await im.decode();return im.naturalWidth;});
+  await page.emulateMedia({reducedMotion:'reduce'});await visit();
+  await page.locator('.hero-sequence[data-static="true"]').waitFor();
+  if(await page.locator('canvas,video,.pin-spacer').count()) throw Error('Reduced motion retained immersive media');
+  if(errors.length||failedAssets.length) throw Error(JSON.stringify({errors,failedAssets}));
+  return {engine,poses,exactReversal:true,resize:true,sizes,contextLossPoster:poster,reducedMotion:true,errors,failedAssets};
+}

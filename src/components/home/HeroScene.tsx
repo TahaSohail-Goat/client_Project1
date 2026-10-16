@@ -4,6 +4,8 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  lazy,
+  Suspense,
 } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
@@ -16,6 +18,11 @@ import { EditorialHeading } from "../type/EditorialHeading";
 import { FacadePanelReveal } from "./FacadePanelReveal";
 import { addVisionDepth } from "./visionDepth";
 import { canUseVisionThree } from "../three/visionCapabilities";
+import { CanvasBoundary } from "../three/CanvasBoundary";
+import { heroWalkthrough } from "../../content/heroWalkthrough";
+import { ResidenceOverlay } from "./ResidenceOverlay";
+
+const HeroWalkthroughCanvas = lazy(() => import("../three/HeroWalkthroughCanvas"));
 
 gsap.registerPlugin(ScrollTrigger);
 // GSAP exposes these lifecycle events at runtime (also used by ScrollTrigger),
@@ -35,26 +42,40 @@ function canAnimate() {
   );
 }
 
-/** One document pin carries the independent film into the next editorial chapter. */
+/** One document pin carries the residence (or retained film) into the editorial chapter. */
 export function HeroScene() {
   const root = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const progress = useRef(0);
+  const sceneRedraw = useRef<(() => void) | null>(null);
+  const residenceOverlay = useRef<HTMLDivElement>(null);
   const visionProgress = useRef(0);
   const visionRedraw = useRef<(() => void) | null>(null);
   const [enabled, setEnabled] = useState(canAnimate);
   const [failed, setFailed] = useState(false);
   const [loadVision, setLoadVision] = useState(false);
+  const [sceneReady, setSceneReady] = useState(false);
   const [small] = useState(() => matchMedia("(max-width: 767px)").matches);
   const motion = enabled && !failed;
-  const source = motion ? (small ? videoHero.mobile : videoHero.desktop) : null;
+  const walkthrough = heroWalkthrough.enabled;
+  const source = motion && !walkthrough ? (small ? videoHero.mobile : videoHero.desktop) : null;
+  const poster = walkthrough ? small ? heroWalkthrough.mobilePoster : heroWalkthrough.poster : videoHero.poster;
   const onFailure = useCallback(() => setFailed(true), []);
-  const { ready, buffering, requestSeek } = useVideoScrub(
+  const onSceneReady = useCallback(() => setSceneReady(true), []);
+  const { ready: filmReady, buffering, requestSeek } = useVideoScrub(
     video,
     progress,
     source,
     onFailure,
   );
+  const ready = walkthrough ? sceneReady : filmReady;
+  const sceneEnd = walkthrough ? heroWalkthrough.sceneEnd : videoHero.filmEnd;
+
+  useEffect(() => {
+    if (!walkthrough || !motion || sceneReady) return;
+    const timer = window.setTimeout(onFailure, 25000);
+    return () => clearTimeout(timer);
+  }, [walkthrough, motion, sceneReady, onFailure]);
 
   useEffect(() => {
     const preference = matchMedia(
@@ -132,6 +153,7 @@ export function HeroScene() {
         const editorial = node.querySelector<HTMLElement>(".video-editorial")!;
         const desktop = context.conditions?.desktop;
         const playhead = { p: 0 };
+        let priorSurface: boolean | null = null;
         gsap.set([interior, detail], { autoAlpha: 0, y: 24 });
         gsap.from(".video-opening .editorial-heading__line > span", {
           opacity: 0.45,
@@ -147,14 +169,25 @@ export function HeroScene() {
             id: "hero",
             trigger: node,
             start: "top top",
-            end: () => `+=${innerHeight * (desktop ? 9.6 : 6.8)}`,
+            end: () => `+=${innerHeight * (walkthrough
+              ? desktop ? heroWalkthrough.desktopScroll : heroWalkthrough.mobileScroll
+              : desktop ? 9.6 : 6.8)}`,
             pin: true,
             scrub: desktop ? 0.45 : 0.25,
             invalidateOnRefresh: true,
             anticipatePin: 1,
           },
         });
-        tl.to(playhead, { p: 1, duration: 2 }, 0)
+        tl.to(playhead, { p: 1, duration: 2 }, 0);
+        if (walkthrough) {
+          tl.to(opening, { autoAlpha: 0, y: -24, duration: 0.12 }, 0.06)
+            .fromTo(".residence-overlay", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1 }, 0.18)
+            .to(".residence-overlay", { autoAlpha: 0, duration: 0.07 }, 1.59)
+            .fromTo(".residence-finish", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.07 }, 1.49)
+            .to(".residence-finish", { autoAlpha: 0, duration: 0.05 }, 1.64)
+            .to(".hero-top, .hero-film-credit, .hero-scroll-cue", { autoAlpha: 0, duration: 0.08 }, 1.55);
+        } else {
+        tl
           .to(opening, { autoAlpha: 0, y: -44, duration: 0.2 }, 0.14)
           .to(interior, { autoAlpha: 1, y: 0, duration: 0.1 }, 0.64)
           .fromTo(
@@ -177,6 +210,7 @@ export function HeroScene() {
             { autoAlpha: 0, duration: 0.08 },
             1.55,
           );
+        }
         addVisionDepth(
           tl,
           node,
@@ -200,8 +234,9 @@ export function HeroScene() {
           if (stable) {
             lastPosition = p;
             wasInside = p > 0.0001 && p < 0.9999;
-            progress.current = Math.min(1, p / videoHero.filmEnd);
-            requestSeek();
+            progress.current = Math.min(1, p / sceneEnd);
+            if (walkthrough) sceneRedraw.current?.();
+            else requestSeek();
           }
           visionRedraw.current?.();
           node.dataset.progress = hero.dataset.progress = p.toFixed(4);
@@ -210,11 +245,17 @@ export function HeroScene() {
               ? "outside"
               : p < 0.56
                 ? "within"
-                : p < videoHero.filmEnd
+                : p < sceneEnd
                   ? "detail"
                   : "vision";
-          opening.inert = time > 0.34;
-          opening.setAttribute("aria-hidden", String(time > 0.34));
+          const overScene = p < sceneEnd;
+          if (overScene !== priorSurface) {
+            priorSurface = overScene;
+            window.dispatchEvent(new Event("studio:hero-surface"));
+          }
+          const openingHidden = time > (walkthrough ? 0.18 : 0.34);
+          opening.inert = openingHidden;
+          opening.setAttribute("aria-hidden", String(openingHidden));
           interior.setAttribute(
             "aria-hidden",
             String(time < 0.64 || time > 1.06),
@@ -223,6 +264,11 @@ export function HeroScene() {
             "aria-hidden",
             String(time < 1.16 || time > 1.55),
           );
+          const finish = node.querySelector<HTMLElement>(".residence-finish");
+          if (finish) {
+            finish.inert = !motion || p < 0.745 || p > 0.835;
+            finish.setAttribute("aria-hidden", String(finish.inert));
+          }
           editorial.inert = p < 0.94;
           editorial.setAttribute("aria-hidden", String(p < 0.94));
           if (p > 0.7 && canUseVisionThree()) setLoadVision(true);
@@ -237,6 +283,7 @@ export function HeroScene() {
           delete node.dataset.progress;
           delete hero.dataset.progress;
           delete node.dataset.chapter;
+          window.dispatchEvent(new Event("studio:hero-surface"));
         };
       },
       root,
@@ -253,15 +300,16 @@ export function HeroScene() {
       window.removeEventListener("studio:scroll-to", cancelRestore);
       mm.revert();
     };
-  }, [motion, requestSeek]);
+  }, [motion, requestSeek, walkthrough, sceneEnd]);
 
   return (
     <div
       ref={root}
-      className="hero-sequence"
+      className={`hero-sequence ${walkthrough ? "residence-sequence" : ""}`}
       data-static={!motion}
       data-scene="hero"
-      data-film-end={videoHero.filmEnd}
+      data-film-end={sceneEnd}
+      data-renderer={walkthrough ? motion ? ready ? "webgl" : "loading" : "static" : "video"}
     >
       <section
         className={`hero video-hero ${ready ? "film-ready" : ""}`}
@@ -270,14 +318,25 @@ export function HeroScene() {
         data-video-state={!motion ? "static" : ready ? "ready" : "loading"}
       >
         <div className="video-media" aria-hidden="true">
+          <picture>
+          {walkthrough && <source media="(max-width: 767px)" srcSet={heroWalkthrough.mobilePoster} />}
           <img
             className="video-poster"
-            src={videoHero.poster}
+            src={poster}
             width="1920"
             height="1080"
             alt=""
             fetchPriority="high"
           />
+          </picture>
+          {walkthrough && motion && <div className={`hero-walkthrough ${ready ? "is-ready" : ""}`}>
+            <CanvasBoundary onFailure={onFailure}>
+              <Suspense fallback={null}>
+                <HeroWalkthroughCanvas progress={progress} redraw={sceneRedraw} overlay={residenceOverlay}
+                  onReady={onSceneReady} onFailure={onFailure} />
+              </Suspense>
+            </CanvasBoundary>
+          </div>}
           {source && (
             <video
               ref={video}
@@ -293,9 +352,10 @@ export function HeroScene() {
           )}
           <div className="video-shade" />
         </div>
+        {walkthrough && <ResidenceOverlay overlay={residenceOverlay} />}
         <div className="hero-top">
           <span className="eyebrow">Architecture & Interior Design</span>
-          <span className="eyebrow">Outside, then within</span>
+          <span className="eyebrow">{walkthrough ? "One residence / Four levels" : "Outside, then within"}</span>
         </div>
         <div className="hero-copy video-opening">
           <p className="eyebrow">eco28 / Form & feeling</p>
@@ -322,22 +382,28 @@ export function HeroScene() {
           <p className="eyebrow">Light, texture, atmosphere</p>
           <EditorialHeading lead="Space to" emphasis="feel at home." />
         </div>
+        {walkthrough && <div className="residence-finish" inert aria-hidden="true">
+          <Link to="/#contact" className="line-link">Imagine your own residence <Arrow diagonal /></Link>
+        </div>}
+        {walkthrough && <p className="sr-only">Explore an original four-storey residence concept: enter the ground-floor living and dining spaces, follow the open stair to the first-floor family lounge and guest suite, the second-floor master suite and bathroom, and the third-floor study and sky terrace. Scroll in either direction to explore, or use the navigation to view our work and discuss a project.</p>}
         <p className="hero-scroll-cue">
           Scroll to step inside <span aria-hidden="true">&darr;</span>
         </p>
-        <a
+        {walkthrough ? <span className="hero-film-credit">
+          Original concept / The residence
+        </span> : <a
           className="hero-film-credit"
           href={videoHero.creditUrl}
           target="_blank"
           rel="noopener noreferrer"
         >
           Visual study / Film by {videoHero.credit}
-        </a>
+        </a>}
         <p className="video-loading" role="status" aria-live="polite">
           {failed
-            ? "Film unavailable. Explore the work below."
+            ? "Explore the work below."
             : motion && !ready
-              ? "Preparing the film…"
+              ? walkthrough ? "Preparing the walkthrough…" : "Preparing the film…"
               : buffering
                 ? "Preparing this view…"
                 : ""}

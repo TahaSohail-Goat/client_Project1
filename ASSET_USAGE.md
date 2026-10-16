@@ -26,3 +26,12 @@ The physical-model canvas maps client photographs to planes. The separate housin
 Publication permission, photographer credits and higher-resolution masters remain launch requirements in `CLIENT_ACTION_REQUIRED.md`.
 
 The former `hero_exterior_to_interior_scrub.mp4`, its mobile derivative and poster are preserved in `references/retired_hero/`, outside production. Current hero assets are in `public/media/hero-film/`: a 1080p desktop film, 540p mobile film and independent poster. Typography remains selectable HTML.
+
+
+## Earlier single-storey concept hero (historical)
+
+The active hero uses the existing original courtyard-house geometry with local CC0 materials/environment maps, not client photographs or reference-video frames. All 43 client photos remain in the chapters and selected-work gallery below. See `docs/HERO_WALKTHROUGH.md` for the material/license table, matching generated scene posters and the distinction between concept geometry and client work. The earlier Pexels media remains preserved.
+
+## Active four-storey residence
+
+`ResidenceModel.ts` contains the original, editable four-storey geometry, furniture, foliage and generated stone/fabric/artwork textures. The hero reuses local Poly Haven CC0 oak maps, grass and sky HDRI. The two `residence-poster*.webp` files are captures of this same scene. No reference frames, stock photographs or unrelated interiors are used. See [HERO_IMPLEMENTATION.md](HERO_IMPLEMENTATION.md) for exact sources, licensing and render limitations. Older media remains preserved but is not requested by the active hero.

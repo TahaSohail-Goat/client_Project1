@@ -1,4 +1,6 @@
-# Independent hero film
+# Retained independent hero film
+
+The active hero is now the continuous concept walkthrough described in [HERO_WALKTHROUGH.md](HERO_WALKTHROUGH.md). The following records the preserved earlier film configuration.
 
 The client authorized free internet-sourced footage for the hero on 2026-10-15.
 The client photographs remain the portfolio collection; this film is an independent

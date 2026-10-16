@@ -21,8 +21,8 @@ async (page) => {
         .getEntriesByType("resource")
         .filter((r) => /model-experience/.test(r.name)).length,
   );
-  if (initialModelDownloads)
-    throw Error("WebGL bundle loaded before the architecture chapter");
+  if (!initialModelDownloads)
+    throw Error("The visible 3D hero did not load its renderer");
   await visit("selected-work");
   await page.waitForFunction(
     () =>
@@ -161,7 +161,7 @@ async (page) => {
     );
     filters[name] = await page.locator(".work-card").count();
   }
-  await page.locator(".work-card").first().click();
+  await page.getByRole("button", { name: "Open selected photograph", exact: true }).click();
   await page.getByRole("dialog").waitFor();
   await page.keyboard.press("ArrowRight");
   await page.keyboard.press("Escape");

@@ -16,7 +16,9 @@
         const hero = document.createElement("link");
         hero.rel = "preload";
         hero.as = "image";
-        hero.href = "/media/hero-film/terrace-poster.webp";
+        hero.href = matchMedia("(max-width: 767px)").matches
+          ? "/media/hero-study/residence-poster-mobile.webp"
+          : "/media/hero-study/residence-poster.webp";
         hero.fetchPriority = "high";
         document.head.appendChild(hero);
       }
