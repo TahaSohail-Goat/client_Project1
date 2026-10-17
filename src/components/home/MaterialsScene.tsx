@@ -378,9 +378,9 @@ export function MaterialsScene() {
             <Link
               key={study.slug}
               to={destination(study.slug)}
-              aria-label={`View ${study.label}: ${photo(study.slug).description}`}
+              aria-label={`${study.number} / ${study.label}: ${photo(study.slug).description}`}
             >
-              <span className="eyebrow">{study.number}</span>
+              <span className="eyebrow">{study.number}</span>{" "}
               {study.label}
               <Arrow diagonal />
             </Link>

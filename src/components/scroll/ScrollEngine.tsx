@@ -4,6 +4,7 @@ import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "lenis/dist/lenis.css";
+import { scrollToSection, sectionId, sectionScrollPosition } from "./anchors";
 
 gsap.registerPlugin(ScrollTrigger);
 // Keep Lenis's elapsed time aligned with the shared GSAP ticker.
@@ -45,11 +46,28 @@ export function ScrollEngine() {
         engine.current.scrollTo(position, { immediate: true, force: true });
       else window.scrollTo({ top: position, behavior: "instant" });
     };
+    let repeatFrame = 0;
+    const repeatContentAnchor = (event: MouseEvent) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target instanceof Element
+        ? event.target.closest<HTMLAnchorElement>("main a[href]") : null;
+      if (!link || link.download || (link.target && link.target !== "_self")) return;
+      const destination = new URL(link.href, window.location.href);
+      if (destination.origin !== window.location.origin || destination.pathname !== window.location.pathname ||
+        !destination.hash || destination.hash !== window.location.hash) return;
+      // React Router keeps the same hash effect when a content link is reused.
+      // Capture the click before it updates the URL, then restore the chapter.
+      cancelAnimationFrame(repeatFrame);
+      repeatFrame = requestAnimationFrame(() => scrollToSection(sectionId(destination.hash)));
+    };
     window.addEventListener("studio:scroll-to", navigateSequence);
+    document.addEventListener("click", repeatContentAnchor, true);
     preference.addEventListener("change", configure);
     desktop.addEventListener("change", configure);
     return () => {
       window.removeEventListener("studio:scroll-to", navigateSequence);
+      document.removeEventListener("click", repeatContentAnchor, true);
+      cancelAnimationFrame(repeatFrame);
       gsap.ticker.remove(tick);
       lenis?.destroy();
       preference.removeEventListener("change", configure);
@@ -69,16 +87,8 @@ export function ScrollEngine() {
     let layoutFrame = 0;
     const alignAnchor = () => {
       if (!anchor || userMoved) return;
-      const offset = Number(anchor.dataset.scrollOffset ?? 100);
       engine.current?.resize();
-      // A pinned element's rectangle follows the viewport. Its trigger retains
-      // the actual chapter entry point through refreshes and media loading.
-      const pinnedChapter = ScrollTrigger.getAll().find(
-        (trigger) => trigger.trigger === anchor && trigger.pin,
-      );
-      const position = pinnedChapter
-        ? pinnedChapter.start - offset
-        : anchor.getBoundingClientRect().top + scrollY - offset;
+      const position = sectionScrollPosition(anchor);
       if (engine.current)
         engine.current.scrollTo(position, { immediate: true, force: true });
       else window.scrollTo({ top: position, behavior: "instant" });
@@ -119,7 +129,7 @@ export function ScrollEngine() {
     const locate = () => {
       if (finished) return;
       const element = hash
-        ? document.getElementById(decodeURIComponent(hash.slice(1)))
+        ? document.getElementById(sectionId(hash))
         : document.querySelector("main > :first-child");
       if (!element) return;
       anchor = hash ? (element as HTMLElement) : null;

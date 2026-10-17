@@ -9,13 +9,14 @@ import {
   type CSSProperties,
   type PointerEvent,
 } from "react";
-import { m, useMotionValue, useSpring, useReducedMotion } from "motion/react";
+import { m, useMotionValue, useSpring } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Photo } from "../content/media";
 import { PhotoImage } from "./PhotoImage";
 import { CanvasBoundary } from "./three/CanvasBoundary";
 import { canUseVisionThree } from "./three/visionCapabilities";
+import { useMotionPreference } from "../hooks/useMotionPreference";
 
 const ExteriorPerspectiveCanvas = lazy(
   () => import("./three/ExteriorPerspectiveCanvas"),
@@ -37,7 +38,7 @@ export function DepthPhoto({
   threeD?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = useMotionPreference();
   const [canvasEnabled, setCanvasEnabled] = useState(false);
   const [canvasReady, setCanvasReady] = useState(false);
   const [canvasFailed, setCanvasFailed] = useState(false);
@@ -120,32 +121,42 @@ export function DepthPhoto({
     const desktop = matchMedia(
       "(min-width: 1024px) and (min-height: 700px) and (pointer: fine)",
     );
-    let observer: IntersectionObserver | undefined;
-    const prepare = () => {
-      observer?.disconnect();
+    let frame = 0;
+    let activated = false;
+    const activate = () => {
+      frame = 0;
       if (reduced || !canUseVisionThree()) {
         setCanvasEnabled(false);
         return;
       }
       const node = ref.current;
-      if (!node || typeof IntersectionObserver === "undefined") {
+      // Perspective transforms can leave an observer watching an old plane.
+      // Measure the stable grid while approaching it, then stop watching scroll.
+      const bounds = (node?.closest(".exterior-grid") ?? node)?.getBoundingClientRect();
+      if (activated || !bounds || (bounds.top <= innerHeight + 240 && bounds.bottom >= -240)) {
+        activated = true;
         setCanvasEnabled(true);
-        return;
+        window.removeEventListener("scroll", schedule);
       }
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          if (!entry.isIntersecting) return;
-          setCanvasEnabled(true);
-          observer?.disconnect();
-        },
-        { rootMargin: "240px 0px" },
-      );
-      observer.observe(node);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(activate);
+    };
+    const prepare = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      window.removeEventListener("scroll", schedule);
+      if (!reduced && canUseVisionThree() && !activated)
+        window.addEventListener("scroll", schedule, { passive: true });
+      activate();
     };
     prepare();
     desktop.addEventListener("change", prepare);
+    window.addEventListener("resize", prepare);
     return () => {
-      observer?.disconnect();
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", prepare);
       desktop.removeEventListener("change", prepare);
     };
   }, [reduced, threeD]);

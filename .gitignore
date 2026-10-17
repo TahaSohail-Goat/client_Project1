@@ -6,5 +6,10 @@ dist/
 output/
 .playwright-cli/
 *.tsbuildinfo
-# Supplemental client masters and reference clips stay local; web exports are in public/media.
-DesktopAssests/
+# Source masters, reference media and retired implementations are local archives.
+.local/
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+*.log

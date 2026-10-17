@@ -198,11 +198,6 @@ section[tabindex="-1"]:focus {
   border-bottom: 1px solid var(--line);
   padding-bottom: 16px;
 }
-.spatial-signature {
-  display: block;
-  width: min(100%, 360px);
-  color: var(--bronze);
-}
 .approach {
   background: var(--charcoal);
   color: var(--ivory);
@@ -225,10 +220,6 @@ section[tabindex="-1"]:focus {
   align-items: center;
   grid-template-columns: 1fr 1fr;
   margin-top: 48px;
-}
-.approach-lower > .spatial-signature {
-  margin-left: 7%;
-  width: min(100%, 290px);
 }
 .approach-lower p {
   color: #d1d0c6;
@@ -539,23 +530,13 @@ section[tabindex="-1"]:focus {
 .footer-signature {
   grid-column: 1 / -1;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
   gap: 0 !important;
   padding-top: 25px;
-  font: 700 clamp(100px, 30vw, 580px) / 0.88 var(--display);
-  letter-spacing: -0.085em;
+  line-height: 1;
 }
-.footer-signature > span {
-  color: var(--bronze);
-}
-.footer-signature > i {
-  width: 0.035em;
-  height: 0.035em;
-  background: var(--bronze);
-  border-radius: 50%;
-  margin-left: 0.055em;
-}
+.footer-signature img { display: block; width: 100%; height: auto; }
 @media (max-width: 767px) {
   .exterior-grid {
     grid-template-columns: 1fr;
@@ -602,10 +583,6 @@ section[tabindex="-1"]:focus {
     grid-template-columns: 1fr;
     gap: 30px;
     margin-top: 35px;
-  }
-  .approach-lower > .spatial-signature {
-    width: 170px;
-    margin: 0;
   }
   .consultation {
     padding-top: 70px;

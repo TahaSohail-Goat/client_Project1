@@ -1,0 +1,87 @@
+[
+  {
+    "asset": "mid_century_lounge_chair",
+    "source": "https://polyhaven.com/a/mid_century_lounge_chair",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "potted_plant_01",
+    "source": "https://polyhaven.com/a/potted_plant_01",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "potted_plant_04",
+    "source": "https://polyhaven.com/a/potted_plant_04",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "island_tree_02",
+    "source": "https://polyhaven.com/a/island_tree_02",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "GlamVelvetSofa",
+    "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/GlamVelvetSofa/glTF-Binary/GlamVelvetSofa.glb",
+    "license": "CC-BY-4.0",
+    "author": "Eric Chadwick / Wayfair, LLC",
+    "changes": "Textures optimized; demo light removed; fabric recolored to warm neutral."
+  },
+  {
+    "asset": "marble_01",
+    "source": "https://polyhaven.com/a/marble_01",
+    "license": "CC0-1.0",
+    "files": [
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_diff_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_nor_gl_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_rough_1k.jpg"
+    ]
+  },
+  {
+    "asset": "oak_veneer_01",
+    "source": "https://polyhaven.com/a/oak_veneer_01",
+    "license": "CC0-1.0",
+    "files": [
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_veneer_01/oak_veneer_01_diff_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_veneer_01/oak_veneer_01_nor_gl_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_veneer_01/oak_veneer_01_rough_1k.jpg"
+    ]
+  },
+  {
+    "asset": "rough_linen",
+    "source": "https://polyhaven.com/a/rough_linen",
+    "license": "CC0-1.0",
+    "files": [
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_linen/rough_linen_diff_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_linen/rough_linen_nor_gl_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_linen/rough_linen_rough_1k.jpg"
+    ]
+  },
+  {
+    "asset": "grass_ground",
+    "source": "https://polyhaven.com/a/grass_ground",
+    "license": "CC0-1.0",
+    "files": [
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_ground/grass_ground_diff_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_ground/grass_ground_nor_gl_1k.jpg",
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_ground/grass_ground_rough_1k.jpg"
+    ]
+  },
+  {
+    "asset": "kloppenheim_06",
+    "source": "https://polyhaven.com/a/kloppenheim_06",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "dining_chair_02",
+    "source": "https://polyhaven.com/a/dining_chair_02",
+    "license": "CC0-1.0"
+  },
+  {
+    "asset": "plastered_wall_04",
+    "source": "https://polyhaven.com/a/plastered_wall_04",
+    "license": "CC0-1.0",
+    "files": [
+      "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/plastered_wall_04/plastered_wall_04_diff_1k.jpg"
+    ]
+  }
+]

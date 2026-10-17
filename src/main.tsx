@@ -14,7 +14,7 @@ import "./styles/site.css";
 import "./styles/responsive.css";
 import "./styles/navigation.css";
 import "./styles/housing-study.css";
-import "./styles/video-hero.css";
+import "./styles/hero.css";
 import "./styles/cinematic.css";
 import "./styles/vision-depth.css";
 import "./styles/materials-depth.css";
@@ -23,6 +23,7 @@ import "./styles/approach-spatial.css";
 import "./styles/consultation-motion.css";
 import "./styles/spatial-gallery.css";
 import "./styles/residence.css";
+import "./styles/contact-footer.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,4 +1,4 @@
-import manifest from "../../docs/ASSET_MANIFEST.json";
+import manifest from "./photo-manifest.json";
 
 export type Category = "Architecture" | "Interiors" | "Model Studies";
 export type Photo = {

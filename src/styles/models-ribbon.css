@@ -110,7 +110,7 @@
   font: 600 13px var(--display);
 }
 .model-ribbon-count > span:last-child {
-  opacity: 0.5;
+  color: #535c52;
 }
 .model-ribbon-progress {
   height: 1px;

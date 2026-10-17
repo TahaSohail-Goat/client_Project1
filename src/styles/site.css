@@ -300,11 +300,13 @@ figcaption span {
   font-size: 11px;
 }
 .footer-brand {
-  font-size: 22px;
-  letter-spacing: -0.025em;
+  display: block;
+  width: 128px;
 }
+.footer-brand img { display: block; width: 100%; height: auto; }
 .footer > p {
   text-align: right;
+  align-self: center;
 }
 .footer > div {
   display: flex;
@@ -518,7 +520,7 @@ body {
 .interior-indicators span {
   padding: 5px 8px;
   border-bottom: 1px solid transparent;
-  opacity: 0.35;
+  opacity: 0.6;
   transition: opacity 0.2s;
 }
 .interior-indicators span[data-active="true"] {

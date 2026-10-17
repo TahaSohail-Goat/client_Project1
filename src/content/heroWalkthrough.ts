@@ -1,6 +1,5 @@
 ﻿/** Original four-storey residence; never represented as a completed client project. */
 export const heroWalkthrough = {
-  enabled: true,
   poster: "/media/hero-study/residence-poster.webp",
   mobilePoster: "/media/hero-study/residence-poster-mobile.webp",
   desktopScroll: 9.2,

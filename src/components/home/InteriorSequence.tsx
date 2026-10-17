@@ -121,6 +121,7 @@ export function InteriorSequence() {
   }, []);
   return (
     <section
+      id="interiors"
       className="interior-sequence"
       ref={ref}
       aria-labelledby="interior-title"

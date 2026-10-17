@@ -169,7 +169,7 @@
   }
 }
 @media (max-width: 767px) and (min-height: 501px) and (max-height: 700px) {
-  .video-editorial .vision-composition {
+  .hero-editorial .vision-composition {
     display: block;
   }
   .vision-photo-stack {
@@ -179,10 +179,10 @@
     margin-top: 12px;
     font-size: 8px;
   }
-  .video-editorial .vision-copy {
+  .hero-editorial .vision-copy {
     margin-top: 18px;
   }
-  .video-editorial .vision-copy .line-link {
+  .hero-editorial .vision-copy .line-link {
     margin-top: 14px;
   }
 }

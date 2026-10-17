@@ -2,9 +2,12 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei/core/Environment";
 import { useTexture } from "@react-three/drei/core/Texture";
-import { Group, MathUtils, MeshStandardMaterial, PerspectiveCamera, Vector3 } from "three";
+import { AgXToneMapping, Group, MathUtils, MeshStandardMaterial, PCFSoftShadowMap, PerspectiveCamera, Vector3 } from "three";
+import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 import { cameraBeats, sampleCamera, chapterAt, residenceChapters, residenceCallouts, type Tuple3 } from "../../content/heroWalkthrough";
-import { buildResidence, residenceMaterials } from "./ResidenceModel";
+import { buildResidence } from "./ResidenceModel";
+import { residenceMaterials, residenceTextureUrls } from "./ResidenceMaterials";
+import { useResidenceAssets } from "./ResidenceAssets";
 import { ResidenceFinish } from "./ResidenceFinish";
 
 type Props = {
@@ -15,16 +18,19 @@ type Props = {
   onFailure: () => void;
 };
 const smooth = (p: number) => { const x=MathUtils.clamp(p,0,1);return x*x*(3-2*x); };
+RectAreaLightUniformsLib.init();
 function Walkthrough({progress,redraw,overlay,onReady,onFailure}:Props) {
   const { camera,gl,invalidate,size }=useThree();
   const sliding=useRef<Group>(null);
   const lastChapter=useRef(-1);
   const ready=useRef(false), readyFrame=useRef(0);
+  const prepared=useRef(false);
   const point=useMemo(()=>new Vector3(),[]);
-  const maps=useTexture(["/media/hero-study/wood-color.jpg","/media/hero-study/wood-normal.jpg","/media/hero-study/wood-roughness.jpg","/media/hero-study/aerial_grass_rock.jpg"]);
+  const assets=useResidenceAssets();
+  const maps=useTexture(residenceTextureUrls);
   const surfaces=useMemo(()=>residenceMaterials(maps,Math.min(8,gl.capabilities.getMaxAnisotropy())),[maps,gl]);
-  const residence=useMemo(()=>buildResidence(surfaces.materials),[surfaces]);
-  useEffect(()=>()=>{residence.dispose();surfaces.dispose();},[residence,surfaces]);
+  const residence=useMemo(()=>buildResidence(surfaces.materials,assets.library),[surfaces,assets]);
+  useEffect(()=>()=>{residence.dispose();surfaces.dispose();assets.dispose();},[residence,surfaces,assets]);
   useEffect(()=>{
     redraw.current=invalidate;
     gl.shadowMap.autoUpdate=false;gl.shadowMap.needsUpdate=true;
@@ -83,34 +89,43 @@ function Walkthrough({progress,redraw,overlay,onReady,onFailure}:Props) {
         text.setAttribute("x",String(tx));text.setAttribute("y",String(ty));
       });
     }
-    if(!ready.current){gl.shadowMap.needsUpdate=true;ready.current=true;readyFrame.current=requestAnimationFrame(onReady);}
+    if(prepared.current&&!ready.current){gl.shadowMap.needsUpdate=true;ready.current=true;readyFrame.current=requestAnimationFrame(onReady);}
   });
   const m=surfaces.materials;
   return <>
-    <color attach="background" args={["#b9b6a6"]}/>
-    <fog attach="fog" args={["#b9b6a6",65,160]}/>
-    <Environment files="/media/hero-study/sky.hdr" background backgroundBlurriness={.35} backgroundIntensity={.65} environmentIntensity={.65}/>
-    <hemisphereLight args={["#eee5d2","#797461",.7]}/>
-    <directionalLight position={[-18,26,18]} color="#ffe0b0" intensity={3.1} castShadow
+    <color attach="background" args={["#bfc6bf"]}/>
+    <fog attach="fog" args={["#8a9488",180,800]}/>
+    <Environment files="/media/residence-realism/garden-sky.hdr" background backgroundBlurriness={0} backgroundIntensity={1.2} environmentIntensity={.55}/>
+    <hemisphereLight args={["#dbe4ec","#74674f",.4]}/>
+    <directionalLight position={[-18,26,18]} color="#ffe5c4" intensity={2.5} castShadow
       shadow-mapSize={[size.width<768?1024:2048,size.width<768?1024:2048]}
       shadow-camera-left={-22} shadow-camera-right={22} shadow-camera-top={22} shadow-camera-bottom={-14}
       shadow-camera-near={1} shadow-camera-far={75} shadow-normalBias={.035} shadow-bias={-.0002}
       target-position={[0,5,0]}/>
-    {[0,1,2,3].map(floor=><pointLight key={floor} position={[3.2,floor*3.5+2.7,.3]} intensity={24} distance={10} decay={2} color="#ffdfae"/>)}
+    {/* A single broad window-side fill approximates bounced daylight across
+        the four levels without compiling eight lights into every material. */}
+    <rectAreaLight position={[9,7,0]} rotation={[0,Math.PI/2,0]} width={10} height={15} intensity={3.2} color="#ffead2"/>
     <primitive object={residence.root}/>
-    <ResidenceFinish/>
+    <ResidenceFinish prepared={prepared} onFailure={onFailure}/>
     <group ref={sliding}>
       <mesh position={[0,1.55,5.45]} material={m.glass}><boxGeometry args={[2.75,3.1,.025]}/></mesh>
       {[-1.37,1.37].map(x=><mesh key={x} position={[x,1.55,5.46]} material={m.bronze}><boxGeometry args={[.045,3.1,.065]}/></mesh>)}
       <mesh position={[1.15,1.2,5.5]} material={m.bronze}><boxGeometry args={[.025,.65,.08]}/></mesh>
     </group>
     {/* Upper terrace door leaves are set open; all floor paths use real openings. */}
-    <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.51,0]} receiveShadow material={m.ground as MeshStandardMaterial}><planeGeometry args={[300,300]}/></mesh>
+    <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.51,0]} receiveShadow material={m.ground as MeshStandardMaterial}>
+      <planeGeometry args={[2000,2000]} onUpdate={geometry=>{
+        const uv=geometry.getAttribute("uv"),position=geometry.getAttribute("position");
+        for(let i=0;i<uv.count;i++)uv.setXY(i,position.getX(i),position.getY(i));
+        uv.needsUpdate=true;
+      }}/>
+    </mesh>
   </>;
 }
 export default function HeroWalkthroughCanvas(props:Props) {
-  return <Canvas camera={{position:cameraBeats[0].position,fov:43,near:.06,far:250}}
-    frameloop="demand" shadows dpr={[1,1.5]} gl={{antialias:true,alpha:false,powerPreference:"high-performance"}}>
+  return <Canvas camera={{position:cameraBeats[0].position,fov:43,near:.06,far:1000}}
+    frameloop="demand" shadows dpr={[1,1.5]} gl={{antialias:true,alpha:false,powerPreference:"high-performance"}}
+    onCreated={({gl})=>{gl.toneMapping=AgXToneMapping;gl.toneMappingExposure=1.05;gl.shadowMap.type=PCFSoftShadowMap;}}>
     <Walkthrough {...props}/>
   </Canvas>;
 }

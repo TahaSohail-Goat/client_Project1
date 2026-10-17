@@ -47,7 +47,7 @@ export function PortfolioCard({
         y.set(0);
       }}
       onClick={() => onOpen(item)}
-      aria-label={`Open ${item.title} photograph`}
+      aria-label={`${String(index + 1).padStart(2, "0")} ${item.title} ${item.category} — Open photograph`}
     >
       <m.div
         className="work-image"
@@ -63,9 +63,9 @@ export function PortfolioCard({
         <span className="image-open">
           <Arrow diagonal />
         </span>
-      </m.div>
+      </m.div>{" "}
       <div className="work-card-caption">
-        <h3>{item.title}</h3>
+        <h3>{item.title}</h3>{" "}
         <span>{item.category}</span>
       </div>
     </m.button>

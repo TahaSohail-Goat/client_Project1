@@ -1,0 +1,38 @@
+async page => {
+  page.setDefaultTimeout(15000);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`http://127.0.0.1:4173/?compat=${Date.now()}#work`);
+  if (await page.locator('.work-card').count() !== 43) throw Error('Photo collection missing');
+  await page.locator('.work-card').first().click();
+  await page.getByRole('dialog').waitFor();
+  await page.locator('.lightbox-image img').evaluate(image => image.decode());
+  await page.getByRole('button', { name: 'Next photograph', exact: true }).click();
+  await page.waitForFunction(() => /2 of 43/i.test(document.querySelector('.lightbox-toolbar').innerText));
+  await page.getByRole('button', { name: 'Previous photograph', exact: true }).click();
+  await page.waitForFunction(() => /1 of 43/i.test(document.querySelector('.lightbox-toolbar').innerText));
+  await page.getByRole('button', { name: 'Close photograph', exact: true }).click();
+  await page.waitForFunction(() => !document.querySelector('dialog') && document.activeElement?.classList.contains('work-card'));
+  await page.getByRole('button', { name: 'Open navigation', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Site navigation' }).waitFor();
+  await page.getByRole('button', { name: 'Close navigation', exact: true }).click();
+  await page.waitForFunction(() => !document.querySelector('.mobile-navigation') && !document.querySelector('main').inert);
+  await page.getByRole('button', { name: 'Open navigation', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Site navigation' }).waitFor();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.waitForFunction(() => !document.querySelector('.mobile-navigation') && !document.querySelector('main').inert);
+  await page.locator('header a[href="/#contact"]').click();
+  await page.waitForFunction(() => Math.abs(document.getElementById('contact').getBoundingClientRect().top - 100) < 5);
+  const form = page.getByRole('form', { name: 'Project inquiry' });
+  await form.getByRole('textbox', { name: 'Your name', exact: true }).fill('Compatibility QA');
+  await form.getByRole('textbox', { name: 'Email address', exact: true }).fill('qa@example.test');
+  await form.getByRole('combobox').selectOption('Interior Design');
+  await form.getByRole('textbox', { name: 'About your space', exact: true }).fill('A browser compatibility test. No message is sent.');
+  await form.getByRole('checkbox').check();
+  await form.getByRole('button', { name: 'Review inquiry' }).click();
+  await page.locator('.inquiry-draft').waitFor();
+  if (!await page.locator('.inquiry-draft').evaluate(e => e === document.activeElement)) throw Error('Review focus missing');
+  const href = await page.getByRole('link', { name: 'Open email draft' }).getAttribute('href');
+  if (new URL(href).pathname !== 'tahasohail85@gmail.com') throw Error('Wrong mail recipient');
+  return { engine: page.context().browser().browserType().name(), mobileLightbox: true, nextPreviousClose: true, restoredFocus: true, menuCloseButton: true, openMenuResize: true, contactNavigation: true, inquiryReview: true, emailRecipient: true };
+}

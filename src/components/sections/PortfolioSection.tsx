@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { media, type Category, type Photo } from "../../content/media";
 import { AccessibleLightbox } from "../portfolio/AccessibleLightbox";
@@ -28,7 +28,15 @@ const collection = [...media].sort((a, b) => {
   return rank(a.slug) - rank(b.slug);
 });
 export default function PortfolioSection() {
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const updateParams = (next: URLSearchParams) => {
+    // Changing a filter or photo must keep the visitor in the gallery chapter.
+    navigate({ pathname: location.pathname, search: next.toString(), hash: location.hash }, {
+      replace: true, preventScrollReset: true,
+    });
+  };
   const reduced = useMotionPreference();
   const [mode, setMode] = useState<GalleryMode>("list");
   const category = categories.includes(params.get("category") as Category)
@@ -47,17 +55,17 @@ export default function PortfolioSection() {
     next.delete("photo");
     if (value === "All") next.delete("category");
     else next.set("category", value);
-    setParams(next, { replace: true });
+    updateParams(next);
   };
   const open = (item: Photo) => {
     const next = new URLSearchParams(params);
     next.set("photo", item.slug);
-    setParams(next, { replace: true });
+    updateParams(next);
   };
   const close = () => {
     const next = new URLSearchParams(params);
     next.delete("photo");
-    setParams(next, { replace: true });
+    updateParams(next);
   };
   return (
     <>
@@ -68,40 +76,49 @@ export default function PortfolioSection() {
       >
         <div className="section-pad spatial-gallery-top">
           <div className="spatial-collection-meta">
-            <p className="eyebrow">The portfolio / An image collection</p>
+            <p className="eyebrow">The portfolio</p>
             <span>{media.length} photographs / 3 disciplines</span>
           </div>
-          <div
-            className="work-filters"
-            role="group"
-            aria-label="Filter photographs"
-          >
-            {categories.map((value) => (
-              <button
-                key={value}
-                aria-pressed={category === value}
-                onClick={() => filter(value)}
-              >
-                {value}
-                <sup>
-                  {value === "All"
-                    ? media.length
-                    : media.filter((item) => item.category === value).length}
-                </sup>
-              </button>
-            ))}
-          </div>
-          <p className="gallery-count" role="status">
-            {filtered.length} photographs · {category}
-          </p>
-        </div>
-        {reduced ? (
-          <div className="section-pad spatial-static">
+          <div className="portfolio-heading-row">
             <CinematicHeading
               id="portfolio-title"
               animate={false}
               lines={[{ text: "Selected" }, { text: "work.", italic: true }]}
             />
+            <p className="portfolio-introduction">
+              Architecture, interiors and physical model studies.
+              Select a photograph to explore it in full.
+            </p>
+          </div>
+          <div className="portfolio-filter-row">
+            <div
+              className="work-filters"
+              role="group"
+              aria-label="Filter photographs"
+            >
+              {categories.map((value) => (
+                <button
+                  type="button"
+                  key={value}
+                  aria-pressed={category === value}
+                  onClick={() => filter(value)}
+                >
+                  {value}
+                  <sup>
+                    {value === "All"
+                      ? media.length
+                      : media.filter((item) => item.category === value).length}
+                  </sup>
+                </button>
+              ))}
+            </div>
+            <p className="gallery-count" role="status">
+              {filtered.length} photographs · {category}
+            </p>
+          </div>
+        </div>
+        {reduced ? (
+          <div className="section-pad spatial-static">
             <div className="work-grid">
               {filtered.map((item, i) => (
                 <PortfolioCard
@@ -122,12 +139,6 @@ export default function PortfolioSection() {
             onOpen={open}
           />
         )}
-        <div className="section-pad spatial-gallery-note">
-          <p className="portfolio-note">
-            Architecture, interiors and physical model studies, presented
-            through the studio’s photographic collection.
-          </p>
-        </div>
       </section>
       {active && (
         <AccessibleLightbox

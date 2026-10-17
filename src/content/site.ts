@@ -13,9 +13,11 @@ export const site = {
     "Architecture and interior design, seen together. This portfolio brings architectural perspectives, interior spaces and physical model studies into view.",
   inquiry: {
     // Set a confirmed studio email OR a same-origin/approved HTTPS JSON POST endpoint.
-    email: "",
-    endpoint: "",
+    email: "tahasohail85@gmail.com",
+    endpoint: import.meta.env.VITE_INQUIRY_ENDPOINT?.trim() || "",
     privacy:
-      "Your details are used to respond to your project inquiry. Privacy wording requires studio approval.",
+      "I agree to be contacted by eco28 about this project inquiry.",
   },
+  // Add only confirmed, approved studio details; empty entries are not displayed.
+  contact: { phone: "", whatsapp: "", location: "" },
 };

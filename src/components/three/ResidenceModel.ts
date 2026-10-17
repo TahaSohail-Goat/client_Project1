@@ -1,83 +1,21 @@
 import {
-  BoxGeometry, BufferGeometry, CanvasTexture, CylinderGeometry, DoubleSide,
-  Euler, Group, LatheGeometry, Material, Matrix4, Mesh, MeshStandardMaterial, Quaternion,
-  RepeatWrapping, SphereGeometry, SRGBColorSpace, Texture, TorusGeometry, Vector2, Vector3,
+  BoxGeometry, BufferGeometry, CylinderGeometry,
+  Euler, Group, LatheGeometry, Material, Matrix4, Mesh, Quaternion,
+  SphereGeometry, TorusGeometry, Vector2, Vector3, PlaneGeometry,
 } from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import type { Tuple3 } from "../../content/heroWalkthrough";
+import type { ResidenceLibrary } from "./ResidenceAssets";
 
 type Palette = Record<string, Material>;
 const pi = Math.PI;
 
-/** Seeded textures are original, tileable scene materials, generated once, locally. */
-function drawnTexture(kind: "stone" | "rug" | "art" | "water") {
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = kind === "art" ? 512 : 256;
-  const ctx = canvas.getContext("2d")!;
-  let seed = 928;
-  const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-  ctx.fillStyle = { stone: "#d2c4ac", rug: "#b1a188", art: "#d7ccba", water: "#455e57" }[kind];
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  if (kind === "art") {
-    ctx.fillStyle = "#a27957"; ctx.beginPath(); ctx.arc(240,220,144,0,pi*2); ctx.fill();
-    ctx.fillStyle = "#4c584e"; ctx.fillRect(210,110,105,340);
-    ctx.fillStyle = "#c3b290"; ctx.beginPath(); ctx.arc(130,355,110,0,pi*2); ctx.fill();
-    ctx.strokeStyle = "#eee1c8"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(66,400); ctx.bezierCurveTo(460,300,130,60,414,76); ctx.stroke();
-  } else for (let i=0;i<10000;i++) {
-    const x=rand()*256,y=rand()*256;
-    ctx.fillStyle = rand()>.5 ? `rgba(52,42,25,${rand()*.1})` : `rgba(255,246,219,${rand()*.2})`;
-    ctx.fillRect(x,y,kind === "stone" ? 2+rand()*32 : 1,kind === "rug" ? 5 : 1);
-  }
-  const texture = new CanvasTexture(canvas);
-  texture.colorSpace=SRGBColorSpace;
-  texture.wrapS=texture.wrapT=RepeatWrapping;
-  if(kind !== "art") texture.repeat.set(kind === "rug" ? 7 : 3,kind === "rug" ? 7 : 3);
-  return texture;
-}
-
-export function residenceMaterials(maps: Texture[], anisotropy: number) {
-  const textures = maps.map((map,i) => {
-    const copy=map.clone(); copy.wrapS=copy.wrapT=RepeatWrapping;
-    copy.repeat.set(i === 3 ? 38 : 1, i === 3 ? 38 : 2);
-    if(i!==1 && i!==2) copy.colorSpace=SRGBColorSpace;
-    copy.anisotropy=anisotropy; copy.needsUpdate=true; return copy;
-  });
-  const stoneMap=drawnTexture("stone"), rugMap=drawnTexture("rug"), artMap=drawnTexture("art");
-  const mat = (color: string, roughness=.7, metalness=0) => new MeshStandardMaterial({ color,roughness,metalness });
-  const materials: Palette = {
-    stone: new MeshStandardMaterial({map:stoneMap,roughness:.72,bumpMap:stoneMap,bumpScale:.018}),
-    plaster: mat("#dfd6c4",.91),
-    timber: new MeshStandardMaterial({color:"#c9ad87",map:textures[0],normalMap:textures[1],roughnessMap:textures[2],roughness:.68}),
-    bronze: mat("#65503b",.32,.75),
-    dark: mat("#282c29",.5,.25),
-    linen: new MeshStandardMaterial({color:"#e4dac5",map:rugMap,roughness:1}),
-    cream: mat("#ded7c8",.93),
-    olive: mat("#707963",.95),
-    terracotta: mat("#996d50",.95),
-    rug: new MeshStandardMaterial({map:rugMap,roughness:1}),
-    art: new MeshStandardMaterial({map:artMap,roughness:.95}),
-    glow: new MeshStandardMaterial({color:"#ffe6b7",emissive:"#ffd18a",emissiveIntensity:2.5}),
-    white: mat("#ede4d4",.22),
-    leaf: mat("#65704c",.9),
-    leafDark: mat("#3f503d",.95),
-    bark: mat("#5e5140",1),
-    ground: new MeshStandardMaterial({color:"#78846a",map:textures[3],roughness:1}),
-    water: new MeshStandardMaterial({color:"#476b67",roughness:.13,metalness:.5}),
-    glass: new MeshStandardMaterial({color:"#a5b9b0",transparent:true,opacity:.13,roughness:.09,metalness:.45,depthWrite:false,side:DoubleSide}),
-    mirror: mat("#b2b9ad",.05,.95),
-  };
-  (materials.timber as MeshStandardMaterial).normalScale.set(.12,.12);
-  return { materials, dispose: () => {
-    Object.values(materials).forEach(m=>m.dispose());
-    [...textures,stoneMap,rugMap,artMap].forEach(t=>t.dispose());
-  }};
-}
-
-/** Batch geometry by material AND storey: detailed architecture in ~80 draw calls.
+/** Batch geometry by material AND storey, retaining camera culling across floors.
  * Slabs are built around a real stair opening; there is no animated wall removal.
  */
-export function buildResidence(m: Palette) {
+export function buildResidence(m: Palette, library: ResidenceLibrary) {
+  const palette={...m};
   const root=new Group(); root.name="The Residence — original four-storey concept";
   const batches = new Map<string, BufferGeometry[]>();
   let zone="site";
@@ -86,13 +24,27 @@ export function buildResidence(m: Palette) {
     matrix.compose(new Vector3(...p),q,new Vector3(1,1,1));
     const g=geometry.index ? geometry.toNonIndexed() : geometry.clone();
     geometry.dispose(); g.applyMatrix4(matrix);
+    // Architectural maps retain a real-world texel density across differently sized parts.
+    if(!["art","glow"].includes(material)) {
+      const uv=g.getAttribute("uv"),pos=g.getAttribute("position"),normal=g.getAttribute("normal");
+      for(let i=0;i<uv.count;i++) {
+        const nx=Math.abs(normal.getX(i)),ny=Math.abs(normal.getY(i)),nz=Math.abs(normal.getZ(i));
+        const x=pos.getX(i),y=pos.getY(i),z=pos.getZ(i);
+        if(ny>=nx&&ny>=nz)uv.setXY(i,x,-z);
+        else if(nx>nz)uv.setXY(i,z,y);
+        else uv.setXY(i,x,y);
+      }
+    }
     // Rounded primitives have extra UV channels on some Three versions.
     for (const key of Object.keys(g.attributes)) if(!["position","normal","uv"].includes(key)) g.deleteAttribute(key);
     const key=`${zone}:${material}`;
     if(!batches.has(key)) batches.set(key,[]);
     batches.get(key)!.push(g);
   };
-  const box=(p:Tuple3,s:Tuple3,mat="stone",r:Tuple3=[0,0,0])=>add(new BoxGeometry(...s),mat,p,r);
+  const box=(p:Tuple3,s:Tuple3,mat="stone",r:Tuple3=[0,0,0])=>{
+    const bevel=["stone","timber"].includes(mat)&&Math.min(...s)>.06;
+    add(bevel?new RoundedBoxGeometry(...s,1,.009):new BoxGeometry(...s),mat,p,r);
+  };
   const soft=(p:Tuple3,s:Tuple3,mat="linen",radius=.09,r:Tuple3=[0,0,0])=>add(new RoundedBoxGeometry(...s,2,radius),mat,p,r);
   const cylinder=(p:Tuple3,rt:number,rb:number,h:number,mat="bronze",r:Tuple3=[0,0,0])=>add(new CylinderGeometry(rt,rb,h,20),mat,p,r);
   const sphere=(p:Tuple3,s:Tuple3,mat="leaf",r:Tuple3=[0,0,0],distantLeaf=false)=>{
@@ -104,13 +56,30 @@ export function buildResidence(m: Palette) {
     g.applyQuaternion(new Quaternion().setFromUnitVectors(new Vector3(0,1,0),v.normalize()));
     add(g,mat,start.add(end).multiplyScalar(.5).toArray() as Tuple3);
   };
+  const place=(name:keyof ResidenceLibrary,p:Tuple3,scale:Tuple3,rotation=0)=>{
+    const instance=library[name].object.clone(true);
+    instance.position.fromArray(p);instance.scale.fromArray(scale);instance.rotation.y=rotation;instance.updateMatrixWorld(true);
+    instance.traverse(node=>{
+      if(!(node instanceof Mesh))return;
+      const material=node.material as Material;
+      // Keep shared vertices on authored models; expanding every leaf triangle
+      // needlessly multiplies both preparation and GPU memory.
+      const geometry=node.geometry.clone();
+      geometry.applyMatrix4(node.matrixWorld);
+      const key=`asset_${name}_${material.uuid}_${geometry.index?"indexed":"expanded"}_${Object.keys(geometry.attributes).sort().join("_")}`;
+      palette[key]=material;
+      const batch=`${zone}:${key}`;
+      if(!batches.has(batch))batches.set(batch,[]);
+      batches.get(batch)!.push(geometry);
+    });
+  };
+  const fit=(name:keyof ResidenceLibrary,p:Tuple3,dimensions:Tuple3,rotation=0)=>{
+    const size=library[name].size;
+    place(name,p,[dimensions[0]/size.x,dimensions[1]/size.y,dimensions[2]/size.z],rotation);
+  };
   const pot=(x:number,y:number,z:number,scale=1)=>{
-    cylinder([x,y+.22*scale,z],.24*scale,.17*scale,.44*scale,"terracotta");
-    for(let i=0;i<9;i++) {
-      const a=i*2.4, top:Tuple3=[x+Math.cos(a)*.32*scale,y+(.6+(i%3)*.15)*scale,z+Math.sin(a)*.32*scale];
-      rod([x,y+.4*scale,z],top,.008*scale,"leafDark");
-      sphere(top,[.15*scale,.31*scale,.1*scale],i%2 ? "leaf":"leafDark");
-    }
+    const factor=scale/library.plant.size.y;
+    place("plant",[x,y,z],[factor,factor,factor],x*.31+z*.2);
   };
   const book=(x:number,y:number,z:number,i:number)=>box([x,y,z],[.07,.27+(i%3)*.035,.22],i%3===0?"olive":i%3===1?"terracotta":"cream",[0,0,(i%4-1)*.025]);
   const art=(x:number,y:number,z:number,w=2,h=1.4)=>{
@@ -127,22 +96,12 @@ export function buildResidence(m: Palette) {
     box([x-.32,y+.5,z-.05],[.32,.035,.26],"terracotta");box([x-.29,y+.53,z-.05],[.3,.025,.24],"cream");
   };
   const sofa=(x:number,y:number,z:number,w=3,rotation=0)=>{
-    // Build in local coordinates so the sofa can sit against any facade.
-    const local=(dx:number,dy:number,dz:number):Tuple3=>[x+dx*Math.cos(rotation)+dz*Math.sin(rotation),y+dy,z-dx*Math.sin(rotation)+dz*Math.cos(rotation)];
-    const r:Tuple3=[0,rotation,0];
-    soft(local(0,.27,0),[w,.32,.96],"timber",.07,r);
-    soft(local(0,.72,-.44),[w,.72,.24],"linen",.1,r);
-    [-1,1].forEach(sign=>soft(local(sign*(w/2-.12),.55,0),[.25,.6,1.05],"linen",.1,r));
-    for(let i=0;i<3;i++) {
-      soft(local((i-1)*(w-.5)/3,.53,.05),[(w-.5)/3-.025,.24,.8],"cream",.08,r);
-      soft(local((i-1)*(w-.5)/3,.87,-.25),[.49,.46,.14],i===1?"olive":"linen",.06,[.15,rotation,.06*(i-1)]);
-    }
+    fit("sofa",[x,y,z],[w,.92,1.08],rotation);
   };
   const chair=(x:number,y:number,z:number,rotation=0)=>{
-    cylinder([x,y+.26,z],.13,.27,.5,"bronze");
-    soft([x,y+.5,z],[.6,.13,.62],"olive",.1,[0,rotation,0]);
-    soft([x-Math.sin(rotation)*.24,y+.84,z-Math.cos(rotation)*.24],[.6,.66,.14],"olive",.08,[0,rotation,0]);
+    fit("chair",[x,y,z],[.83,1.02,.92],rotation);
   };
+  const diningChair=(x:number,y:number,z:number,rotation=0)=>fit("dining",[x,y,z],[.54,.9,.58],rotation);
   const pendant=(x:number,y:number,z:number,r=.66)=>{
     for(let i=0;i<3;i++) {
       const a=i*pi*2/3;rod([x,y+.65,z],[x+Math.cos(a)*r,y,z+Math.sin(a)*r],.006,"dark");
@@ -153,8 +112,23 @@ export function buildResidence(m: Palette) {
   const bed=(x:number,y:number,z:number,w=2.5)=>{
     soft([x,y+.21,z],[w+.2,.34,2.5],"timber",.06);
     soft([x,y+.5,z],[w,.3,2.38],"cream",.1);
-    soft([x,y+.64,z+.28],[w+.02,.17,1.68],"linen",.08);
-    soft([x,y+.74,z+.75],[w+.03,.08,.55],"olive",.025);
+    // Woven duvet drapes over the mattress, with small non-repeating creases.
+    const duvet=new PlaneGeometry(w+.32,1.98,32,28),vertices=duvet.getAttribute("position");
+    for(let i=0;i<vertices.count;i++){
+      const px=vertices.getX(i),pz=-vertices.getY(i);
+      const overhang=Math.max(0,Math.abs(px)-w*.46);
+      const folds=.016*Math.sin(px*13+pz*4)+.008*Math.sin(pz*21-px*3);
+        vertices.setXYZ(i,px,.765-overhang*1.25+folds,pz);
+    }
+    duvet.computeVertexNormals();add(duvet,"linen",[x,y,z+.28]);
+    const throwCloth=new PlaneGeometry(w+.1,.52,32,12),throwVertices=throwCloth.getAttribute("position");
+    for(let i=0;i<throwVertices.count;i++){
+      const px=throwVertices.getX(i),pz=-throwVertices.getY(i)+.54;
+      const overhang=Math.max(0,Math.abs(px)-w*.46);
+      const folds=.016*Math.sin(px*13+pz*4)+.008*Math.sin(pz*21-px*3);
+      throwVertices.setXYZ(i,px,.803-overhang*1.25+folds,pz);
+    }
+    throwCloth.computeVertexNormals();add(throwCloth,"olive",[x,y,z+.28]);
     soft([x,y+1,z-1.25],[w+1.6,1.7,.14],"linen",.05);
     [-.64,.64].forEach(dx=>soft([x+dx,y+.78,z-.73],[.92,.2,.53],"cream",.09,[.1,0,dx*.04]));
     [-1,1].forEach(sign=>{
@@ -174,29 +148,32 @@ export function buildResidence(m: Palette) {
     [-.5,0,.5].forEach(dx=>box([x+dx*w,y+1.5,z+.15],[.05,3,.4],"timber"));
   };
 
+  const curtains=(x:number,y:number,z:number,width:number,rotation=0)=>{
+    const curtain=new PlaneGeometry(width,2.94,30,12),p=curtain.getAttribute("position");
+    for(let i=0;i<p.count;i++) {
+      const u=p.getX(i),v=p.getY(i);
+      p.setXYZ(i,u,v,.055*Math.sin((u/width+.5)*pi*14)+.018*Math.sin(v*2+u));
+    }
+    curtain.computeVertexNormals();add(curtain,"curtain",[x,y+1.52,z],[0,rotation,0]);
+  };
+
   // Landscape: mineral forecourt, reflecting pool, individual stepping stones.
   box([0,-.35,0],[160,.3,160],"ground");
   box([0,-.14,1],[19,.22,17],"stone");
   box([9,-.03,1],[3,.14,10],"dark");box([9,.05,1],[2.75,.025,9.75],"water");
   for(let i=0;i<9;i++) box([0,-.01,7+i*.93],[2.7,.16,.69],"stone");
   for(let i=0;i<5;i++) box([0,-.12,6.3+i*.25],[3.4+i*.2,.12,.22],"stone");
-  for(let i=0;i<9;i++) {
-    const x=i%2===0 ? -10-(i%3)*2.4 : 13+(i%3)*2.8;
-    const z=-9+Math.floor(i/2)*6;
-    cylinder([x,1.5,z],.1,.21,3.4,"bark");
-    for(let j=0;j<7;j++) {
-      const a=j*2.4;const end:Tuple3=[x+Math.cos(a)*1.4,3+(j%3)*.8,z+Math.sin(a)*1.4];
-      rod([x,1.7,z],end,.06,"bark");
-      for(let k=0;k<105;k++) {
-        const b=k*2.4+j;
-        const radius=Math.sqrt((k%29)/29)*1.0;
-        sphere([end[0]+Math.cos(b)*radius,end[1]+Math.sin(k*1.8)*.65,end[2]+Math.sin(b)*radius], [.075,.19,.025],k%3?"leafDark":"leaf",[k*.73,b,k*.31],true);
-      }
-    }
-  }
+  [[-13,4],[-12,-8],[16,8],[13,-9],[1,-17]].forEach(([x,z],i)=>{
+    const factor=(5.8+(i%2)*.7)/library.tree.size.y;
+    place("tree",[x,-.05,z],[factor,factor,factor],i*1.71);
+  });
+  // A defined garden boundary replaces the bare, infinite brown field.
+  box([-18,1,-1],[.3,2,33],"plaster");box([18,1,-1],[.3,2,33],"plaster");
+  box([0,1,-18],[36,2,.3],"plaster");
+  [-18,18].forEach(x=>box([x,2.02,-1],[.34,.06,33],"stone"));
   [-7.9,7.8].forEach(x=>{
     box([x,.2,7],[1.5,.55,3],"dark");
-    for(let i=0;i<5;i++) pot(x,.48,6+i*.55,.8);
+    for(let i=0;i<3;i++) pot(x,.48,6.1+i*.9,.8);
     cylinder([x,1.0,8.9],.045,.045,1.5,"dark");sphere([x,1.77,8.9],[.07,.07,.07],"glow");
   });
 
@@ -221,10 +198,15 @@ export function buildResidence(m: Palette) {
       [-1.8,1.7,4.65].forEach(z=>box([x,y+1.6,z],[.07,3.2,.065],"bronze"));
     });
     // Split soffits leave the stairwell open; the upper terrace stays uncovered.
-    box([3,y+3.19,floor===3 ? -2.35 : 0],[8,.14,floor===3 ? 6.3 : 11],"timber");
-    box([-6.05,y+3.19,0],[1.9,.14,11],"timber");
-    box([-3.1,y+3.19,-4.25],[4,.14,2.5],"timber");
-    box([-3.1,y+3.19,4.25],[4,.14,2.5],"timber");
+    box([3,y+3.19,floor===3 ? -2.35 : 0],[8,.14,floor===3 ? 6.3 : 11],"ceiling");
+    box([-6.05,y+3.19,0],[1.9,.14,11],"ceiling");
+    box([-3.1,y+3.19,-4.25],[4,.14,2.5],"ceiling");
+    box([-3.1,y+3.19,4.25],[4,.14,2.5],"ceiling");
+    // Layered ceiling and joinery give broad highlights instead of a flat timber lid.
+    box([3.8,y+3.09,-.3],[5.1,.07,7.8],"ceiling");
+    box([3.8,y+3.045,-4.2],[5.1,.018,.025],"glow");
+    if(floor<3)curtains(6.79,y,3.8,1.4,-pi/2);
+    if(floor===1||floor===2)curtains(6.79,y,-.6,1.1,-pi/2);
     // Front terrace projects from the same structure, with a framed entrance.
     box([0,y-.08,5.8],[14.5,.2,1]);
     box([-5.8,y+1.6,5.5],[2.4,3.2,.24],"stone");
@@ -246,9 +228,7 @@ export function buildResidence(m: Palette) {
     box([3,y+3.08,4.7],[7.2,.025,.028],"glow");
     box([6.65,y+3.08,0],[.025,.025,8.9],"glow");
     box([-6.65,y+3.08,0],[.025,.025,8.9],"glow");
-    // Limestone tile joints; all four rooms share the same material grammar.
-    for(let i=0;i<8;i++) box([3,y+.008,-4.8+i*1.4],[7.8,.004,.008],"cream");
-    for(let i=0;i<5;i++) box([-.6+i*1.7,y+.008,0],[.008,.004,10.7],"cream");
+    // Tile joints and surface pores come from the photographed PBR material.
     // Stair opening guards are open at both actual landings.
     box([-1.1,y+.53,-.35],[.025,1.06,4.5],"glass");
     box([-1.1,y+1.08,-.35],[.035,.035,4.5],"bronze");
@@ -277,13 +257,14 @@ export function buildResidence(m: Palette) {
       // Formal living is to the right, dining/kitchen to the rear; no route furniture.
       soft([4.15,y+.025,1.2],[4.4,.035,3.5],"rug",.03);
       sofa(4.1,y,.0,3.5);table(4.1,y,1.55,1.8,.85);
+      fit("accent",[4.5,y+.48,1.55],[.22,.25,.22]);
       chair(2.55,y,2.8,pi*.8);chair(5.7,y,2.7,-pi*.8);lamp(6.2,y,.3);
       art(4.0,y+1.95,-1.1,2.7,1.3);
       box([4.1,y+1.55,-1.18],[4.7,3.1,.16],"plaster");
       // Open room divider: low joinery, planted niche, no full wall across sightline.
       box([4.1,y+.45,-1.25],[4.7,.9,.22],"timber");
       box([3.6,y+.82,-3.6],[2.6,.1,1.25],"timber");
-      [-.9,.9].forEach(dx=>[-.85,.85].forEach(dz=>chair(3.6+dx,y,-3.6+dz,dz>0?0:pi)));
+      [-.9,.9].forEach(dx=>[-.85,.85].forEach(dz=>diningChair(3.6+dx,y,-3.6+dz,dz>0?0:pi)));
       [-.85,.85].forEach(dx=>cylinder([3.6+dx,y+.4,-3.6],.08,.1,.8,"dark"));
       [-.8,0,.8].forEach(dx=>cylinder([3.6+dx,y+.89,-3.6],.2,.18,.018,"white"));
       pendant(3.6,y+2.5,-3.6,.62);
@@ -300,6 +281,7 @@ export function buildResidence(m: Palette) {
     if(floor===1) {
       soft([4.2,y+.025,.6],[4.3,.04,3.2],"rug",.03);
       sofa(4.2,y,-.45,3.6);table(4.2,y,1.05,1.5,.85);chair(2.7,y,2.2,pi*.8);lamp(6.3,y,-.3);
+      fit("accent",[4.55,y+.48,1.05],[.2,.23,.2]);
       shelves(-.05,y,-5.28,1.8);
       box([4.2,y+.45,-1.5],[4.6,.9,.32],"timber");
       pot(2.2,y+.9,-1.5,.55);pot(6.1,y+.9,-1.5,.55);
@@ -368,9 +350,9 @@ export function buildResidence(m: Palette) {
   for(const [key,geometries] of batches) {
     const name=key.split(":")[1];
     const merged=mergeGeometries(geometries,false)!;
-    const mesh=new Mesh(merged,m[name]); mesh.name=key;
-    mesh.castShadow=!["glass","glow","ground","water","art"].includes(name);
-    mesh.receiveShadow=!["glass","glow"].includes(name);
+    const mesh=new Mesh(merged,palette[name]); mesh.name=key;
+    mesh.castShadow=!["glass","glow","ground","water","art","curtain"].includes(name);
+    mesh.receiveShadow=!["glass","glow","curtain"].includes(name);
     root.add(mesh);geometries.forEach(g=>g.dispose());
   }
   return { root, dispose:()=>root.traverse(node=>{if(node instanceof Mesh) node.geometry.dispose();}) };

@@ -1,0 +1,17 @@
+RESIDENCE VISUAL ASSET CREDITS
+
+GlamVelvetSofa — Eric Chadwick / Wayfair, LLC (2021)
+Licensed under Creative Commons Attribution 4.0 International.
+https://creativecommons.org/licenses/by/4.0/
+Source: https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/GlamVelvetSofa
+Changes: textures optimized, demo light removed, geometry repacked, fabric recolored.
+
+Poly Haven assets: CC0 — https://polyhaven.com/license
+Mid Century Lounge Chair: Kuutti Siitonen.
+Dining Chair 02: James Ray Cock.
+Potted Plant 01: Rico Cilliers. Potted Plant 04: James Ray Cock.
+Island Tree 02: Rob Tuytel and Rico Cilliers.
+Surface and HDRI sources: see sources.json in this directory.
+Geometry simplification and texture optimization are local modifications.
+
+The residence is an original concept visualization, not a verified completed client project.

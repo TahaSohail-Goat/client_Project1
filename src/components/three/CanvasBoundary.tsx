@@ -7,7 +7,8 @@ export class CanvasBoundary extends Component<
   static getDerivedStateFromError() {
     return { failed: true };
   }
-  componentDidCatch() {
+  componentDidCatch(error: Error) {
+    console.error("Scene initialization failed", error);
     this.props.onFailure();
   }
   render() {

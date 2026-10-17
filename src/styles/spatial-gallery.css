@@ -4,7 +4,7 @@
   background: #101411;
   position: relative;
   overflow: clip;
-  padding-top: 66px;
+  padding: 80px 0 36px;
 }
 .spatial-gallery-top {
   padding-top: 0;
@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 25px;
-  padding-bottom: 25px;
+  padding-bottom: 0;
 }
 .spatial-collection-meta .eyebrow {
   color: var(--bronze);
@@ -24,19 +24,57 @@
   color: #b1b8ab;
   font-size: 10px;
 }
+.portfolio-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 310px);
+  align-items: end;
+  gap: 32px;
+  padding: 36px 0 38px;
+}
+.portfolio-heading-row .cinematic-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.06em 0.19em;
+  font-size: clamp(48px, 6.6vw, 110px);
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+}
+.portfolio-heading-row .cinematic-line em {
+  color: var(--bronze);
+  font-size: 1.12em;
+}
+.portfolio-introduction {
+  max-width: 310px;
+  padding-bottom: 5px;
+  color: #bec5b8;
+  font-size: 12px;
+  line-height: 1.9;
+  text-wrap: pretty;
+}
+.portfolio-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 24px;
+  border-block: 1px solid #f2ede526;
+  padding: 18px 0;
+}
 .portfolio-showcase .work-filters {
   position: relative;
   top: auto;
   background: transparent;
-  border-color: #f2ede51f;
+  border: 0;
   gap: 8px;
-  padding: 0 0 12px;
+  padding: 0;
 }
 .portfolio-showcase .work-filters button {
-  color: #b6bcae;
+  color: #c5ccbe;
+  border: 1px solid #f2ede526;
   border-radius: 0;
   padding: 10px 17px;
   font-size: 11px;
+  min-height: 44px;
 }
 .portfolio-showcase .work-filters button[aria-pressed="true"] {
   color: var(--charcoal);
@@ -47,45 +85,22 @@
   border-color: #f2ede580;
 }
 .portfolio-showcase .gallery-count {
-  margin: 13px 0 0;
-  color: #a3ab9b;
+  margin: 0;
+  color: #b3bdab;
   font-size: 10px;
+  white-space: nowrap;
 }
 .spatial-viewport {
-  height: clamp(430px, calc(100svh - 380px), 650px);
+  height: clamp(440px, calc(70svh - 80px), 620px);
   position: relative;
   overflow: hidden;
   touch-action: pan-y pinch-zoom;
   cursor: grab;
   isolation: isolate;
+  background: radial-gradient(ellipse at 50% 52%, #26332636, transparent 70%);
 }
 .spatial-viewport:active {
   cursor: grabbing;
-}
-.spatial-title {
-  position: absolute;
-  left: var(--gutter);
-  top: 30px;
-  z-index: 5;
-  pointer-events: none;
-}
-.spatial-title .cinematic-heading {
-  text-shadow: 0 2px 18px #101411cc;
-  font-size: clamp(60px, 7.8vw, 126px);
-  line-height: 0.95;
-  letter-spacing: -0.055em;
-  pointer-events: auto;
-}
-.spatial-title .cinematic-line em {
-  color: var(--bronze);
-}
-.spatial-mode-label {
-  display: block;
-  margin-top: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 9px;
-  color: #c5cbbf;
 }
 .spatial-camera {
   position: absolute;
@@ -152,6 +167,7 @@
   font-size: 9px;
   text-transform: capitalize;
   color: #c2c6b9;
+  line-height: 1.5;
 }
 .spatial-card-caption > span {
   color: var(--bronze);
@@ -168,8 +184,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 20px var(--gutter);
-  border-top: 1px solid #f2ede51c;
+  margin: 0 var(--gutter);
+  padding: 20px 0;
+  border-bottom: 1px solid #f2ede51c;
 }
 .spatial-layouts {
   display: flex;
@@ -186,6 +203,7 @@
   color: #c8cec2;
   text-transform: capitalize;
   font-size: 10px;
+  min-height: 42px;
   transition:
     color 0.2s,
     background 0.2s,
@@ -219,12 +237,14 @@
   color: var(--ivory);
   font: 10px var(--sans);
   color-scheme: dark;
+  min-height: 42px;
 }
 .spatial-bottom {
   margin: 0 var(--gutter);
   padding: 22px 0 30px;
   border-top: 1px solid #f2ede51c;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   align-items: center;
   justify-content: space-between;
   gap: 25px;
@@ -252,6 +272,7 @@
   color: #b2bba9;
   font-size: 10px;
   line-height: 1.8;
+  text-align: center;
 }
 #spatial-instructions span {
   display: block;
@@ -278,27 +299,9 @@
   opacity: 0.3;
   cursor: default;
 }
-.spatial-gallery-note {
-  padding-top: 0;
-  padding-bottom: 60px;
-}
-.portfolio-showcase .portfolio-note {
-  color: #adb8a5;
-  border-color: #f2ede526;
-  margin-top: 0;
-  padding-top: 20px;
-  font-size: 10px;
-}
 .spatial-static {
-  padding-top: 30px;
-  padding-bottom: 40px;
-}
-.spatial-static .cinematic-heading {
-  font-size: clamp(60px, 9vw, 130px);
-  margin-bottom: 50px;
-}
-.spatial-static .cinematic-line em {
-  color: var(--bronze);
+  padding-top: 40px;
+  padding-bottom: 20px;
 }
 .spatial-static .work-card-caption {
   border-color: #f2ede52b;
@@ -307,27 +310,38 @@
   color: #b8c2b0;
 }
 @media (max-width: 1100px) {
+  .portfolio-heading-row {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .portfolio-introduction {
+    max-width: 450px;
+  }
+  .portfolio-filter-row {
+    flex-wrap: wrap;
+  }
   .spatial-controls {
     flex-wrap: wrap;
   }
   .spatial-bottom {
-    flex-wrap: wrap;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  #spatial-instructions {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    text-align: left;
   }
 }
 @media (max-width: 767px) {
   .spatial-mobile-layout {
-    position: absolute;
-    top: 142px;
-    right: var(--gutter);
-    z-index: 7;
     display: grid;
     gap: 6px;
     color: #b5bdac;
     font-size: 9px;
   }
   .spatial-mobile-layout select {
-    width: 110px;
-    min-height: 36px;
+    width: 100%;
+    min-height: 44px;
     padding: 7px;
     color: var(--ivory);
     background: #101411;
@@ -338,78 +352,91 @@
     color-scheme: dark;
   }
   .portfolio-showcase {
-    padding-top: 50px;
+    padding-top: 48px;
   }
   .spatial-collection-meta {
     align-items: start;
     gap: 16px;
-    padding-bottom: 20px;
+    padding-bottom: 0;
   }
   .spatial-collection-meta > span {
     font-size: 8px;
-    max-width: 85px;
+    max-width: 100px;
     text-align: right;
   }
+  .portfolio-heading-row {
+    padding: 26px 0 28px;
+    gap: 18px;
+  }
+  .portfolio-heading-row .cinematic-heading {
+    font-size: clamp(40px, 9vw, 64px);
+  }
+  .portfolio-introduction {
+    max-width: 340px;
+    font-size: 11px;
+    padding: 0;
+  }
+  .portfolio-filter-row {
+    gap: 16px;
+    padding-block: 16px;
+  }
   .portfolio-showcase .work-filters {
-    gap: 4px;
-    flex-wrap: nowrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
   }
   .portfolio-showcase .work-filters button {
-    font-size: 9px;
-    padding: 9px 6px;
+    font-size: 10px;
+    padding: 10px 12px;
   }
   .portfolio-showcase .work-filters sup {
     font-size: 7px;
     padding-left: 4px;
   }
   .spatial-viewport {
-    height: 550px;
-    max-height: 80svh;
-    min-height: 420px;
-  }
-  .spatial-title {
-    top: 24px;
-  }
-  .spatial-title .cinematic-heading {
-    font-size: clamp(52px, 16vw, 82px);
-  }
-  .spatial-mode-label {
-    font-size: 8px;
-    margin-top: 14px;
+    height: clamp(340px, 58svh, 460px);
   }
   .spatial-camera {
     perspective: 1100px;
   }
   .spatial-controls {
-    padding-top: 16px;
-    gap: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block: 18px;
+    gap: 16px;
+    align-items: end;
   }
   .spatial-layouts {
     display: none;
   }
-  .spatial-layouts button {
-    font-size: 9px;
-    padding: 11px 10px;
+  .spatial-transition {
+    display: grid;
+    gap: 6px;
   }
-  .spatial-layouts button small {
-    display: none;
+  .spatial-transition select {
+    width: 100%;
+    min-height: 44px;
+    font-size: 11px;
   }
   .spatial-bottom {
     gap: 20px;
     align-items: start;
   }
   #spatial-instructions {
-    text-align: right;
     font-size: 9px;
-    margin-left: auto;
+    margin: 0;
+    grid-row: auto;
+    grid-column: auto;
+    text-align: right;
   }
   .spatial-current {
-    min-width: 130px;
-    max-width: 53%;
+    min-width: 0;
+    max-width: none;
   }
   .spatial-navigation {
     width: 100%;
+    grid-column: 1 / -1;
   }
   .spatial-navigation button:nth-child(2) {
     flex: 1;

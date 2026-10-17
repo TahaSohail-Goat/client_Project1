@@ -1,23 +1,17 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { site } from "../../content/site";
 import { Arrow } from "../Arrow";
-
-const navigation = [
-  { label: "Work", id: "work" },
-  { label: "3D study", id: "housing" },
-  { label: "Approach", id: "approach" },
-  { label: "Studio", id: "studio" },
-  { label: "Expertise", id: "expertise" },
-  { label: "Contact", id: "contact" },
-];
+import { navigation } from "../../content/navigation";
+import { scrollToSection, sectionTop } from "../scroll/anchors";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
   const [scrolled, setScrolled] = useState(false);
-  const [overFilm, setOverFilm] = useState(true);
+  const [overHero, setOverHero] = useState(true);
   const toggle = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -30,18 +24,16 @@ export function Header() {
     const update = () => {
       frame = 0;
       setScrolled(window.scrollY > 24);
-      const hero = document.querySelector<HTMLElement>(".video-hero");
+      const hero = document.querySelector<HTMLElement>(".hero-stage");
       const bounds = hero?.getBoundingClientRect();
       const sequence = hero?.closest<HTMLElement>(".hero-sequence");
-      setOverFilm(!!bounds && bounds.top <= 100 && bounds.bottom > 100 &&
+      setOverHero(!!bounds && bounds.top <= 100 && bounds.bottom > 100 &&
         Number(sequence?.dataset.progress ?? 0) < 0.82);
       let current = "";
-      let nearest = -Infinity;
       for (const item of navigation) {
-        const top = document.getElementById(item.id)?.getBoundingClientRect().top;
-        if (top !== undefined && top <= 160 && top > nearest) {
+        const target = document.getElementById(item.id);
+        if (target && sectionTop(target) <= window.scrollY + 160) {
           current = item.id;
-          nearest = top;
         }
       }
       setActive(current);
@@ -53,16 +45,18 @@ export function Header() {
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     window.addEventListener("studio:hero-surface", schedule);
+    ScrollTrigger.addEventListener("refresh", schedule);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       window.removeEventListener("studio:hero-surface", schedule);
+      ScrollTrigger.removeEventListener("refresh", schedule);
     };
   }, []);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1100px)");
+    const desktop = window.matchMedia("(min-width: 1280px)");
     const closeOnDesktop = () => { if (desktop.matches) setOpen(false); };
     desktop.addEventListener("change", closeOnDesktop);
     return () => desktop.removeEventListener("change", closeOnDesktop);
@@ -105,13 +99,7 @@ export function Header() {
     // A repeated anchor still navigates after the user has scrolled away.
     if (location.hash === `#${id}`) {
       requestAnimationFrame(() => {
-        const target = document.getElementById(id);
-        if (!target) return;
-        window.dispatchEvent(new CustomEvent("studio:scroll-to", {
-          detail: target.getBoundingClientRect().top + scrollY - Number(target.dataset.scrollOffset ?? 100),
-        }));
-        target.tabIndex = -1;
-        target.focus({ preventScroll: true });
+        scrollToSection(id);
       });
     }
   };
@@ -119,11 +107,13 @@ export function Header() {
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <header className={`header ${scrolled ? "is-scrolled" : ""} ${overFilm ? "is-over-film" : ""} ${open ? "is-open" : ""}`}>
+      <header className={`header ${scrolled ? "is-scrolled" : ""} ${overHero ? "is-over-hero" : ""} ${open ? "is-open" : ""}`}>
         <Link to="/#main" className="wordmark" aria-label={`${site.name} home`}
           tabIndex={open ? -1 : undefined} onClick={() => navigate("main")}>
-          <span className="wordmark-name">eco<span>28</span><i aria-hidden="true" /></span>
-          <span className="wordmark-description">Architecture & interiors</span>
+          <span className="wordmark-art" aria-hidden="true">
+            <img className="wordmark-logo wordmark-logo-default" src="/media/brand/eco28-logo.svg" alt="" width="888" height="624" />
+            <img className="wordmark-logo wordmark-logo-on-dark" src="/media/brand/eco28-logo-light.svg" alt="" width="888" height="624" />
+          </span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           {navigation.filter((item) => item.id !== "contact").map((item) => (
@@ -133,8 +123,9 @@ export function Header() {
               onClick={() => navigate(item.id)}>{item.label}</Link>
           ))}
         </nav>
-        <Link to="/#contact" className="header-inquiry" aria-label="Discuss a project with eco28" onClick={() => navigate("contact")}>
-          Discuss a project <span><Arrow diagonal /></span>
+        <Link to="/#contact" className="header-inquiry" aria-label="Contact eco28 about a project"
+          aria-current={active === "contact" ? "location" : undefined} onClick={() => navigate("contact")}>
+          Contact <span><Arrow diagonal /></span>
         </Link>
         <button className="menu-toggle" ref={toggle} onClick={() => setOpen(!open)}
           aria-expanded={open} aria-controls="mobile-navigation"
@@ -154,7 +145,7 @@ export function Header() {
               {navigation.map((item, index) => (
                 <Link key={item.id} to={`/#${item.id}`} onClick={() => navigate(item.id)}
                   aria-current={active === item.id ? "location" : undefined}>
-                  <small>0{index + 1}</small><span>{item.label}</span><Arrow diagonal />
+                  <small>{String(index + 1).padStart(2, "0")}</small><span>{item.label}</span><Arrow diagonal />
                 </Link>
               ))}
             </nav>

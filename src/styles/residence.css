@@ -1,12 +1,10 @@
 /* The existing masthead, colors and editorial chapter keep their ownership. */
 .residence-sequence .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
-.residence-sequence .video-shade {
+.residence-sequence .hero-shade {
   background: linear-gradient(180deg,#12191570,transparent 24%,transparent 53%,#121915a8 100%);
 }
-.residence-sequence .video-opening { bottom: 130px; max-width: 630px; }
-.residence-sequence .video-opening h1 { font-size: clamp(52px,6.1vw,100px); }
-.residence-sequence .video-interior-copy,
-.residence-sequence .video-detail-copy { display: none; }
+.residence-sequence .hero-opening { bottom: 130px; max-width: 630px; }
+.residence-sequence .hero-opening h1 { font-size: clamp(52px,6.1vw,100px); }
 .residence-overlay { position:absolute; inset:0; color:var(--ivory); opacity:0; visibility:hidden; pointer-events:none; }
 .residence-caption { position:absolute; bottom:103px; left:var(--gutter); text-shadow:0 2px 28px #16201966; }
 .residence-index { font-size:9px; letter-spacing:.19em; font-weight:600; margin-bottom:16px; }
@@ -30,8 +28,8 @@
 .residence-sequence[data-static="true"] .residence-overlay,
 .residence-sequence[data-static="true"] .residence-finish { display:none; }
 @media(max-width:767px) {
-  .residence-sequence .video-opening { bottom:145px; max-width:340px; }
-  .residence-sequence .video-opening h1 { font-size:clamp(42px,11.8vw,70px); }
+  .residence-sequence .hero-opening { bottom:145px; max-width:340px; }
+  .residence-sequence .hero-opening h1 { font-size:clamp(42px,11.8vw,70px); }
   .residence-sequence .hero-top span:last-child { display:none; }
   .residence-caption { bottom:131px; right:var(--gutter); }
   .residence-caption h2 { font-size:clamp(31px,8vw,47px); max-width:300px; }

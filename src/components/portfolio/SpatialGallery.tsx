@@ -28,7 +28,7 @@ import {
   type GalleryTransition,
 } from "../../content/galleryLayouts";
 import { PhotoImage } from "../PhotoImage";
-import { CinematicHeading } from "../type/CinematicHeading";
+import { Arrow } from "../Arrow";
 
 type CardProps = {
   item: Photo;
@@ -79,7 +79,11 @@ function SpatialCard({
     size.width < 768 ? 260 : 350,
     size.width * (size.width < 768 ? 0.67 : 0.24),
   );
-  const width = item.aspect_ratio < 1 ? base * 0.72 : base;
+  // Reserve room for the number, caption and hover lift, including tall photos.
+  const width = Math.min(
+    item.aspect_ratio < 1 ? base * 0.72 : base,
+    Math.max(140, size.height - 160) * item.aspect_ratio,
+  );
   const height = width / item.aspect_ratio;
   return (
     <m.button
@@ -96,13 +100,13 @@ function SpatialCard({
         marginLeft: -width / 2,
         marginTop: -height / 2,
       }}
-      aria-label={`Open ${item.title} photograph`}
+      aria-label={`${String(index + 1).padStart(2, "0")} ${item.title} — Open photograph`}
       aria-current={active === index ? "true" : undefined}
       onClick={() => onOpen(item, index)}
     >
       <span className="spatial-card-number" aria-hidden="true">
         {String(index + 1).padStart(2, "0")}
-      </span>
+      </span>{" "}
       <m.span
         className="spatial-card-image"
         whileHover={{ scale: 1.025, y: -5 }}
@@ -116,7 +120,7 @@ function SpatialCard({
       </m.span>
       <span className="spatial-card-caption" aria-hidden="true">
         {item.title}
-        <span>↗</span>
+        <Arrow diagonal />
       </span>
     </m.button>
   );
@@ -290,6 +294,43 @@ export function SpatialGallery({
       data-active={active}
       data-transition={transition}
     >
+      <div className="spatial-controls">
+        <div
+          className="spatial-layouts"
+          role="group"
+          aria-label="Gallery arrangement"
+        >
+          {galleryModes.map((value, index) => (
+            <button
+              type="button"
+              key={value}
+              aria-pressed={mode === value}
+              onClick={() => changeMode(value)}
+            >
+              <small aria-hidden="true">{index + 1}</small>
+              {value}
+            </button>
+          ))}
+        </div>
+        <label className="spatial-mobile-layout">
+          Layout
+          <select aria-label="Gallery layout" value={mode}
+            onChange={(event) => changeMode(event.target.value as GalleryMode)}>
+            {galleryModes.map((value) => <option key={value} value={value}>{value}</option>)}
+          </select>
+        </label>
+        <label className="spatial-transition">
+          Transition
+          <select
+            value={transition}
+            onChange={(event) => setTransition(event.target.value as GalleryTransition)}
+          >
+            <option value="scatter">Scatter</option>
+            <option value="flow">Flow</option>
+            <option value="fade">Fade</option>
+          </select>
+        </label>
+      </div>
       <div
         className="spatial-viewport"
         ref={viewport}
@@ -309,23 +350,6 @@ export function SpatialGallery({
           }
         }}
       >
-        <div className="spatial-title">
-          <CinematicHeading
-            id="portfolio-title"
-            animate={false}
-            lines={[{ text: "Selected" }, { text: "work.", italic: true }]}
-          />
-          <span className="spatial-mode-label">
-            {mode} / {String(items.length).padStart(2, "0")} perspectives
-          </span>
-        </div>
-        <label className="spatial-mobile-layout">
-          Layout
-          <select aria-label="Gallery layout" value={mode}
-            onChange={(event) => changeMode(event.target.value as GalleryMode)}>
-            {galleryModes.map((value) => <option key={value} value={value}>{value}</option>)}
-          </select>
-        </label>
         <div className="spatial-camera">
           <div className="spatial-world">
             {items.map((item, index) => (
@@ -348,38 +372,6 @@ export function SpatialGallery({
           </div>
         </div>
         <div className="spatial-viewport-edge" aria-hidden="true" />
-      </div>
-      <div className="spatial-controls">
-        <div
-          className="spatial-layouts"
-          role="group"
-          aria-label="Gallery arrangement"
-        >
-          {galleryModes.map((value, index) => (
-            <button
-              type="button"
-              key={value}
-              aria-pressed={mode === value}
-              onClick={() => changeMode(value)}
-            >
-              <small aria-hidden="true">{index + 1}</small>
-              {value}
-            </button>
-          ))}
-        </div>
-        <label className="spatial-transition">
-          Transition
-          <select
-            value={transition}
-            onChange={(event) =>
-              setTransition(event.target.value as GalleryTransition)
-            }
-          >
-            <option value="scatter">Scatter</option>
-            <option value="flow">Flow</option>
-            <option value="fade">Fade</option>
-          </select>
-        </label>
       </div>
       <div className="spatial-bottom">
         <div className="spatial-current" role="status" aria-live="polite">
@@ -404,7 +396,7 @@ export function SpatialGallery({
           </button>
           <button
             type="button"
-            aria-label="Open selected photograph"
+            aria-label="View photograph"
             onClick={() => onOpen(items[active])}
           >
             View photograph ↗
