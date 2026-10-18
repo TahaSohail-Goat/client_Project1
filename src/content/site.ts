@@ -1,16 +1,14 @@
-// All editorial copy is draft copy for approval. No project associations are implied.
 export const site = {
   name: "eco28",
-  brandPending: false,
   disciplines: "Architecture & Interior Design",
   hero: ["Design, made", "tangible."],
   statement: ["Space. Light.", "A way of living."],
   intro:
-    "An exploration of architecture and interiors. From the scale of a facade to the quiet detail of a room.",
+    "Architecture and interiors, from the first impression to the smallest detail.",
   approach:
-    "A considered relationship between the outside and the inside. Between the places we inhabit and the way we feel within them.",
+    "Spaces shaped around light, proportion and the way we live.",
   studio:
-    "Architecture and interior design, seen together. This portfolio brings architectural perspectives, interior spaces and physical model studies into view.",
+    "We bring architecture and interiors together, with care for how a space looks, feels and works.",
   inquiry: {
     // Set a confirmed studio email OR a same-origin/approved HTTPS JSON POST endpoint.
     email: "tahasohail85@gmail.com",

@@ -1,3 +1,45 @@
+# Deployment review - 18 October 2026
+
+The production build was reviewed locally at http://127.0.0.1:4173. No deployment, commit, push or real inquiry was sent.
+
+**Result:** lint, TypeScript, production build and 10 unique Chromium browser suites passed. The final loading, touch, responsive and accessibility checks were rerun after the last fixes. npm audit reported zero vulnerabilities, including the production dependency audit. Consolidated results: `output/playwright/launch-verified-results.json`.
+
+## Changes
+
+- Removed added wheel inertia and its Lenis runtime dependency. Document scrolling now responds natively on every device; hero scrub is 180ms.
+- Compressed all six residence geometry buffers without changing decoded data: 7,607,980 to 5,192,356 bytes, a 31.8% reduction. All 64 buffer views passed a byte-for-byte decode comparison. Kept photographs, textures, geometry detail and visual credits.
+- The hero does not request its models when a visitor opens a lower section directly. Fixed an intermittent initial-layout race and verified returning to the hero still loads it.
+- Added poster fallback for 2G and devices reporting at most 2 GB memory. Existing reduced-motion, Save-Data and graphics-failure fallbacks remain.
+- Removed approximately 25 KB of emitted JavaScript, unused photo source metadata and redundant CSS. Gallery images no longer request high-priority loading below the fold.
+- Shortened gallery transitions to 550ms and supporting-copy entrances to 400ms, running the latter once.
+- Trimmed repeated studio, portfolio, contact and footer wording.
+- Enabled indexing, added social metadata and shipped Vercel/Netlify cache headers. Updated the deployment instructions.
+
+## Browser coverage
+
+| Suite | Verified |
+| --- | --- |
+| Launch | Contact deep link makes zero residence-asset requests; returning to the hero renders all six compressed models; gallery images remain lazy; indexing enabled |
+| Residence | Four-floor camera path, exact reverse, continuous boundaries, rapid scrolling, native wheel input, resize, mobile, context loss and reduced motion |
+| Navigation | All 10 desktop/mobile links, repeated pinned links, active state, ordered targets and reduced-motion deep link |
+| Gallery controls | Eight arrangements, three transitions, keyboard controls, photo dialog, focus handling and mobile controls |
+| Gallery position | Filters and dialog close preserve chapter, scroll and focus |
+| Routing edges | Malformed and encoded fragments, repeated links and Back/Forward |
+| Contact/footer | Validation, consent, email draft recipient/body, copy/download and footer navigation |
+| Responsive | Eight viewport sizes, 320-1920px widths, all rendered images decode, no horizontal overflow or clipped headings |
+| Native touch | Vertical hero scroll, horizontal gallery swipe and native vertical scrolling through gallery |
+| Accessibility | Zero automated WCAG A/AA violations across desktop, photo dialog, mobile navigation and animated gallery |
+
+The touch test was corrected to scroll its gesture surface into view before dispatching native coordinates; its earlier swipe began below the phone viewport. This did not require a gallery behavior change.
+
+Desktop hero and 320/1440px contact screenshots were visually inspected. Evidence remains in ignored `output/playwright/`.
+
+## Deployment notes
+
+Publish `dist/`. The default inquiry form opens an email draft; direct delivery requires a backend endpoint. Final domain metadata, host response headers and live email handoff should be checked on the chosen host. These are local browser checks, not a universal frame-rate guarantee or a physical Safari/Android hardware test. The 3D vendor bundle remains a large, lazy-loaded chunk; Vite reports that size advisory during the successful build.
+
+---
+
 # eco28 website QA — 17 October 2026
 
 Test target: the local production build at `http://127.0.0.1:4173`.

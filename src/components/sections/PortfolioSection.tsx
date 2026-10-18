@@ -86,8 +86,7 @@ export default function PortfolioSection() {
               lines={[{ text: "Selected" }, { text: "work.", italic: true }]}
             />
             <p className="portfolio-introduction">
-              Architecture, interiors and physical model studies.
-              Select a photograph to explore it in full.
+              Architecture, interiors and model studies.
             </p>
           </div>
           <div className="portfolio-filter-row">

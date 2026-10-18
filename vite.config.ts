@@ -19,7 +19,7 @@ export default defineConfig({
             )
           )
             return "motion";
-          if (/node_modules\/(gsap|lenis)\//.test(path)) return "scroll";
+          if (/node_modules\/gsap\//.test(path)) return "scroll";
         },
       },
     },

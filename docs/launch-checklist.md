@@ -1,36 +1,25 @@
-# Launch checklist
+# Deployment
 
-The local site is ready for review. Deployment and public launch require the following content and operational decisions.
+Use Node 24, run `npm ci` and `npm run check`, then publish `dist/`.
 
-- [ ] Approve studio copy in `src/content/site.ts`, including the introduction, services, and process language.
-- [ ] Confirm permission to publish all 43 photographs and supply photographer credits.
-- [ ] Provide verified project associations before replacing descriptive image titles with case studies.
-- [ ] Approve the concept residence, editorial animation, and mobile/reduced-motion presentations.
-- [x] Apply the confirmed inquiry address `tahasohail85@gmail.com`. Optional phone, WhatsApp, and location details can be added when supplied.
-- [ ] Choose email-draft inquiry handling or configure an approved delivery endpoint as described below.
-- [ ] Confirm hosting, domain, final metadata, and any analytics or CMS requirement.
-- [ ] Review on physical Safari/iOS and a midrange Android device, including graphics performance and the email-app handoff.
-- [ ] After publication approval, update both `index.html` robots metadata and `public/robots.txt` to allow indexing.
-- [ ] Build and deploy `dist/`, then verify SPA rewrites, media responses, contact behavior, and response headers on the chosen host.
+- Vercel: framework Vite, build command `npm run build`, output `dist`. Routing and cache headers are in `vercel.json`.
+- Netlify: build command `npm run build`, publish directory `dist`. Routing and cache headers ship as `_redirects` and `_headers`.
+- Other static hosts: serve existing files directly and return `index.html` for application routes. Cache hashed `/assets/` files for one year; revalidate `/media/` after one day.
 
-The supplied eco28 logo is already applied. Current photographs are organized by discipline, without invented commission names or built-status claims. The residence and courtyard study remain labelled concepts.
+Indexing is enabled. Once the final domain is known, use its absolute URL for `og:image` in `index.html` and add a canonical URL. Check the live home page, `/work`, `/studio`, `/contact`, mobile navigation, photo gallery and inquiry email handoff after deployment. Hosting headers must be checked on the actual host; Vite preview does not apply them.
 
-## Inquiry configuration
+All 43 photographs, SVG branding and visual credits are retained. Source masters and generated QA output are ignored and are not required for deployment. Publish `dist/`, rather than the entire working folder.
 
-Without `VITE_INQUIRY_ENDPOINT`, the form validates the brief, presents a review, and prepares an email draft. Visitors send it from their email application. Copy and text-download alternatives are available.
+## Inquiries
 
-For direct website delivery, copy `.env.example` to `.env.local` and set an approved same-origin or HTTPS endpoint:
+The default form validates and reviews a brief, then opens an email draft addressed to `tahasohail85@gmail.com`. Visitors send the draft from their email app; copy and download alternatives are available. No backend is needed for this mode.
+
+For direct website delivery, set `VITE_INQUIRY_ENDPOINT` before building, for example:
 
 ```dotenv
 VITE_INQUIRY_ENDPOINT=/api/inquiry
 ```
 
-The form sends JSON with `name`, `email`, `discipline`, `location`, `message`, and `consent: true`. Only an HTTP success response with the following JSON confirms receipt:
+The endpoint must accept JSON with `name`, `email`, `discipline`, `location`, `message` and `consent: true`, validate it, and deliver or store the message. Only an HTTP success response containing `{ "received": true }` confirms receipt. The frontend does not supply this server. Keep credentials on the server: Vite environment values are public.
 
-```json
-{ "received": true }
-```
-
-The frontend does not supply this server. The endpoint must validate input, implement spam controls, and deliver/store the inquiry. Keep provider credentials on the server; Vite environment values are public client configuration. The form aborts after 15 seconds, prevents duplicate pending submissions, and preserves input on failure. It clears stale success/review state after edits.
-
-Endpoint browser checks intercept requests locally and send no real inquiries. Actual mailbox delivery still requires a separate launch check.
+The form prevents duplicate pending submissions, times out after 15 seconds and preserves input on failure. Browser delivery checks use intercepted requests and send no real inquiries.

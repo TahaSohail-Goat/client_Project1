@@ -115,7 +115,6 @@ function SpatialCard({
         <PhotoImage
           item={item}
           sizes="(min-width: 768px) 350px, 260px"
-          priority={index === 2}
         />
       </m.span>
       <span className="spatial-card-caption" aria-hidden="true">
@@ -177,7 +176,7 @@ export function SpatialGallery({
     blend.set(0);
     onModeChange(next);
     morph.current = animate(blend, 1, {
-      duration: 1.05,
+      duration: 0.55,
       ease: [0.22, 1, 0.36, 1],
     });
   };

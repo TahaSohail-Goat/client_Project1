@@ -2,7 +2,7 @@
 
 Architecture and interior design portfolio with a scroll-controlled 3D residence, an editorial photo collection, and a project inquiry flow.
 
-Built with React, TypeScript, Vite, Three.js / React Three Fiber, GSAP, and Motion.
+Built with React, TypeScript, Vite, Three.js / React Three Fiber, GSAP, and Motion. Native scrolling, responsive images, lazy-loaded 3D scenes and lossless model compression keep the experience responsive.
 
 ## Getting started
 
@@ -69,4 +69,4 @@ The default inquiry flow reviews a brief and opens an email draft addressed to `
 
 Build with `npm run build` and publish `dist/` to a static host with SPA fallback. Vercel and Netlify routing configuration is included. `/work`, `/studio`, and `/contact` retain compatibility with the single-page experience.
 
-Search indexing remains disabled until launch approval. Follow the [launch checklist](docs/launch-checklist.md) before publishing.
+Search indexing is enabled. Vercel and Netlify cache configuration is included. Follow the [launch checklist](docs/launch-checklist.md) for hosting and inquiry configuration.

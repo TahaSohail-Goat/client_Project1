@@ -1,261 +1,166 @@
 {
-  "package_version": "2.0",
-  "client_photos_total": 18,
-  "caution": "Photos do not establish which images belong to the same actual commission. Show categories, not fabricated projects. Physical architectural model photos are NOT true 3D GLB/CAD. Confirm usage rights.",
   "assets": [
     {
       "id": 1,
       "slug": "exterior-front-twilight",
       "category": "exterior",
       "description": "Front-quarter view of modern two-story home at dusk, two cars by dark pergola",
-      "recommended_use": "Hero alternate; selected work",
-      "original_path": ".local/source-assets/photos/exterior-front-twilight.jpg",
-      "web_ready_path": "public/media/exterior-front-twilight.webp",
       "width": 1080,
       "height": 471,
-      "aspect_ratio": 2.293,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 6.36.36 PM.jpeg",
-      "sha256_original": "41c06568a551626ca7f3aed9711bb9c67e72e0f1d7867fe6264524e63e2f2777"
+      "aspect_ratio": 2.293
     },
     {
       "id": 2,
       "slug": "exterior-rear-facade",
       "category": "exterior",
       "description": "Wide garden-facing elevation with long glazing and warm lighting",
-      "recommended_use": "Exterior scroll reveal",
-      "original_path": ".local/source-assets/photos/exterior-rear-facade.jpg",
-      "web_ready_path": "public/media/exterior-rear-facade.webp",
       "width": 1080,
       "height": 540,
-      "aspect_ratio": 2.0,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 6.36.37 PM (1).jpeg",
-      "sha256_original": "3f5ed2857b8ac45c7ece53ccf0c0030893f14d419840a8b8776a808deb1d7f50"
+      "aspect_ratio": 2
     },
     {
       "id": 3,
       "slug": "exterior-side-landscape",
       "category": "exterior",
       "description": "Low-angle side elevation with lawn, concrete retaining wall",
-      "recommended_use": "Exterior panel reveal",
-      "original_path": ".local/source-assets/photos/exterior-side-landscape.jpg",
-      "web_ready_path": "public/media/exterior-side-landscape.webp",
       "width": 1080,
       "height": 475,
-      "aspect_ratio": 2.274,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 6.36.37 PM (2).jpeg",
-      "sha256_original": "20f0fa3c6296144a2af31fb30c9393ca0259ed50b3bc5e2442f0ef1ea28470ee"
+      "aspect_ratio": 2.274
     },
     {
       "id": 4,
       "slug": "exterior-driveway-golden-hour",
       "category": "exterior",
       "description": "Front-quarter view of modern house with canopy and two cars at golden hour",
-      "recommended_use": "Primary hero",
-      "original_path": ".local/source-assets/photos/exterior-driveway-golden-hour.jpg",
-      "web_ready_path": "public/media/exterior-driveway-golden-hour.webp",
       "width": 1080,
       "height": 607,
-      "aspect_ratio": 1.779,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 6.36.37 PM.jpeg",
-      "sha256_original": "1f61d86329c546819f0ff9a19f5133abeedc587c30e977d05d9fcc36d0b1aa32"
+      "aspect_ratio": 1.779
     },
     {
       "id": 5,
       "slug": "interior-bedroom-classic",
       "category": "interior",
       "description": "Luxury warm bedroom with decorative wall moldings and desk chair",
-      "recommended_use": "Bedrooms gallery",
-      "original_path": ".local/source-assets/photos/interior-bedroom-classic.jpg",
-      "web_ready_path": "public/media/interior-bedroom-classic.webp",
       "width": 1169,
       "height": 590,
-      "aspect_ratio": 1.981,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.22 AM (1).jpeg",
-      "sha256_original": "6cebb17ea0172a987f900ab7ca9829b3294702ae2f991427f18673fd680e2267"
+      "aspect_ratio": 1.981
     },
     {
       "id": 6,
       "slug": "interior-bedroom-marble",
       "category": "interior",
       "description": "Vertical bedroom and vanity area with glossy dark stone floor",
-      "recommended_use": "Portrait bedroom/interior gallery",
-      "original_path": ".local/source-assets/photos/interior-bedroom-marble.jpg",
-      "web_ready_path": "public/media/interior-bedroom-marble.webp",
       "width": 904,
       "height": 1280,
-      "aspect_ratio": 0.706,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.22 AM.jpeg",
-      "sha256_original": "a4705d33a9281a76eedeb59f952ab7b51739fca410aa415f37033ee4c8cf7347"
+      "aspect_ratio": 0.706
     },
     {
       "id": 7,
       "slug": "interior-lounge-bar",
       "category": "interior",
       "description": "Warm wood and glass bar/lounge with shelving and indoor tree",
-      "recommended_use": "Living/lifestyle gallery",
-      "original_path": ".local/source-assets/photos/interior-lounge-bar.jpg",
-      "web_ready_path": "public/media/interior-lounge-bar.webp",
       "width": 1280,
       "height": 639,
-      "aspect_ratio": 2.003,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.23 AM (1).jpeg",
-      "sha256_original": "5a0d97e5541c0993312e5fe38ce2442369f1419a3744b36e46b8d95d51a789a8"
+      "aspect_ratio": 2.003
     },
     {
       "id": 8,
       "slug": "interior-display-wall",
       "category": "interior",
       "description": "Muted built-in wall with sculptural display and linear warm lighting",
-      "recommended_use": "Details/materials story",
-      "original_path": ".local/source-assets/photos/interior-display-wall.jpg",
-      "web_ready_path": "public/media/interior-display-wall.webp",
       "width": 1280,
       "height": 639,
-      "aspect_ratio": 2.003,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.23 AM (2).jpeg",
-      "sha256_original": "a44229c79bb248631f8d384583b1e641f7ce09b1df30a29b9db2ac51f2e8ce3e"
+      "aspect_ratio": 2.003
     },
     {
       "id": 9,
       "slug": "interior-bedroom-minimal",
       "category": "interior",
       "description": "Bright minimal cream bedroom with pendant ceiling fan",
-      "recommended_use": "Bedroom gallery",
-      "original_path": ".local/source-assets/photos/interior-bedroom-minimal.jpg",
-      "web_ready_path": "public/media/interior-bedroom-minimal.webp",
       "width": 904,
       "height": 1280,
-      "aspect_ratio": 0.706,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.24 AM (1).jpeg",
-      "sha256_original": "1ca651c59676df9fbc8f8b88ff81632463959665ce9b17be76ef96df8a1ffa31"
+      "aspect_ratio": 0.706
     },
     {
       "id": 10,
       "slug": "interior-bathroom-warmstone",
       "category": "interior",
       "description": "Warm stone bathroom, sink, mirrored cabinet and glass shower",
-      "recommended_use": "Bathroom gallery",
-      "original_path": ".local/source-assets/photos/interior-bathroom-warmstone.jpg",
-      "web_ready_path": "public/media/interior-bathroom-warmstone.webp",
       "width": 904,
       "height": 1280,
-      "aspect_ratio": 0.706,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.24 AM.jpeg",
-      "sha256_original": "794845e212688f43fddeb7eaf35f7afeac01c489712add61a69e3c39c76cb525"
+      "aspect_ratio": 0.706
     },
     {
       "id": 11,
       "slug": "interior-walkin-closet",
       "category": "interior",
       "description": "Symmetrical walk-in wardrobe with glass doors and center island",
-      "recommended_use": "Closet gallery",
-      "original_path": ".local/source-assets/photos/interior-walkin-closet.jpg",
-      "web_ready_path": "public/media/interior-walkin-closet.webp",
       "width": 1280,
       "height": 639,
-      "aspect_ratio": 2.003,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.25 AM (1).jpeg",
-      "sha256_original": "4f85260bffec83bb09fa97f0773b33270a4c24c76bca8cbb071f74c824bea895"
+      "aspect_ratio": 2.003
     },
     {
       "id": 12,
       "slug": "interior-reading-nook",
       "category": "interior",
       "description": "Two lounge chairs beside a window with blinds and centered lamp",
-      "recommended_use": "Reading nook gallery",
-      "original_path": ".local/source-assets/photos/interior-reading-nook.jpg",
-      "web_ready_path": "public/media/interior-reading-nook.webp",
       "width": 1280,
       "height": 639,
-      "aspect_ratio": 2.003,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.25 AM (2).jpeg",
-      "sha256_original": "8bcd48687a30acf514e093daf7de20c17078d39427c07f84e49153cd318fd2fa"
+      "aspect_ratio": 2.003
     },
     {
       "id": 13,
       "slug": "interior-study-shelf",
       "category": "interior",
       "description": "Wood-paneled built-in bookshelves and accent lighting beside black chair",
-      "recommended_use": "Study/details story",
-      "original_path": ".local/source-assets/photos/interior-study-shelf.jpg",
-      "web_ready_path": "public/media/interior-study-shelf.webp",
       "width": 1280,
       "height": 639,
-      "aspect_ratio": 2.003,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.26 AM (1).jpeg",
-      "sha256_original": "82e9e6cce81d27385ace4d069f946808c5bfc92dc85658a069d39ff0b845e1b6"
+      "aspect_ratio": 2.003
     },
     {
       "id": 14,
       "slug": "interior-compact-bedroom",
       "category": "interior",
       "description": "Narrow warm neutral bedroom with wardrobe and shelving",
-      "recommended_use": "Portrait bedroom gallery",
-      "original_path": ".local/source-assets/photos/interior-compact-bedroom.jpg",
-      "web_ready_path": "public/media/interior-compact-bedroom.webp",
       "width": 904,
       "height": 1280,
-      "aspect_ratio": 0.706,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.26 AM (2).jpeg",
-      "sha256_original": "831f298667ea1ec63712a57257da693d0a8acc97879eb5bdf739b7b83aedb3a6"
+      "aspect_ratio": 0.706
     },
     {
       "id": 15,
       "slug": "interior-dining-living",
       "category": "interior",
       "description": "Living and dining area with dark furniture and stone finishes",
-      "recommended_use": "Dining and living gallery",
-      "original_path": ".local/source-assets/photos/interior-dining-living.jpg",
-      "web_ready_path": "public/media/interior-dining-living.webp",
       "width": 1280,
       "height": 639,
-      "aspect_ratio": 2.003,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.26 AM.jpeg",
-      "sha256_original": "a2f0c0a40cf0e028e898c5f2bb10ce86c84f9f3184a252f8d672ba3e2163864e"
+      "aspect_ratio": 2.003
     },
     {
       "id": 16,
       "slug": "model-front-facade",
       "category": "architectural_model",
       "description": "Physical miniature architectural model of multi-level building, front view",
-      "recommended_use": "Concept/model gallery",
-      "original_path": ".local/source-assets/photos/model-front-facade.jpg",
-      "web_ready_path": "public/media/model-front-facade.webp",
       "width": 1363,
       "height": 1136,
-      "aspect_ratio": 1.2,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.29 AM (1).jpeg",
-      "sha256_original": "fd409b0f45a657fac229510cef6e9af3eb8eb1e853e9a5a0eb8deae950326903"
+      "aspect_ratio": 1.2
     },
     {
       "id": 17,
       "slug": "model-top-perspective",
       "category": "architectural_model",
       "description": "Physical miniature building model, roof and terrace view",
-      "recommended_use": "Concept/model gallery",
-      "original_path": ".local/source-assets/photos/model-top-perspective.jpg",
-      "web_ready_path": "public/media/model-top-perspective.webp",
       "width": 1302,
       "height": 1068,
-      "aspect_ratio": 1.219,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.30 AM (1).jpeg",
-      "sha256_original": "33526962382457c08167f94d6878d4d98145a39a5d9e7bfd1a7ede9131c518f0"
+      "aspect_ratio": 1.219
     },
     {
       "id": 18,
       "slug": "model-open-cross-section",
       "category": "architectural_model",
       "description": "Physical miniature building model revealing floors and rooms",
-      "recommended_use": "Concept/model gallery",
-      "original_path": ".local/source-assets/photos/model-open-cross-section.jpg",
-      "web_ready_path": "public/media/model-open-cross-section.webp",
       "width": 1444,
       "height": 1033,
-      "aspect_ratio": 1.398,
-      "source_client_filename": "WhatsApp Image 2026-10-13 at 9.35.30 AM.jpeg",
-      "sha256_original": "ae198257c91de51d175b0c9e7bac3b387fec9d21af67a3ed431e3b32353b5185"
+      "aspect_ratio": 1.398
     }
-  ],
-  "business_type": "Architecture and interior design studio portfolio (confirmed by client)",
-  "site_intent": "Showcase architectural and interior design imagery, studio philosophy, and generate consultation inquiries, not property listings."
+  ]
 }

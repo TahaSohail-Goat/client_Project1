@@ -23,6 +23,8 @@ async page => {
     if(Number(hero)<=0) throw Error('Native vertical touch did not move the hero camera');
     await phone.evaluate(()=>{const e=document.querySelector('#work');window.dispatchEvent(new CustomEvent('studio:scroll-to',{detail:e.getBoundingClientRect().top+scrollY-80}));});
     await phone.waitForTimeout(700);
+    // Put the gesture surface inside the phone viewport before sending native coordinates.
+    await phone.locator('.spatial-viewport').scrollIntoViewIfNeeded();
     const stage=await phone.locator('.spatial-viewport').boundingBox();
     const prior=Number(await phone.locator('.spatial-gallery').getAttribute('data-active'));
     const top=await phone.evaluate(()=>scrollY);

@@ -21,7 +21,6 @@ export function Footer() {
             <img src="/media/brand/eco28-logo-light.svg" alt="" width="888" height="624" loading="lazy" />
           </Link>
           <p>Architecture and interiors,<br />considered together.</p>
-          <span className="footer-discipline">{site.disciplines}</span>
         </div>
         <nav className="footer-navigation" aria-label="Footer navigation">
           <h2 className="eyebrow">Explore</h2>

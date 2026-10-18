@@ -79,7 +79,7 @@ export default function InquirySection() {
         <CinematicHeading id="contact-title" lines={[
           { text: "Tell us about" }, { text: "your next space.", italic: true },
         ]} />
-        <p className="contact-intro-copy">A place to live. A space to work. Something entirely your own. Tell us what you have in mind.</p>
+        <p className="contact-intro-copy">Share your ideas, priorities and plans.</p>
       </div>
       <div className="contact-layout">
         <aside className="contact-context" aria-label="About your project">
@@ -91,7 +91,7 @@ export default function InquirySection() {
           </figure>
           <div className="contact-context-copy">
             <h3>From the first idea<br />to the finest detail.</h3>
-            <p>Architecture and interiors, considered together. Share your ideas, your priorities, and the possibilities you see.</p>
+            <p>A home, a workplace, a new possibility. Let’s explore it together.</p>
           </div>
           <dl className="contact-details">
             <div><dt>Our disciplines</dt><dd>Architecture &amp; Interior Design</dd></div>
@@ -103,7 +103,7 @@ export default function InquirySection() {
           <Link className="line-link" to="/#work">Explore our work <Arrow diagonal /></Link>
         </aside>
         <div className="contact-form-wrap">
-          <div className="contact-form-heading"><span className="eyebrow">Your project brief</span><span>01 / A few details</span></div>
+          <div className="contact-form-heading"><span className="eyebrow">Your project brief</span></div>
           <form onSubmit={submit} className="inquiry-form" aria-label="Project inquiry" aria-busy={status === "sending"} onInput={event => {
             const field = event.target;
             if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) field.setCustomValidity("");

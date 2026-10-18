@@ -571,12 +571,6 @@ body {
   max-width: 450px;
   font-size: 14px;
 }
-.page-intro > span {
-  font-size: 10px;
-  color: var(--muted);
-  line-height: 1.7;
-  text-align: right;
-}
 .portfolio {
   padding-top: 0;
 }
@@ -665,13 +659,6 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
-}
-.portfolio-note {
-  font-size: 11px;
-  color: var(--muted);
-  border-top: 1px solid var(--line);
-  margin-top: 75px;
-  padding-top: 25px;
 }
 .lightbox {
   background: #1b211b;
@@ -1308,11 +1295,6 @@ body {
   .page-intro {
     display: block;
   }
-  .page-intro > span {
-    display: block;
-    text-align: left;
-    margin-top: 25px;
-  }
   .work-filters {
     gap: 20px;
   }
@@ -1369,9 +1351,6 @@ body {
   .lightbox-controls button {
     width: 38px;
     height: 44px;
-  }
-  .portfolio-note {
-    margin-top: 40px;
   }
 }
 @media (max-width: 767px) {

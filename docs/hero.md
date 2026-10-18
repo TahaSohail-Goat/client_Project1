@@ -36,7 +36,7 @@ Local PBR maps, authored furniture, foliage, area fills, HDR lighting, and AgX o
 
 The scene renders on demand. Canvas DPR is capped at 1.5, desktop postprocessing at 1.25; shadow maps are 2048px on desktop and 1024px on mobile. Materials compile asynchronously before the first reveal. Matching desktop/mobile posters cover loading.
 
-Reduced motion, Save-Data, viewport height of 500px or less, initialization failure, and WebGL context loss show the same-house poster with ordinary content and navigation. No video or image-sequence fallback is shipped.
+Reduced motion, Save-Data, 2G connections, devices reporting at most 2 GB of memory, viewport height of 500px or less, initialization failure, and WebGL context loss show the same-house poster with ordinary content and navigation. The hero scene loads only when it enters the viewport. No video or image-sequence fallback is shipped.
 
 ## Maintenance
 

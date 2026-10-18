@@ -42,7 +42,6 @@ export function AccessibleLightbox({
       className="lightbox"
       aria-labelledby="lightbox-title"
       aria-describedby="lightbox-description"
-      data-lenis-prevent
       onCancel={(event) => {
         event.preventDefault();
         onClose();

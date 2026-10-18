@@ -1,6 +1,6 @@
 # Motion architecture
 
-GSAP owns scroll-linked transforms and pins. Motion owns navigation, supporting-copy entrances, pointer interactions, and the spatial photo gallery. Lenis smooths eligible desktop document scrolling through the shared GSAP ticker; mobile uses native scrolling.
+GSAP owns scroll-linked transforms and pins. Motion owns navigation, supporting-copy entrances, pointer interactions, and the spatial photo gallery. All devices use native document scrolling, without an extra animation ticker or added wheel inertia. The hero camera follows with a short 180ms scrub, gallery arrangement changes take 550ms, and supporting-copy entrances run once.
 
 Keep these owners on separate DOM nodes. Revert GSAP contexts, remove listeners, cancel scheduled frames, and dispose owned graphics resources when components unmount or motion preferences change.
 

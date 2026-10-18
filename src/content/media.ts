@@ -6,9 +6,6 @@ export type Photo = {
   slug: string;
   category: Category;
   description: string;
-  recommended_use?: string;
-  original_path?: string;
-  web_ready_path?: string;
   width: number;
   height: number;
   aspect_ratio: number;

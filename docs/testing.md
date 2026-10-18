@@ -30,6 +30,7 @@ Use one browser session at a time for graphics-heavy checks. Ensure the selected
 
 | Area | Scripts in `tests/browser/` |
 | --- | --- |
+| Launch loading and delivery budget | `launch-smoke.js` |
 | Hero and whole-page motion | `residence-smoke.js`, `cinematic-smoke.js` |
 | Section controls and graphics recovery | `scene-controls-smoke.js`, `exterior-ready-smoke.js`, `fallback-smoke.js` |
 | Portfolio and photo dialog | `spatial-gallery-smoke.js`, `gallery-controls-smoke.js`, `gallery-position-smoke.js`, `photo-collection-smoke.js` |

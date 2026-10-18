@@ -136,7 +136,7 @@ export function Header() {
       </header>
       <AnimatePresence>
         {open && (
-          <m.div id="mobile-navigation" ref={panel} className="mobile-navigation" data-lenis-prevent
+          <m.div id="mobile-navigation" ref={panel} className="mobile-navigation"
             role="dialog" aria-modal="true" aria-label="Site navigation"
             initial={{ opacity: 0, y: reduced ? 0 : -12 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : 0.22 }}>

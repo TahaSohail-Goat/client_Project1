@@ -28,7 +28,7 @@ async page => {
     },p);
     // Scroll positions are whole CSS pixels; allow one pixel's normalized error.
     await page.waitForFunction(p=>Math.abs(Number(document.querySelector('.hero-walkthrough canvas')?.dataset.progress)-p)<.0003,p);
-    // Wait beyond the 450ms desktop scrub so reads are settled, not in flight.
+    // Wait beyond the 180ms camera scrub so reads are settled, not in flight.
     await page.waitForTimeout(650);
     return camera();
   };
@@ -74,7 +74,7 @@ async page => {
   },p);
   await page.waitForTimeout(1000);
   if(await camera()!==poses[.59])throw Error('Rapid scroll did not settle on the latest pose');
-  // Exercise real wheel input through the existing Lenis/native scroll integration.
+  // Exercise real wheel input through native document scrolling.
   await seek(.285);await page.mouse.wheel(0,500);await page.waitForTimeout(1300);
   if(Number(await canvas().getAttribute('data-progress'))<=.285)throw Error('Downward wheel did not advance');
   await page.mouse.wheel(0,-500);await page.waitForTimeout(1300);

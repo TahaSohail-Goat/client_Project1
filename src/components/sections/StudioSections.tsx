@@ -18,11 +18,6 @@ export function StudioIntro() {
         />
         <div className="page-intro">
           <p>{site.studio}</p>
-          <span>
-            Studio introduction
-            <br />
-            Architecture & interiors
-          </span>
         </div>
       </section>
       <div className="studio-banner">
@@ -70,8 +65,7 @@ export function StudioExpertiseSection() {
             and proportion.
           </h3>
           <p>
-            Explore the exterior studies: a collection of facades, garden-facing
-            elevations and architectural perspectives.
+            Facades, garden-facing elevations and architectural perspectives.
           </p>
           <Link className="line-link" to="/?category=Architecture#work">
             View architecture <Arrow diagonal />
@@ -91,8 +85,7 @@ export function StudioExpertiseSection() {
             everyday life.
           </h3>
           <p>
-            Explore the interior studies, from living and dining spaces to
-            bedrooms, wardrobes and quiet details.
+            Living spaces, bedrooms and the details that make a room your own.
           </p>
           <Link className="line-link" to="/?category=Interiors#work">
             View interiors <Arrow diagonal />
@@ -103,10 +96,6 @@ export function StudioExpertiseSection() {
           sizes="(min-width:768px) 50vw, 100vw"
         />
       </div>
-      <p className="portfolio-note">
-        Architecture and interior design, explored through form, light and the
-        spaces of everyday life.
-      </p>
     </section>
   );
 }

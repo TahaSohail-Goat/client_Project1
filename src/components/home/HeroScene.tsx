@@ -19,6 +19,7 @@ import { canUseVisionThree } from "../three/visionCapabilities";
 import { CanvasBoundary } from "../three/CanvasBoundary";
 import { heroWalkthrough } from "../../content/heroWalkthrough";
 import { ResidenceOverlay } from "./ResidenceOverlay";
+import { sectionId } from "../scroll/anchors";
 
 const HeroWalkthroughCanvas = lazy(() => import("../three/HeroWalkthroughCanvas"));
 
@@ -31,11 +32,14 @@ const mediaEvents = gsap as typeof gsap & {
   removeEventListener(event: MediaEvent, callback: () => void): void;
 };
 function canAnimate() {
-  const saveData = (
-    navigator as Navigator & { connection?: { saveData?: boolean } }
-  ).connection?.saveData;
+  const device = navigator as Navigator & {
+    deviceMemory?: number;
+    connection?: { saveData?: boolean; effectiveType?: string };
+  };
   return (
-    !saveData &&
+    !device.connection?.saveData &&
+    !["slow-2g", "2g"].includes(device.connection?.effectiveType ?? "") &&
+    (device.deviceMemory === undefined || device.deviceMemory > 2) &&
     !matchMedia("(prefers-reduced-motion: reduce), (max-height: 500px)").matches
   );
 }
@@ -52,6 +56,7 @@ export function HeroScene() {
   const [failed, setFailed] = useState(false);
   const [loadVision, setLoadVision] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
+  const [loadScene, setLoadScene] = useState(false);
   const [small] = useState(() => matchMedia("(max-width: 767px)").matches);
   const motion = enabled && !failed;
   const poster = small ? heroWalkthrough.mobilePoster : heroWalkthrough.poster;
@@ -61,10 +66,40 @@ export function HeroScene() {
   const sceneEnd = heroWalkthrough.sceneEnd;
 
   useEffect(() => {
-    if (!motion || sceneReady) return;
+    if (!motion || !loadScene || sceneReady) return;
     const timer = window.setTimeout(onFailure, 25000);
     return () => clearTimeout(timer);
-  }, [motion, sceneReady, onFailure]);
+  }, [motion, loadScene, sceneReady, onFailure]);
+
+  useEffect(() => {
+    if (!motion || loadScene) return;
+    const target = document.getElementById(sectionId(window.location.hash));
+    // A pin refresh can briefly expose the hero during initial deep-link layout.
+    // Wait for actual navigation before loading a scene the visitor skipped.
+    let awaitingNavigation = !!target && target.id !== "main" && !root.current?.contains(target);
+    const allowNavigation = () => {
+      if (!awaitingNavigation) return;
+      awaitingNavigation = false;
+      observer.unobserve(root.current!);
+      observer.observe(root.current!);
+    };
+    const events = ["wheel", "touchstart", "pointerdown", "keydown", "studio:scroll-to", "popstate", "hashchange"];
+    events.forEach(event => window.addEventListener(event, allowNavigation, { passive: true }));
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || awaitingNavigation) return;
+      setLoadScene(true);
+      observer.disconnect();
+    });
+    // Let initial hash navigation settle before deciding whether the hero is visible.
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => observer.observe(root.current!));
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      events.forEach(event => window.removeEventListener(event, allowNavigation));
+    };
+  }, [motion, loadScene]);
 
   useEffect(() => {
     const preference = matchMedia(
@@ -155,7 +190,7 @@ export function HeroScene() {
             start: "top top",
             end: () => `+=${innerHeight * (desktop ? heroWalkthrough.desktopScroll : heroWalkthrough.mobileScroll)}`,
             pin: true,
-            scrub: desktop ? 0.45 : 0.25,
+            scrub: 0.18,
             invalidateOnRefresh: true,
             anticipatePin: 1,
           },
@@ -276,7 +311,7 @@ export function HeroScene() {
             fetchPriority="high"
           />
           </picture>
-          {motion && <div className={`hero-walkthrough ${ready ? "is-ready" : ""}`}>
+          {motion && loadScene && <div className={`hero-walkthrough ${ready ? "is-ready" : ""}`}>
             <CanvasBoundary onFailure={onFailure}>
               <Suspense fallback={null}>
                 <HeroWalkthroughCanvas progress={progress} redraw={sceneRedraw} overlay={residenceOverlay}
