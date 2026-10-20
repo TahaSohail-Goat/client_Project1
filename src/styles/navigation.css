@@ -18,18 +18,9 @@
   background: rgb(242 237 229 / 94%);
   backdrop-filter: blur(18px);
 }
-.header.is-over-hero:not(.is-open) {
-  color: var(--ivory);
-  background: linear-gradient(#1014119c, #10141120);
-  border-color: #f2ede533;
-  backdrop-filter: none;
-}
 .wordmark { display: inline-flex; align-items: center; justify-self: start; }
 .wordmark-art { display: grid; width: 96px; aspect-ratio: 888 / 624; }
 .wordmark-logo { grid-area: 1 / 1; display: block; width: 100%; height: 100%; object-fit: contain; }
-.wordmark-logo-on-dark { opacity: 0; }
-.header.is-over-hero:not(.is-open) .wordmark-logo-default { opacity: 0; }
-.header.is-over-hero:not(.is-open) .wordmark-logo-on-dark { opacity: 1; }
 .desktop-nav { display: flex; align-items: center; justify-content: center; gap: 2px; }
 .desktop-nav a {
   position: relative;
@@ -46,8 +37,6 @@
 }
 .desktop-nav a::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--bronze); opacity: 0; transition: opacity 0.2s; }
 .desktop-nav a:hover, .desktop-nav a.active { color: #765739; }
-.header.is-over-hero:not(.is-open) .desktop-nav a:hover,
-.header.is-over-hero:not(.is-open) .desktop-nav a.active { color: #efd4b0; }
 .desktop-nav a.active::before { opacity: 1; }
 .header-inquiry { justify-self: end; display: inline-flex; align-items: center; gap: 22px; font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 20px; min-height: 44px; background: var(--bronze); color: var(--charcoal); }
 .header-inquiry > span { display: grid; place-items: center; width: 18px; height: 34px; }

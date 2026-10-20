@@ -11,7 +11,6 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
   const [scrolled, setScrolled] = useState(false);
-  const [overHero, setOverHero] = useState(true);
   const toggle = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -24,11 +23,6 @@ export function Header() {
     const update = () => {
       frame = 0;
       setScrolled(window.scrollY > 24);
-      const hero = document.querySelector<HTMLElement>(".hero-stage");
-      const bounds = hero?.getBoundingClientRect();
-      const sequence = hero?.closest<HTMLElement>(".hero-sequence");
-      setOverHero(!!bounds && bounds.top <= 100 && bounds.bottom > 100 &&
-        Number(sequence?.dataset.progress ?? 0) < 0.82);
       let current = "";
       for (const item of navigation) {
         const target = document.getElementById(item.id);
@@ -44,13 +38,11 @@ export function Header() {
     update();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
-    window.addEventListener("studio:hero-surface", schedule);
     ScrollTrigger.addEventListener("refresh", schedule);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
-      window.removeEventListener("studio:hero-surface", schedule);
       ScrollTrigger.removeEventListener("refresh", schedule);
     };
   }, []);
@@ -107,12 +99,11 @@ export function Header() {
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <header className={`header ${scrolled ? "is-scrolled" : ""} ${overHero ? "is-over-hero" : ""} ${open ? "is-open" : ""}`}>
+      <header className={`header ${scrolled ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
         <Link to="/#main" className="wordmark" aria-label={`${site.name} home`}
           tabIndex={open ? -1 : undefined} onClick={() => navigate("main")}>
           <span className="wordmark-art" aria-hidden="true">
-            <img className="wordmark-logo wordmark-logo-default" src="/media/brand/eco28-logo.svg" alt="" width="888" height="624" />
-            <img className="wordmark-logo wordmark-logo-on-dark" src="/media/brand/eco28-logo-light.svg" alt="" width="888" height="624" />
+            <img className="wordmark-logo" src="/media/brand/eco28-logo.svg" alt="" width="888" height="624" />
           </span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
@@ -125,7 +116,7 @@ export function Header() {
         </nav>
         <Link to="/#contact" className="header-inquiry" aria-label="Contact eco28 about a project"
           aria-current={active === "contact" ? "location" : undefined} onClick={() => navigate("contact")}>
-          Contact <span><Arrow diagonal /></span>
+          Contact Us <span><Arrow diagonal /></span>
         </Link>
         <button className="menu-toggle" ref={toggle} onClick={() => setOpen(!open)}
           aria-expanded={open} aria-controls="mobile-navigation"

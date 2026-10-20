@@ -8,7 +8,7 @@
 | --- | --- |
 | Root photo WebPs | 18 photographs from the original client collection |
 | `supplemental/` | 25 additional client photographs |
-| `brand/` | Transparent dark/light logo and light footer wordmark SVGs |
+| `brand/` | Fixed transparent logo (including its legacy light filename) and light footer wordmark SVGs |
 | `hero-study/` | Desktop/mobile residence posters and the plaster surface map |
 | `residence-realism/` | Furniture, plants, PBR textures, HDR environment, and credits |
 
@@ -19,6 +19,8 @@ The 43-photo collection comprises 11 architecture, 25 interior, and 7 physical-m
 ## Brand
 
 The logo comes from the client-supplied Illustrator PDF. Its vector paths and wordmark opacity mask are preserved; the page background is omitted. The mountain symbol supplies `public/favicon.svg`.
+
+The full logo keeps the supplied dark mountain and underline on every background, without theme-based recoloring. The header and footer use the same asset; the footer provides a light backing for legibility. The standalone footer wordmark remains light.
 
 The source PDF is preserved locally at `.local/source-assets/eco28-logo.pdf`. To regenerate the SVG exports:
 

@@ -1,6 +1,6 @@
 # eco28
 
-Architecture and interior design portfolio with a scroll-controlled 3D residence, an editorial photo collection, and a project inquiry flow.
+Architecture and interior design portfolio with the original animated hero followed by six modules: Interiors, Materials, Models, Portfolio, Studio, and Contact Us. The retained modules keep their existing content, layouts, and interactions.
 
 Built with React, TypeScript, Vite, Three.js / React Three Fiber, GSAP, and Motion. Native scrolling, responsive images, lazy-loaded 3D scenes and lossless model compression keep the experience responsive.
 

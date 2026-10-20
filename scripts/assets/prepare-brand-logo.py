@@ -53,14 +53,14 @@ def main():
             "mask": "url(#wordmark-opacity)",
         })
 
-    for name, light in [("eco28-logo.svg", False), ("eco28-logo-light.svg", True)]:
+    # The supplied full logo is fixed across backgrounds. Keep the legacy light
+    # filename identical so an asset rebuild cannot recolor its mountain or line.
+    for name in ["eco28-logo.svg", "eco28-logo-light.svg"]:
         root = svg("100 208 888 624", 888, 624)
         for source in paths:
             path = deepcopy(source)
-            if light and path.get("fill") in ("#424342", "#454545"):
-                path.set("fill", "#f2ede5")
             root.append(path)
-        wordmark(root, "#f2ede5" if light else "#030404")
+        wordmark(root, "#030404")
         save(root, DEST / name)
 
     root = svg("170 664 765 168", 765, 168)
@@ -68,12 +68,8 @@ def main():
     save(root, DEST / "eco28-wordmark-light.svg")
 
     icon = svg("84 -15 920 920", 64, 64)
-    style = ET.SubElement(icon, f"{{{NS}}}style")
-    style.text = "@media(prefers-color-scheme:dark){.neutral{fill:#f2ede5}}"
     for source in paths:
         path = deepcopy(source)
-        if path.get("fill") in ("#424342", "#454545"):
-            path.set("class", "neutral")
         icon.append(path)
     save(icon, ROOT / "public/favicon.svg")
 

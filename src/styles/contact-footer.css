@@ -63,7 +63,7 @@
 .footer { display: block; padding: 64px var(--gutter) 26px; }
 .footer .footer-top { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .7fr) minmax(0, 1fr); gap: 6vw; }
 .footer .footer-identity { min-width: 0; }
-.footer .footer-brand { width: 116px; }
+.footer .footer-brand { width: 116px; padding: 8px; background: var(--ivory); }
 .footer-identity > p { margin-top: 24px; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.5; letter-spacing: -.03em; }
 .footer .eyebrow { margin-bottom: 22px; color: var(--bronze); font-family: var(--sans); font-size: 9px; letter-spacing: .14em; line-height: 1.6; font-weight: 500; }
 .footer-navigation { display: flex; flex-direction: column; align-items: stretch; }

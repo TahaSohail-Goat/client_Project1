@@ -18,7 +18,7 @@ export function Footer() {
       <div className="footer-top">
         <div className="footer-identity">
           <Link className="footer-brand" to="/#main" aria-label={`${site.name} home`} onClick={() => navigate("main")}>
-            <img src="/media/brand/eco28-logo-light.svg" alt="" width="888" height="624" loading="lazy" />
+            <img src="/media/brand/eco28-logo.svg" alt="" width="888" height="624" loading="lazy" />
           </Link>
           <p>Architecture and interiors,<br />considered together.</p>
         </div>

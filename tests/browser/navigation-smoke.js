@@ -1,12 +1,13 @@
 async page => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  const ids = ['selected-work', 'interiors', 'considered-detail', 'housing', 'model-studies', 'approach', 'work', 'studio', 'expertise', 'contact'];
+  const ids = ['interiors', 'considered-detail', 'model-studies', 'work', 'studio', 'contact'];
   const assert = (condition, message) => { if (!condition) throw Error(message); };
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`http://127.0.0.1:4173/?navigation-qa=${Date.now()}`);
-  await page.waitForFunction(() => ['webgl', 'static'].includes(document.querySelector('.hero-sequence')?.dataset.renderer), null, { timeout: 45000 });
+  await page.locator('#interiors').waitFor();
+  assert(await page.locator('#selected-work, #housing, #approach, #expertise, .architectural-ribbon, .studio-home, .consultation').count() === 0, 'A removed module is still rendered');
   const desktopIds = await page.locator('.desktop-nav a, .header-inquiry').evaluateAll(links => links.map(link => new URL(link.href).hash.slice(1)));
   assert(JSON.stringify(desktopIds) === JSON.stringify(ids), 'Desktop order differs from chapter order');
   assert(await page.evaluate(ids => ids.every((id, index) => {
@@ -21,7 +22,7 @@ async page => {
     await page.waitForFunction(id => Math.abs(document.getElementById(id).getBoundingClientRect().top - Number(document.getElementById(id).dataset.scrollOffset ?? 100)) < 5, id);
     await page.waitForFunction(id => document.querySelector(`header a[href="/#${id}"]`)?.getAttribute('aria-current') === 'location', id);
     // Reusing the same URL after scrolling within a pinned chapter must reset its entry.
-    if (['interiors', 'considered-detail', 'housing', 'model-studies'].includes(id)) {
+    if (['interiors', 'considered-detail', 'model-studies'].includes(id)) {
       await page.mouse.wheel(0, 500);
       await page.waitForTimeout(700);
       await link.click();
@@ -51,7 +52,7 @@ async page => {
   const menu = page.getByRole('dialog', { name: 'Site navigation' });
   const mobileIds = await menu.locator('nav a').evaluateAll(links => links.map(link => new URL(link.href).hash.slice(1)));
   assert(JSON.stringify(mobileIds) === JSON.stringify(ids), 'Mobile order differs');
-  assert(await menu.locator('nav small').last().textContent() === '10', 'Tenth chapter number is incorrect');
+  assert(await menu.locator('nav small').last().textContent() === '06', 'Sixth chapter number is incorrect');
   assert(await page.locator('main').evaluate(element => element.inert), 'Background not inert');
   await page.screenshot({ path: 'output/playwright/navigation-mobile.png' });
   await page.keyboard.press('Escape');
@@ -68,5 +69,5 @@ async page => {
   await page.goto(`http://127.0.0.1:4173/?navigation-reduced=${Date.now()}#interiors`);
   await page.waitForFunction(() => Math.abs(document.getElementById('interiors').getBoundingClientRect().top - 100) < 5);
   assert(!errors.length, JSON.stringify(errors));
-  return { chapterOrder: ids, desktopLinks: 10, mobileLinks: 10, repeatedPinnedLinks: true, reducedMotionDeepLink: true, layouts, errors };
+  return { chapterOrder: ids, desktopLinks: 6, mobileLinks: 6, repeatedPinnedLinks: true, reducedMotionDeepLink: true, layouts, errors };
 }

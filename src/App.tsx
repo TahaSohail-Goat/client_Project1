@@ -4,20 +4,11 @@ import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { ScrollEngine } from "./components/scroll/ScrollEngine";
 import { HeroScene } from "./components/home/HeroScene";
-import { ExteriorWorks } from "./components/home/ExteriorWorks";
 import { InteriorSequence } from "./components/home/InteriorSequence";
 import { MaterialsScene } from "./components/home/MaterialsScene";
 import { ScaleModelScene } from "./components/home/ScaleModelScene";
-import { HousingStudy } from "./components/home/HousingStudy";
-import { ApproachEditorial } from "./components/home/ApproachEditorial";
-import { StudioExpertise } from "./components/home/StudioExpertise";
-import { ConsultationCTA } from "./components/home/ConsultationCTA";
-import { ArchitecturalRibbon } from "./components/home/ArchitecturalRibbon";
 import PortfolioSection from "./components/sections/PortfolioSection";
-import {
-  StudioExpertiseSection,
-  StudioIntro,
-} from "./components/sections/StudioSections";
+import { StudioIntro } from "./components/sections/StudioSections";
 import InquirySection from "./components/sections/InquirySection";
 import { site } from "./content/site";
 
@@ -25,18 +16,11 @@ function Home() {
   return (
     <>
       <HeroScene />
-      <ExteriorWorks />
-      <ArchitecturalRibbon />
       <InteriorSequence />
       <MaterialsScene />
-      <HousingStudy />
       <ScaleModelScene />
-      <ApproachEditorial />
-      <StudioExpertise />
-      <ConsultationCTA />
       <PortfolioSection />
       <StudioIntro />
-      <StudioExpertiseSection />
       <InquirySection />
     </>
   );
