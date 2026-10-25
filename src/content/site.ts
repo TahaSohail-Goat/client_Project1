@@ -11,7 +11,7 @@ export const site = {
     "We bring architecture and interiors together, with care for how a space looks, feels and works.",
   inquiry: {
     // Set a confirmed studio email OR a same-origin/approved HTTPS JSON POST endpoint.
-    email: "tahasohail85@gmail.com",
+    email: "Eco28development@gmail.com",
     endpoint: import.meta.env.VITE_INQUIRY_ENDPOINT?.trim() || "",
     privacy:
       "I agree to be contacted by eco28 about this project inquiry.",

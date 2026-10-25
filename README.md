@@ -54,7 +54,7 @@ Generated output, browser evidence, and local source archives are excluded from 
 
 All 43 client photographs remain available, grouped as Architecture (11), Interiors (25), and Model Studies (7). The hero is an original concept residence. Photo titles describe images without inventing project identities.
 
-The default inquiry flow reviews a brief and opens an email draft addressed to `tahasohail85@gmail.com`, with copy and download alternatives. Direct delivery is optional; its configuration and response contract are documented in [the launch checklist](docs/launch-checklist.md).
+The default inquiry flow reviews a brief and opens an email draft addressed to `Eco28development@gmail.com`, with copy and download alternatives. Direct delivery is optional; its configuration and response contract are documented in [the launch checklist](docs/launch-checklist.md).
 
 ## Documentation
 

@@ -103,7 +103,7 @@ The engines were tested sequentially after simultaneous graphics-heavy browser s
 
 ## Limits of verification
 
-- The current contact flow creates a reviewed email draft addressed to `tahasohail85@gmail.com`. The visitor sends it in their email application. Actual mailbox delivery was not tested, and no live submission endpoint is configured. Endpoint tests used a temporary local server with intercepted requests.
+- The current contact flow creates a reviewed email draft addressed to `Eco28development@gmail.com`. The visitor sends it in their email application. Actual mailbox delivery was not tested, and no live submission endpoint is configured. Endpoint tests used a temporary local server with intercepted requests.
 - Automated accessibility checks have manual-review items, especially text over imagery. Zero automated violations is not a full accessibility certification.
 - Responsive sizes and touch are browser emulation, not testing on physical phones.
 - WebKit is an engine compatibility check, not validation on a physical iPhone/Safari installation. Full 3D performance on physical devices was not measured.

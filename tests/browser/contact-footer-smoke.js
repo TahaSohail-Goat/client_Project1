@@ -32,7 +32,7 @@ async page => {
   if(!/not sent/i.test(draft)||!draft.includes('Karachi'))throw Error('Review omitted draft state or location');
   const href=await page.getByRole('link',{name:'Open email draft'}).getAttribute('href');
   const mail=new URL(href);
-  if(mail.protocol!=='mailto:'||mail.pathname!=='tahasohail85@gmail.com'||!mail.searchParams.get('body').includes('Contact QA')||!mail.searchParams.get('body').includes('Karachi'))throw Error('Email draft content or recipient incorrect');
+  if(mail.protocol!=='mailto:'||mail.pathname!=='Eco28development@gmail.com'||!mail.searchParams.get('body').includes('Contact QA')||!mail.searchParams.get('body').includes('Karachi'))throw Error('Email draft content or recipient incorrect');
   await page.getByRole('button',{name:'Copy brief',exact:true}).click();
   await page.getByRole('status').filter({hasText:'Brief copied'}).waitFor();
   if(!await page.evaluate(()=>window.__briefCopy.includes('Contact QA')))throw Error('Copy omitted inquiry');
@@ -68,7 +68,7 @@ async page => {
   await page.waitForFunction(()=>scrollY<2);
   const links=await footer.locator('a[href^="/#"]').evaluateAll(links=>links.map(link=>({href:link.getAttribute('href'),exists:!!document.querySelector(link.hash)})));
   if(links.some(link=>!link.exists))throw Error('Footer contains an invalid section link');
-  if(await footer.locator('a[href="mailto:tahasohail85@gmail.com"]').count()!==1)throw Error('Footer email missing');
+  if(await footer.locator('a[href="mailto:Eco28development@gmail.com"]').count()!==1)throw Error('Footer email missing');
   if(errors.length||failed.length)throw Error(JSON.stringify({errors,failed}));
   return {validation:true,consent:true,review:true,copy:true,download:true,emailRecipient:mail.pathname,staleDraftCleared:true,layouts,repeatContactLink:true,backToTop:true,links,errors,failed};
 }

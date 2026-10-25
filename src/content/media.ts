@@ -1,4 +1,5 @@
 import manifest from "./photo-manifest.json";
+import pdfProjects from "./pdf-projects.json";
 
 export type Category = "Architecture" | "Interiors" | "Model Studies";
 export type Photo = {
@@ -83,7 +84,16 @@ const supplementalMedia: Photo[] = supplementalDescriptions.map(
   },
 );
 
-export const media: Photo[] = [...manifestMedia, ...supplementalMedia];
+const pdfProjectMedia: Photo[] = pdfProjects.assets.map((asset) => ({
+  ...asset,
+  category: asset.category as Category,
+}));
+
+export const media: Photo[] = [
+  ...manifestMedia,
+  ...supplementalMedia,
+  ...pdfProjectMedia,
+];
 export function photo(slug: string): Photo {
   const result = media.find((item) => item.slug === slug);
   if (!result) throw new Error(`Unknown photograph: ${slug}`);

@@ -12,7 +12,7 @@ All 43 photographs, SVG branding and visual credits are retained. Source masters
 
 ## Inquiries
 
-The default form validates and reviews a brief, then opens an email draft addressed to `tahasohail85@gmail.com`. Visitors send the draft from their email app; copy and download alternatives are available. No backend is needed for this mode.
+The default form validates and reviews a brief, then opens an email draft addressed to `Eco28development@gmail.com`. Visitors send the draft from their email app; copy and download alternatives are available. No backend is needed for this mode.
 
 For direct website delivery, set `VITE_INQUIRY_ENDPOINT` before building, for example:
 

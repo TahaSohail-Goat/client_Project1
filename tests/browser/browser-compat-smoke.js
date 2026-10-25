@@ -33,6 +33,6 @@ async page => {
   await page.locator('.inquiry-draft').waitFor();
   if (!await page.locator('.inquiry-draft').evaluate(e => e === document.activeElement)) throw Error('Review focus missing');
   const href = await page.getByRole('link', { name: 'Open email draft' }).getAttribute('href');
-  if (new URL(href).pathname !== 'tahasohail85@gmail.com') throw Error('Wrong mail recipient');
+  if (new URL(href).pathname !== 'Eco28development@gmail.com') throw Error('Wrong mail recipient');
   return { engine: page.context().browser().browserType().name(), mobileLightbox: true, nextPreviousClose: true, restoredFocus: true, menuCloseButton: true, openMenuResize: true, contactNavigation: true, inquiryReview: true, emailRecipient: true };
 }

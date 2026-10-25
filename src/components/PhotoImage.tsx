@@ -34,7 +34,7 @@ export function PhotoImage({
     <img
       src={item.src}
       srcSet={
-        full
+        full || !item.src.endsWith(".webp")
           ? undefined
           : `${responsive}-480.webp 480w, ${responsive}-768.webp 768w, ${item.src} ${item.width}w`
       }

@@ -1,0 +1,257 @@
+{
+  "assets": [
+    {
+      "id": 1000,
+      "slug": "architecture-balcony-01",
+      "category": "Architecture",
+      "description": "Front facade at dusk",
+      "width": 1672,
+      "height": 941,
+      "aspect_ratio": 1.777,
+      "src": "/media/pdf-projects/architecture-balcony-01.jpeg",
+      "title": "Architecture Balcony 01"
+    },
+    {
+      "id": 1001,
+      "slug": "architecture-balcony-02",
+      "category": "Architecture",
+      "description": "Front elevation in evening light",
+      "width": 1672,
+      "height": 941,
+      "aspect_ratio": 1.777,
+      "src": "/media/pdf-projects/architecture-balcony-02.jpeg",
+      "title": "Architecture Balcony 02"
+    },
+    {
+      "id": 1002,
+      "slug": "architecture-balcony-03",
+      "category": "Architecture",
+      "description": "Covered balcony with stone and timber",
+      "width": 1672,
+      "height": 941,
+      "aspect_ratio": 1.777,
+      "src": "/media/pdf-projects/architecture-balcony-03.jpeg",
+      "title": "Architecture Balcony 03"
+    },
+    {
+      "id": 1003,
+      "slug": "architecture-balcony-04",
+      "category": "Architecture",
+      "description": "Terrace seating beneath timber canopy",
+      "width": 1672,
+      "height": 940,
+      "aspect_ratio": 1.779,
+      "src": "/media/pdf-projects/architecture-balcony-04.jpeg",
+      "title": "Architecture Balcony 04"
+    },
+    {
+      "id": 1004,
+      "slug": "ground-floor-living-01",
+      "category": "Interiors",
+      "description": "Ground floor open-plan living and dining",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/ground-floor-living-01.jpeg",
+      "title": "Ground Floor Living 01"
+    },
+    {
+      "id": 1005,
+      "slug": "ground-floor-lounge-02",
+      "category": "Interiors",
+      "description": "Ground floor lounge with stone feature wall",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/ground-floor-lounge-02.jpeg",
+      "title": "Ground Floor Lounge 02"
+    },
+    {
+      "id": 1006,
+      "slug": "ground-floor-bathroom-03",
+      "category": "Interiors",
+      "description": "Ground floor bathroom and vanity",
+      "width": 1122,
+      "height": 1402,
+      "aspect_ratio": 0.8,
+      "src": "/media/pdf-projects/ground-floor-bathroom-03.jpeg",
+      "title": "Ground Floor Bathroom 03"
+    },
+    {
+      "id": 1007,
+      "slug": "ground-floor-stair-04",
+      "category": "Interiors",
+      "description": "Timber stair with integrated lighting",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/ground-floor-stair-04.jpeg",
+      "title": "Ground Floor Stair 04"
+    },
+    {
+      "id": 1008,
+      "slug": "ground-floor-lounge-05",
+      "category": "Interiors",
+      "description": "Ground floor living room with garden views",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/ground-floor-lounge-05.jpeg",
+      "title": "Ground Floor Lounge 05"
+    },
+    {
+      "id": 1009,
+      "slug": "ground-floor-lounge-06",
+      "category": "Interiors",
+      "description": "Ground floor lounge and dining perspective",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/ground-floor-lounge-06.jpeg",
+      "title": "Ground Floor Lounge 06"
+    },
+    {
+      "id": 1010,
+      "slug": "first-floor-lounge-01",
+      "category": "Interiors",
+      "description": "First floor lounge and bedroom interior",
+      "width": 1672,
+      "height": 941,
+      "aspect_ratio": 1.777,
+      "src": "/media/pdf-projects/first-floor-lounge-01.jpeg",
+      "title": "First Floor Lounge 01"
+    },
+    {
+      "id": 1011,
+      "slug": "first-floor-bedroom-02",
+      "category": "Interiors",
+      "description": "First floor bedroom with timber wardrobe",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/first-floor-bedroom-02.jpeg",
+      "title": "First Floor Bedroom 02"
+    },
+    {
+      "id": 1012,
+      "slug": "first-floor-bedroom-03",
+      "category": "Interiors",
+      "description": "First floor bedroom and built-in storage",
+      "width": 1404,
+      "height": 1120,
+      "aspect_ratio": 1.254,
+      "src": "/media/pdf-projects/first-floor-bedroom-03.jpeg",
+      "title": "First Floor Bedroom 03"
+    },
+    {
+      "id": 1013,
+      "slug": "first-floor-bedroom-04",
+      "category": "Interiors",
+      "description": "First floor bedroom with warm timber joinery",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/first-floor-bedroom-04.jpeg",
+      "title": "First Floor Bedroom 04"
+    },
+    {
+      "id": 1014,
+      "slug": "first-floor-bathroom-05",
+      "category": "Interiors",
+      "description": "First floor bathroom with shower and vanity",
+      "width": 1122,
+      "height": 1402,
+      "aspect_ratio": 0.8,
+      "src": "/media/pdf-projects/first-floor-bathroom-05.jpeg",
+      "title": "First Floor Bathroom 05"
+    },
+    {
+      "id": 1015,
+      "slug": "first-floor-bathroom-06",
+      "category": "Interiors",
+      "description": "First floor bathroom with round mirror",
+      "width": 1122,
+      "height": 1402,
+      "aspect_ratio": 0.8,
+      "src": "/media/pdf-projects/first-floor-bathroom-06.jpeg",
+      "title": "First Floor Bathroom 06"
+    },
+    {
+      "id": 1016,
+      "slug": "first-floor-bathroom-07",
+      "category": "Interiors",
+      "description": "First floor bathroom and stone shower",
+      "width": 1122,
+      "height": 1402,
+      "aspect_ratio": 0.8,
+      "src": "/media/pdf-projects/first-floor-bathroom-07.jpeg",
+      "title": "First Floor Bathroom 07"
+    },
+    {
+      "id": 1017,
+      "slug": "first-floor-lounge-08",
+      "category": "Interiors",
+      "description": "First floor lounge corridor",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/first-floor-lounge-08.jpeg",
+      "title": "First Floor Lounge 08"
+    },
+    {
+      "id": 1018,
+      "slug": "first-floor-lounge-09",
+      "category": "Interiors",
+      "description": "First floor lounge with timber detailing",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/first-floor-lounge-09.jpeg",
+      "title": "First Floor Lounge 09"
+    },
+    {
+      "id": 1019,
+      "slug": "first-floor-stair-10",
+      "category": "Interiors",
+      "description": "First floor stair with warm wall lighting",
+      "width": 1122,
+      "height": 1402,
+      "aspect_ratio": 0.8,
+      "src": "/media/pdf-projects/first-floor-stair-10.jpeg",
+      "title": "First Floor Stair 10"
+    },
+    {
+      "id": 1020,
+      "slug": "second-floor-bathroom-01",
+      "category": "Interiors",
+      "description": "Second floor bathroom with stone shower",
+      "width": 1403,
+      "height": 1121,
+      "aspect_ratio": 1.252,
+      "src": "/media/pdf-projects/second-floor-bathroom-01.jpeg",
+      "title": "Second Floor Bathroom 01"
+    },
+    {
+      "id": 1021,
+      "slug": "second-floor-kitchen-02",
+      "category": "Interiors",
+      "description": "Second floor kitchen with timber cabinetry",
+      "width": 1402,
+      "height": 1122,
+      "aspect_ratio": 1.25,
+      "src": "/media/pdf-projects/second-floor-kitchen-02.jpeg",
+      "title": "Second Floor Kitchen 02"
+    },
+    {
+      "id": 1022,
+      "slug": "second-floor-bedroom-03",
+      "category": "Interiors",
+      "description": "Second floor bedroom with timber wardrobe",
+      "width": 1122,
+      "height": 1402,
+      "aspect_ratio": 0.8,
+      "src": "/media/pdf-projects/second-floor-bedroom-03.jpeg",
+      "title": "Second Floor Bedroom 03"
+    }
+  ]
+}

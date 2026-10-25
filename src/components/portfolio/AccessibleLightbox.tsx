@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import type { Photo } from "../../content/media";
 import { PhotoImage } from "../PhotoImage";
 import { m } from "motion/react";
@@ -20,7 +20,7 @@ export function AccessibleLightbox({
   const index = items.findIndex((item) => item.slug === active.slug);
   const change = (delta: number) =>
     onChange(items[(index + delta + items.length) % items.length]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const dialog = ref.current!;
     // WebKit does not focus a button on pointer click. Restore the opening card explicitly.
     const focused = document.activeElement as HTMLElement;

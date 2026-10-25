@@ -77,7 +77,7 @@ export default function PortfolioSection() {
         <div className="section-pad spatial-gallery-top">
           <div className="spatial-collection-meta">
             <p className="eyebrow">The portfolio</p>
-            <span>{media.length} photographs / 3 disciplines</span>
+            <span>{media.length} projects / 3 disciplines</span>
           </div>
           <div className="portfolio-heading-row">
             <CinematicHeading
@@ -93,7 +93,7 @@ export default function PortfolioSection() {
             <div
               className="work-filters"
               role="group"
-              aria-label="Filter photographs"
+              aria-label="Filter projects by category"
             >
               {categories.map((value) => (
                 <button
@@ -111,8 +111,8 @@ export default function PortfolioSection() {
                 </button>
               ))}
             </div>
-            <p className="gallery-count" role="status">
-              {filtered.length} photographs · {category}
+            <p className="gallery-count" role="status" aria-live="polite">
+              {filtered.length} projects · {category}
             </p>
           </div>
         </div>
