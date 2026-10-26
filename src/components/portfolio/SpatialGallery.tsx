@@ -76,8 +76,8 @@ function SpatialCard({
     p.opacity < 0.15 ? "none" : "auto",
   );
   const base = Math.min(
-    size.width < 768 ? 260 : 350,
-    size.width * (size.width < 768 ? 0.67 : 0.24),
+    size.width < 768 ? (mode === "grid" ? 150 : 260) : 350,
+    size.width * (size.width < 768 ? (mode === "grid" ? 0.37 : 0.67) : 0.24),
   );
   // Reserve room for the number, caption and hover lift, including tall photos.
   const width = Math.min(
@@ -269,9 +269,6 @@ export function SpatialGallery({
     if (event.key in values) {
       event.preventDefault();
       select(values[event.key]);
-    } else if (/^[1-8]$/.test(event.key)) {
-      event.preventDefault();
-      changeMode(galleryModes[Number(event.key) - 1]);
     } else return;
     // Keep the roving keyboard target on the selected photo, without scrolling
     // the document to an offscreen transformed button.
@@ -294,41 +291,27 @@ export function SpatialGallery({
       data-transition={transition}
     >
       <div className="spatial-controls">
-        <div
-          className="spatial-layouts"
-          role="group"
-          aria-label="Gallery arrangement"
-        >
-          {galleryModes.map((value, index) => (
-            <button
-              type="button"
-              key={value}
-              aria-pressed={mode === value}
-              onClick={() => changeMode(value)}
-            >
-              <small aria-hidden="true">{index + 1}</small>
-              {value}
-            </button>
-          ))}
-        </div>
-        <label className="spatial-mobile-layout">
+        <label className="spatial-layout-select">
           Layout
           <select aria-label="Gallery layout" value={mode}
             onChange={(event) => changeMode(event.target.value as GalleryMode)}>
             {galleryModes.map((value) => <option key={value} value={value}>{value}</option>)}
           </select>
         </label>
-        <label className="spatial-transition">
-          Transition
-          <select
-            value={transition}
-            onChange={(event) => setTransition(event.target.value as GalleryTransition)}
-          >
-            <option value="scatter">Scatter</option>
-            <option value="flow">Flow</option>
-            <option value="fade">Fade</option>
-          </select>
-        </label>
+        <details className="spatial-transition">
+          <summary>{transition}</summary>
+          <label>
+            <span className="sr-only">Gallery animation</span>
+            <select
+              value={transition}
+              onChange={(event) => setTransition(event.target.value as GalleryTransition)}
+            >
+              <option value="scatter">Scatter</option>
+              <option value="flow">Flow</option>
+              <option value="fade">Fade</option>
+            </select>
+          </label>
+        </details>
       </div>
       <div
         className="spatial-viewport"
@@ -382,7 +365,7 @@ export function SpatialGallery({
           <small>{items[active].category}</small>
         </div>
         <p id="spatial-instructions">
-          Drag or swipe to explore <span>← → to navigate · Enter to open</span>
+          Swipe or use arrows to browse
         </p>
         <div className="spatial-navigation">
           <button

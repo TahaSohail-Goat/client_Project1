@@ -14,19 +14,19 @@ const categories: ("All" | Category)[] = [
   "Interiors",
   "Model Studies",
 ];
-const opening = [
-  "supplemental-01",
-  "interior-display-wall",
-  "supplemental-03",
-  "interior-bathroom-warmstone",
-  "model-front-facade",
-  "interior-reading-nook",
-];
-const collection = [...media].sort((a, b) => {
-  const rank = (slug: string) =>
-    opening.includes(slug) ? opening.indexOf(slug) : opening.length;
-  return rank(a.slug) - rank(b.slug);
-});
+const categoryOrder: Record<Category, number> = {
+  Architecture: 0,
+  Interiors: 1,
+  "Model Studies": 2,
+};
+const sourceOrder = (item: Photo) =>
+  item.id >= 1000 ? 0 : item.id <= 18 ? 1 : 2;
+const collection = [...media].sort(
+  (a, b) =>
+    categoryOrder[a.category] - categoryOrder[b.category] ||
+    sourceOrder(a) - sourceOrder(b) ||
+    a.id - b.id,
+);
 export default function PortfolioSection() {
   const [params] = useSearchParams();
   const location = useLocation();
@@ -38,7 +38,7 @@ export default function PortfolioSection() {
     });
   };
   const reduced = useMotionPreference();
-  const [mode, setMode] = useState<GalleryMode>("list");
+  const [mode, setMode] = useState<GalleryMode>("grid");
   const category = categories.includes(params.get("category") as Category)
     ? params.get("category")!
     : "All";

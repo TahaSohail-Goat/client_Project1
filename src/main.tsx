@@ -24,6 +24,7 @@ import "./styles/consultation-motion.css";
 import "./styles/spatial-gallery.css";
 import "./styles/residence.css";
 import "./styles/contact-footer.css";
+import "./styles/minimal-cleanup.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

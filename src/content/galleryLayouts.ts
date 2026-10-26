@@ -63,10 +63,14 @@ export function galleryPose(
       break;
     case "grid": {
       const columns = mobile ? 2 : 4;
-      pose.x = ((index % columns) - (columns - 1) / 2) * width * 1.06;
+      const gridWidth = mobile
+        ? Math.min(150, size.width * 0.37)
+        : width;
+      pose.x = ((index % columns) - (columns - 1) / 2) * gridWidth * 1.06;
       pose.y =
-        (Math.floor(index / columns) - focus / columns) * (mobile ? 210 : 250) +
-        35;
+        (Math.floor(index / columns) - focus / columns) *
+          (mobile ? 165 : 210) +
+        (mobile ? 0 : 15);
       pose.z = -60;
       pose.rx = 9;
       pose.scale = 0.87;

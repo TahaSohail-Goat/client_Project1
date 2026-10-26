@@ -39,7 +39,7 @@ export function Footer() {
         initial={reduced ? false : { opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }}
         transition={{ duration: reduced ? 0 : .8, ease: [0.22, 1, 0.36, 1] }}>
-        <img src="/media/brand/eco28-wordmark-light.svg" alt="" width="765" height="168" loading="lazy" />
+        <img src="/media/brand/eco28-wordmark-dark.svg" alt="" width="765" height="168" loading="lazy" />
       </m.div>
       <div className="footer-bottom">
         <small>© {new Date().getFullYear()} {site.name}</small>

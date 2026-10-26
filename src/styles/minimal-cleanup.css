@@ -1,0 +1,597 @@
+:root {
+  --ivory: #f5f3ee;
+  --paper: #fff;
+  --ink: #252824;
+  --muted: #686d65;
+  --line: #dfddd6;
+  --bronze: #987451;
+  --display: "Manrope", Arial, sans-serif;
+  --serif: "Manrope", Arial, sans-serif;
+}
+
+body {
+  background: #fff;
+  color: var(--ink);
+}
+
+/* Keep every page on the same typeface while preserving the existing motion. */
+h1,
+h2,
+h3,
+em,
+.serif,
+.ribbon-type,
+.model-ribbon-count,
+.footer-conversation > p {
+  font-family: var(--sans);
+}
+
+em,
+.serif {
+  font-style: italic;
+}
+
+.section-pad {
+  padding-block: clamp(64px, 7vw, 104px);
+}
+
+.exterior-card:nth-child(2),
+.material-large,
+.work-card:nth-child(even),
+.model-ribbon-card:nth-child(3n + 2),
+.model-ribbon-card:nth-child(3n) {
+  margin-top: 0;
+}
+
+.exterior-card::before {
+  display: none;
+}
+
+.exterior-grid,
+.materials-grid,
+.work-grid {
+  align-items: start;
+}
+
+.work-grid {
+  gap: clamp(24px, 3vw, 44px);
+}
+
+.exterior-card .exterior-frame,
+.material-photo {
+  box-shadow: none;
+}
+
+.interior-sequence,
+.architectural-ribbon,
+.materials,
+.approach,
+.approach-spatial,
+.housing-study,
+.portfolio-showcase,
+.contact-section,
+.footer,
+.consultation {
+  color: var(--ink);
+  background: #fff;
+  --line: #dfddd6;
+  --focus-ring: var(--ink);
+}
+
+.interior-sequence {
+  background: #f5f3ee;
+}
+
+.interior-sequence .interior-heading,
+.interior-sequence .interior-bottom,
+.interior-sequence .interior-indicators span {
+  color: var(--ink);
+}
+
+.interior-sequence .interior-stage {
+  border-radius: 2px;
+}
+
+.architectural-ribbon {
+  padding-block: clamp(32px, 4vw, 52px) 22px;
+}
+
+.architectural-ribbon .ribbon-rule,
+.architectural-ribbon .ribbon-scale i {
+  background-color: #d9d6ce;
+}
+
+.architectural-ribbon .ribbon-type {
+  color: var(--ink);
+}
+
+.materials {
+  background: #fff;
+  color: var(--ink);
+  --line: #dfddd6;
+}
+
+.materials .heading-note,
+.materials .material-copy,
+.materials .material-scroll-cue {
+  color: var(--muted);
+}
+
+.materials[data-immersive="true"] .section-heading .eyebrow {
+  color: var(--bronze);
+}
+
+.materials[data-immersive="true"] .material-scroll-cue {
+  border-color: var(--line);
+  background: #ffffffd9;
+}
+
+.model-section {
+  background: #f5f3ee;
+}
+
+.model-section .model-ribbon-photo {
+  box-shadow: 0 12px 30px -23px #25282466;
+}
+
+.model-ribbon-controls,
+.model-ribbon-controls .line-link,
+.model-ribbon-count {
+  color: var(--ink);
+}
+
+.model-ribbon-progress {
+  background: #25282426;
+}
+
+.model-ribbon-progress span {
+  background: var(--bronze);
+}
+
+.approach,
+.approach-spatial {
+  color: var(--ink);
+  background: #fff;
+}
+
+.approach .cinematic-line em,
+.approach-heading-group > .eyebrow,
+.approach-phase[data-active="true"],
+.approach-phase[data-active="true"] small {
+  color: var(--bronze);
+}
+
+.approach-lower p,
+.approach-spatial .approach-copy p,
+.approach-visual figcaption,
+.approach-phase,
+.approach-phase small {
+  color: var(--muted);
+}
+
+.approach .line-link,
+.approach-spatial .line-link,
+.approach-visual figcaption {
+  border-color: var(--line);
+}
+
+.housing-study {
+  color: var(--ink);
+  background: #f5f3ee;
+}
+
+.housing-copy > .eyebrow,
+.housing-copy h2 em,
+.housing-note > span,
+.housing-chapter-button span {
+  color: var(--bronze);
+}
+
+.housing-intro,
+.housing-note,
+.housing-note p,
+.housing-model-label,
+.housing-chapter-button,
+.housing-next {
+  color: var(--muted);
+}
+
+.housing-note[data-active="true"],
+.housing-study[data-animated="false"] .housing-note,
+.housing-chapter-button[aria-current],
+.housing-chapter-button:hover {
+  color: var(--ink);
+}
+
+.housing-toolbar {
+  border-color: var(--line);
+}
+
+.housing-progress span {
+  background: var(--bronze);
+}
+
+.portfolio-showcase {
+  color: var(--ink);
+  background: #fff;
+  --focus-ring: var(--bronze);
+  padding-block: clamp(38px, 4vw, 56px) 24px;
+}
+
+.portfolio-showcase .spatial-gallery-top {
+  padding-block: 0;
+}
+
+.portfolio-heading-row .cinematic-line em,
+.spatial-collection-meta .eyebrow,
+.spatial-current > span {
+  color: var(--bronze);
+}
+
+.portfolio-introduction,
+.spatial-collection-meta > span,
+.portfolio-showcase .gallery-count,
+.spatial-current small,
+#spatial-instructions {
+  color: var(--muted);
+}
+
+#spatial-instructions span,
+.lightbox-hint {
+  color: var(--muted);
+}
+
+.portfolio-filter-row,
+.spatial-bottom {
+  border-color: var(--line);
+}
+
+.portfolio-showcase .work-filters button {
+  color: var(--muted);
+  border-color: var(--line);
+  border-radius: 2px;
+  transition: color .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.portfolio-showcase .work-filters button[aria-pressed="true"] {
+  color: var(--ink);
+  background: #f5f3ee;
+  border-color: var(--bronze);
+}
+
+.portfolio-showcase .work-filters button:hover {
+  border-color: var(--bronze);
+}
+
+.spatial-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 0 var(--gutter);
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.spatial-layouts {
+  display: none;
+}
+
+.spatial-layout-select {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.spatial-layout-select select,
+.spatial-transition select {
+  min-height: 42px;
+  min-width: 155px;
+  padding: 8px 34px 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--ink);
+  background-color: #fff;
+  font: 12px var(--sans);
+  color-scheme: light;
+  text-transform: capitalize;
+}
+
+.spatial-transition {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.spatial-transition::before {
+  content: "Animation";
+  line-height: 16px;
+}
+
+.spatial-transition summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  min-width: 155px;
+  padding: 8px 12px;
+  transform: translateY(2px);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--ink);
+  background: #fff;
+  cursor: pointer;
+  list-style: none;
+  line-height: 1.4;
+  text-transform: capitalize;
+}
+
+.spatial-transition summary::-webkit-details-marker {
+  display: none;
+}
+
+.spatial-transition summary::after {
+  content: "+";
+  padding-left: 12px;
+  color: var(--bronze);
+}
+
+.spatial-transition[open] summary::after {
+  content: "−";
+}
+
+.spatial-transition > label {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  right: 0;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.spatial-transition select {
+  min-width: 128px;
+}
+
+.spatial-transition .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.spatial-viewport {
+  background: radial-gradient(ellipse at 50% 52%, #f5f3ee 0%, #fff 72%);
+}
+
+.spatial-world {
+  pointer-events: none;
+}
+
+.portfolio-showcase .spatial-card {
+  color: var(--ink);
+  pointer-events: auto;
+}
+
+.spatial-card-number {
+  color: var(--muted);
+}
+
+.spatial-card-image {
+  background: #f5f3ee;
+  box-shadow: 0 12px 30px -18px #25282455;
+}
+
+.spatial-viewport-edge {
+  display: none;
+}
+
+.interior-sequence .interior-caption,
+.interior-sequence .interior-caption :is(.eyebrow, h3, p) {
+  color: #fff;
+}
+
+.materials[data-immersive="true"] .material-shot-caption,
+.materials[data-immersive="true"] .material-shot-caption :is(.eyebrow, h3, em),
+.materials[data-immersive="true"] .material-controls,
+.materials[data-immersive="true"] .material-controls a,
+.materials[data-immersive="true"] .material-caption-links .eyebrow,
+.materials[data-immersive="true"] .material-scroll-cue > span:first-child {
+  color: #fff;
+}
+
+.materials[data-immersive="true"] .material-controls .line-link {
+  border-color: #ffffffb3;
+}
+
+.materials[data-immersive="true"] .material-progress {
+  background: #ffffff66;
+}
+
+.spatial-card-caption {
+  color: var(--muted);
+}
+
+.spatial-current p {
+  color: var(--ink);
+}
+
+.spatial-navigation button {
+  color: var(--ink);
+  border-color: var(--line);
+  background: #fff;
+}
+
+.spatial-navigation button:hover {
+  color: #fff;
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.spatial-static .work-card-caption {
+  border-color: var(--line);
+}
+
+.spatial-static .work-card-caption > span {
+  color: var(--muted);
+}
+
+.contact-section {
+  background: #fff;
+}
+
+.contact-section .contact-form-wrap {
+  background: #f9f8f5;
+  border-color: var(--line);
+}
+
+.contact-section .form-submit .inquiry-button,
+.draft-email {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.contact-section .form-submit .inquiry-button:hover,
+.draft-email:hover {
+  background: #3d443d;
+}
+
+.consultation {
+  background: #f5f3ee;
+  color: var(--ink);
+}
+
+.consultation-signature {
+  color: #9874511c;
+}
+
+.footer {
+  background: #fff;
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+}
+
+.footer .eyebrow,
+.footer-conversation > p em {
+  color: var(--bronze);
+}
+
+.footer-navigation > a,
+.footer-email,
+.footer-location,
+.footer-bottom,
+.footer-bottom > a {
+  color: var(--muted);
+}
+
+.footer-signature img {
+  width: min(100%, 280px);
+}
+
+.footer-project-link,
+.footer .footer-bottom {
+  border-color: var(--line);
+}
+
+.footer .footer-brand {
+  background: #f5f3ee;
+}
+
+.lightbox {
+  background: #fff;
+  color: var(--ink);
+}
+
+.lightbox::backdrop {
+  background: #20231fcc;
+}
+
+.lightbox-toolbar button,
+.lightbox-controls button {
+  color: var(--ink);
+}
+
+.lightbox-controls button {
+  border-color: var(--line);
+}
+
+.lightbox-controls button:hover {
+  color: #fff;
+  background: var(--ink);
+}
+
+@media (max-width: 767px) {
+  .section-pad {
+    padding-block: 58px;
+  }
+
+  .spatial-controls {
+    display: flex;
+    justify-content: stretch;
+    margin: 0 var(--gutter);
+    padding: 14px 0;
+  }
+
+  .spatial-layout-select {
+    flex: 1;
+  }
+
+  .spatial-layout-select select {
+    width: 100%;
+  }
+
+  .spatial-transition {
+    flex: 0 0 auto;
+    align-self: stretch;
+  }
+
+  .spatial-bottom {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .housing-study {
+    background: #fff;
+  }
+
+  .interior-sequence .interior-caption,
+  .interior-sequence .interior-caption :is(.eyebrow, h3, p) {
+    color: var(--ink);
+  }
+
+  .exterior-grid,
+  .materials-grid,
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .work-card.portrait .work-image,
+  .work-card.portrait:nth-child(odd) .work-image {
+    max-width: none;
+  }
+}
+
+@media (min-height: 651px) {
+  .interior-sequence .interior-caption,
+  .interior-sequence .interior-caption :is(.eyebrow, h3, p) {
+    color: #fff;
+  }
+}
+
+@media (max-height: 650px) {
+  .interior-sequence .interior-caption,
+  .interior-sequence .interior-caption :is(.eyebrow, h3, p) {
+    color: var(--ink);
+  }
+}
