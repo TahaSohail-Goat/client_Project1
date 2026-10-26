@@ -4,7 +4,8 @@
   --ink: #252824;
   --muted: #686d65;
   --line: #dfddd6;
-  --bronze: #987451;
+  /* Dark bronze is used for readable accents on light surfaces. */
+  --bronze: #795b3a;
   --display: "Manrope", Arial, sans-serif;
   --serif: "Manrope", Arial, sans-serif;
 }
@@ -90,6 +91,10 @@ em,
 
 .interior-sequence .interior-stage {
   border-radius: 2px;
+}
+
+.interior-indicators span {
+  opacity: 0.9;
 }
 
 .architectural-ribbon {
@@ -201,6 +206,23 @@ em,
 .housing-chapter-button[aria-current],
 .housing-chapter-button:hover {
   color: var(--ink);
+}
+
+.housing-coordinate {
+  color: var(--ink);
+  background: #ffffffdf;
+  padding: 6px 10px;
+}
+
+.housing-model-label {
+  color: var(--ink);
+  background: #ffffffdf;
+  width: fit-content;
+  max-width: calc(100% - 20px);
+  left: 50%;
+  right: auto;
+  padding: 6px 10px;
+  transform: translateX(-50%);
 }
 
 .housing-toolbar {
@@ -398,7 +420,33 @@ em,
 
 .interior-sequence .interior-caption,
 .interior-sequence .interior-caption :is(.eyebrow, h3, p) {
+  color: var(--ink);
+}
+
+.hero {
+  --bronze: #b99670;
+}
+
+.header-inquiry {
+  background: #b99670;
+}
+
+.materials[data-immersive="true"] .section-heading h2,
+.materials[data-immersive="true"] .section-heading .heading-note {
   color: #fff;
+}
+
+.materials[data-immersive="true"] .section-heading .eyebrow,
+.materials[data-immersive="true"] .material-shot-caption .eyebrow,
+.materials[data-immersive="true"] .material-caption-links .eyebrow,
+.materials[data-immersive="true"] .material-scroll-cue > span:last-child {
+  color: #d7bc98;
+}
+
+.materials[data-immersive="true"] .section-heading .eyebrow {
+  display: table;
+  padding: 4px 7px;
+  background: #171c1acc;
 }
 
 .materials[data-immersive="true"] .material-shot-caption,
@@ -495,6 +543,11 @@ em,
   color: var(--muted);
 }
 
+.footer-bottom > small,
+.footer-bottom > span {
+  color: var(--muted);
+}
+
 .footer-signature img {
   width: min(100%, 280px);
 }
@@ -531,6 +584,15 @@ em,
   background: var(--ink);
 }
 
+::selection {
+  background: #b99670;
+  color: var(--ink);
+}
+
+.spatial-navigation button:disabled {
+  opacity: 0.7;
+}
+
 @media (max-width: 767px) {
   .section-pad {
     padding-block: 58px;
@@ -564,6 +626,10 @@ em,
     background: #fff;
   }
 
+  .spatial-mobile-layout {
+    color: var(--muted);
+  }
+
   .interior-sequence .interior-caption,
   .interior-sequence .interior-caption :is(.eyebrow, h3, p) {
     color: var(--ink);
@@ -582,7 +648,8 @@ em,
   }
 }
 
-@media (min-height: 651px) {
+/* Captions overlay the dark photo only in the wide, animated presentation. */
+@media (min-width: 768px) and (min-height: 651px) and (prefers-reduced-motion: no-preference) {
   .interior-sequence .interior-caption,
   .interior-sequence .interior-caption :is(.eyebrow, h3, p) {
     color: #fff;
